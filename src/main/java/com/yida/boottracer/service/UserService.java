@@ -35,8 +35,7 @@ public class UserService
 		u = new User();
 		u.setName("b");
 		u.setAge(2);
-		if (true)
-			throw new RuntimeException();
+
 		userRepository.save(u);
 	}
 }

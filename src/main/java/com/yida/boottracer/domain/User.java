@@ -16,6 +16,10 @@ import javax.persistence.Table;
 public class User implements java.io.Serializable
 {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Integer id;
 	private int age;
 	private String name;
