@@ -6,6 +6,8 @@ import javax.transaction.Transactional;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -18,6 +20,7 @@ import com.yida.boottracer.domain.test.*;
 
 public class BoottracerApplicationTests
 {
+	private static final Logger log = LoggerFactory.getLogger(BoottracerApplicationTests.class);
 
 	@Autowired
 	private UserRepository userRepository;
@@ -98,7 +101,7 @@ public class BoottracerApplicationTests
 	@Transactional // 需要加上事务才可以进行Lazy loading
 	public void testFindOrder_Lazyloading()
 	{
-		Order order = orderRepository.findByLazyloading("2018-001");
+		Order order = orderRepository.myFindByLazyloading("2018-001");
 		assertNotNull(order);
 
 		for (OrderItem oi : order.getItems())
@@ -106,13 +109,15 @@ public class BoottracerApplicationTests
 			assertNotNull(oi);
 			assertNotNull(oi.getProduct().getName());
 		}
+
+		log.info("查询完成");
 	}
 
 	@Test
 	@Transactional
 	public void testFindOrder_AttributePaths()
 	{
-		Order order = orderRepository.findByAttributePaths("2018-001");
+		Order order = orderRepository.myFindByAttributePaths("2018-001");
 		assertNotNull(order);
 
 		for (OrderItem oi : order.getItems())
@@ -126,7 +131,7 @@ public class BoottracerApplicationTests
 	@Transactional
 	public void testFindOrder_NamedEntityGraph()
 	{
-		Order order = orderRepository.findByNamedEntityGraph("2018-001");
+		Order order = orderRepository.myFindByNamedEntityGraph("2018-001");
 		assertNotNull(order);
 
 		for (OrderItem oi : order.getItems())
@@ -140,7 +145,7 @@ public class BoottracerApplicationTests
 	@Transactional
 	public void testFindOrder_Fetch()
 	{
-		Order order = orderRepository.findByFetch("2018-001");
+		Order order = orderRepository.myFindByFetch("2018-001");
 		assertNotNull(order);
 
 		for (OrderItem oi : order.getItems())

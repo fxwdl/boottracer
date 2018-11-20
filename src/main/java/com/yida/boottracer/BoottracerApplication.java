@@ -1,5 +1,6 @@
 package com.yida.boottracer;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -9,6 +10,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 // @EntityScan(basePackages = { "com.yida.boottracer.domain" })
 // @ComponentScan(basePackages = { "com.yida.boottracer.service" })
 // @EnableTransactionManagement
+
+// 用来集成mybatis
+// @MapperScan("")
 public class BoottracerApplication
 {
 

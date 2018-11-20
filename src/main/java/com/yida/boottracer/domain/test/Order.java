@@ -51,7 +51,7 @@ public class Order implements java.io.Serializable
 	}
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", updatable = false, nullable = false)
 	public long getId()
 	{
