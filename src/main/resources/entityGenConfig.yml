@@ -1,5 +1,5 @@
 # ---------------------------------------------------------
-# *** JDBC configuration to fetch metadata ***
+# *** JDBC configuration to fetch metadata 这个是用于com.smartnews的那个生成实体类的插件，不好用，废弃***
 
 jdbcSettings:
   url: "jdbc:mysql://127.0.0.1:3306/sourcetracerdb"

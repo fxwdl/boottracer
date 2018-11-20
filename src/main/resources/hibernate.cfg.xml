@@ -7,7 +7,9 @@
   <property name="hibernate.connection.password">abc#1234</property>
   <property name="hibernate.connection.url">jdbc:mysql://127.0.0.1:3306/sourcetracerdb?serverTimezone=GMT%2B8</property>
   <property name="hibernate.connection.username">root</property>
-  <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+  <property name="hibernate.dialect">org.hibernate.dialect.MySQLInnoDBDialect</property>
   <property name="hibernate.default_catalog">sourcetracerdb</property>
+  <property name="hibernate.show_sql">true</property>
+  <property name="hibernate.format_sql">true</property>
  </session-factory>
 </hibernate-configuration>

@@ -7,8 +7,8 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.yida.boottracer.domain.User;
-import com.yida.boottracer.domain.UserRepository;
+import com.yida.boottracer.domain.test.User;
+import com.yida.boottracer.domain.test.UserRepository;
 
 @Service
 public class UserService

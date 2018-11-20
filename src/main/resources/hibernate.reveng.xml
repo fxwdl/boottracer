@@ -2,5 +2,23 @@
 <!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.org/dtd/hibernate-reverse-engineering-3.0.dtd" >
 
 <hibernate-reverse-engineering>
-	<table-filter match-name="user" match-catalog="sourcetracerdb"></table-filter>
+
+	<table-filter match-name="test_product"
+		match-catalog="sourcetracerdb" exclude="true">
+	</table-filter>
+	<table-filter match-name="test_order"
+		match-catalog="sourcetracerdb" exclude="true">
+	</table-filter>
+	<table-filter match-name="test_order_item"
+		match-catalog="sourcetracerdb" exclude="true">
+	</table-filter>
+
+
+
+
+
+
+	<table-filter match-name="test_user"
+		match-catalog="sourcetracerdb" exclude="true">
+	</table-filter>
 </hibernate-reverse-engineering>
