@@ -1,16 +1,17 @@
-
-<!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{_layout/main}" th:with="module='首页',functionName='首页',smallTitle=''">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta
-	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
-	name="viewport">
-<title th:text="${title}"></title>
-
+  <title>首页</title>
+  
 </head>
 <body>
-	hello world!
+	<div layout:fragment="doBody">
+		<p>欢迎使用 <span th:text="${order.orderNumber}">Our App</span></p>
+	</div>
+	<th:block layout:fragment="script">
+		<script type="text/javascript" th:src="@{/js/hello.js}"></script>
+	</th:block>
+	
 </body>
 </html>

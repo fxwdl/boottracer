@@ -1,6 +1,10 @@
 package com.yida.boottracer;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -10,10 +14,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.yida.boottracer.domain.test.*;
+import com.yida.boottracer.domain.test.Order;
+import com.yida.boottracer.domain.test.OrderItem;
+import com.yida.boottracer.domain.test.OrderRepository;
+import com.yida.boottracer.domain.test.Product;
+import com.yida.boottracer.domain.test.ProductRepository;
+import com.yida.boottracer.domain.test.User;
+import com.yida.boottracer.domain.test.UserRepository;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -101,14 +110,17 @@ public class BoottracerApplicationTests
 	@Transactional // 需要加上事务才可以进行Lazy loading
 	public void testFindOrder_Lazyloading()
 	{
-		Order order = orderRepository.myFindByLazyloading("2018-001");
-		assertNotNull(order);
-
-		for (OrderItem oi : order.getItems())
+		Optional<Order> order = orderRepository.myFindByLazyloading("2018-001");
+		order.map(o ->
 		{
-			assertNotNull(oi);
-			assertNotNull(oi.getProduct().getName());
-		}
+			for (OrderItem oi : o.getItems())
+			{
+				assertNotNull(oi);
+				assertNotNull(oi.getProduct().getName());
+
+			}
+			return o;
+		}).orElse(null);
 
 		log.info("查询完成");
 	}
@@ -153,5 +165,13 @@ public class BoottracerApplicationTests
 			assertNotNull(oi);
 			assertNotNull(oi.getProduct().getName());
 		}
+	}
+
+	@Test
+	@Transactional // 需要加上事务才可以进行Lazy loading
+	public void testFindOrder_Paged()
+	{
+
+		log.info("查询完成");
 	}
 }

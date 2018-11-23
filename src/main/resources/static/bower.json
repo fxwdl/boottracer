@@ -1,0 +1,30 @@
+{
+"name": "boottracer",
+"version": "1.0.0",
+"private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+"dependencies": {
+    "jquery": "3.3.1",
+    "bootstrap":"3.3.7",
+    "fontAwesome":"4.7.0",
+    "ionicons":"2.0.1",
+    "adminLTE":"2.4.3",
+    "html5shiv":"",
+    "respond":"",
+    "jquery-cookie":"",
+    "css":"",
+    "vue":"",
+    "es6-promise":"",
+    "axios":"",
+    "bootstrap-table":"1.12.1",
+    "bootstrap-dialog":"",
+    "q":"",
+    "vuelidate":""
+	}
+}

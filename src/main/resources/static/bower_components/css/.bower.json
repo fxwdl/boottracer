@@ -1,0 +1,14 @@
+{
+  "name": "css",
+  "homepage": "https://github.com/reworkcss/css",
+  "version": "2.2.4",
+  "_release": "2.2.4",
+  "_resolution": {
+    "type": "version",
+    "tag": "v2.2.4",
+    "commit": "ccce876e71dd8dd226d2167a507648f1b37e1739"
+  },
+  "_source": "https://github.com/reworkcss/css.git",
+  "_target": "*",
+  "_originalSource": "css"
+}
