@@ -27,6 +27,9 @@
     <![endif]*/-->
 
 	<style type="text/css">
+		body {
+		 font-family:"Microsoft YaHei","\5fae\8f6f\96c5\9ed1","\5b8b\4f53",sans-serif;
+		}
 		[v-cloak] {
 		  display: none;
 		}	
@@ -99,7 +102,29 @@
             <section class="sidebar">                    
                 <!--/* sidebar menu: : style can be found in sidebar.less */-->
                 <ul class="sidebar-menu"  data-widget="tree">
-            	
+            		<th:block th:if="${!menu.isEmpty()}">
+            			<th:block th:each="m:${menu}" th:with="cssClass=${m.cssClass}?${m.cssClass}:'fa fa-dashboard',isMActive=${m.displayName == module}?'active':''">            				
+		           			<li th:class="${isMActive}+' treeview'">
+						        <a href="#">
+						            <i th:class="${cssClass}"></i> <span th:text="${m.displayName}"></span>
+						            <span class="pull-right-container">
+						                <i class="fa fa-angle-left pull-right"></i>
+						            </span>
+						        </a>
+						        <ul class="treeview-menu">
+						        	<th:block th:each="i:${m.children}" th:with="isFActive=${i.displayName == functionName}?'active':''">						        		
+						        		<li th:class="${isFActive}">
+						        			<a th:href="@{/}+${i.page }" th:data-href="@{/}+${i.page }" 
+						        				th:data-title="${i.displayName }" data-my-type="menu" 
+						        				th:data-my-menu-id="${i.fullName }" th:text="${i.displayName }">
+						        				<i class="fa fa-circle-o"></i>
+						        			</a>
+						        		</li>
+						        	</th:block>
+						        </ul>
+					        </li>
+            			</th:block> 
+            		</th:block>
                 </ul>
             </section>
             <!--/* /.sidebar */-->

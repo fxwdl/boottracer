@@ -6,8 +6,8 @@
 	<table-filter match-name="test_product"
 		match-catalog="sourcetracerdb" exclude="true">
 	</table-filter>
-	<table-filter match-name="test_order"
-		match-catalog="sourcetracerdb" exclude="true">
+	<table-filter match-name="test_order" match-catalog="sourcetracerdb"
+		exclude="true">
 	</table-filter>
 	<table-filter match-name="test_order_item"
 		match-catalog="sourcetracerdb" exclude="true">
@@ -18,7 +18,10 @@
 
 
 
-	<table-filter match-name="test_user"
+	<table-filter match-name="test_user" match-catalog="sourcetracerdb"
+		exclude="true">
+	</table-filter>
+	<table-filter match-name="dict_system_function"
 		match-catalog="sourcetracerdb" exclude="true">
 	</table-filter>
 </hibernate-reverse-engineering>
