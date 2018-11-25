@@ -29,7 +29,7 @@ public class DictSystemFunction implements java.io.Serializable
 	private String seq;
 	private String page;
 	private String cssClass;
-	private Set<DictSystemFunction> children = new HashSet<DictSystemFunction>();
+	private Set<DictSystemFunction> children = new HashSet<>();
 
 	public DictSystemFunction()
 	{

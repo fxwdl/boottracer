@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{_layout/main}" th:with="module='一级菜单B',functionName='二级菜单B1',smallTitle=''">
+<head>
+  <title>首页</title>
+  
+</head>
+<body>
+	<div layout:fragment="doBody">
+		<p>欢迎使用 <span th:text="${order.orderNumber}">Our App</span></p>
+	</div>
+	<th:block layout:fragment="script">
+		<script type="text/javascript" th:src="@{/js/hello.js}"></script>
+	</th:block>
+	
+</body>
+</html>

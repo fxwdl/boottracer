@@ -1,0 +1,110 @@
+
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+	name="viewport">
+<title th:text="${title}"></title>
+<link rel="stylesheet" th:href="@{/bower_components/bootstrap/dist/css/bootstrap.min.css}">
+<link rel="stylesheet" th:href="@{/bower_components/fontAwesome/css/font-awesome.min.css}">
+<link rel="stylesheet" th:href="@{/bower_components/Ionicons/css/ionicons.min.css}">
+<link rel="stylesheet" th:href="@{/bower_components/adminLTE/dist/css/AdminLTE.min.css}">
+<link rel="stylesheet" th:href="@{/bower_components/adminLTE/plugins/iCheck/square/blue.css}">
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script th:src="@{/bower_components/html5shiv/disk/html5shiv.min.js}"></script>
+<script th:src="@{/bower_components/respond/dest/respond.min.js}"></script>
+<![endif]-->
+</head>
+<body class="hold-transition login-page">
+    <div class="login-box" style="width:400px;">
+        <div class="login-logo">
+            <b th:text="${@environment.getProperty('my.title')}">标题</b>
+        </div>
+<!-- /.login-logo -->
+        <div class="login-box-body">
+            <p class="login-box-msg">请输入用户名和密码登录系统</p>
+            <form action="#" th:action="@{/logincheck}" method="post" class="form-horizontal" role="form" onsubmit="onSubmit()">
+         	
+                <div th:if="${modelState}!=null" class="alert alert-danger" role="alert">
+                    <a class="close" data-dismiss="alert">×</a>
+         			<p th:each="state:${modelState}" th:text="${state}">${state}</p>
+                </div>                                
+          
+                <div class="form-group has-feedback">
+                	<input name="username" class="form-control" placeholder="用户名"/>               
+                    <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                </div>
+                <div class="form-group has-feedback">
+                	<input type="password" name="password" class="form-control" placeholder="密码"/>   
+                    <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                </div>
+                
+                <div class="row">
+                    <div class="col-xs-8">
+                        <div class="checkbox icheck">
+                            <label>                                
+                                <input type="checkbox" id="RememberMe">记住我
+                            </label>
+                        </div>
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-xs-4">
+                        <button type="submit" class="btn btn-primary btn-block btn-flat">登录</button>
+                    </div>
+                    <!-- /.col -->
+                </div>             	
+            </form>
+            
+        </div>        
+    </div>
+<!-- /.login-box -->
+    <script th:src="@{/bower_components/jquery/dist/jquery.min.js}"></script>
+    <script th:src="@{/bower_components/jquery-cookie/jquery.cookie.js}"></script>
+    <script th:src="@{/bower_components/bootstrap/dist/js/bootstrap.min.js}"></script>
+    <script th:src="@{/bower_components/adminLTE/plugins/iCheck/icheck.min.js}"></script>
+    
+    <script>
+          $(function () {
+            $('input').iCheck({
+              checkboxClass: 'icheckbox_square-blue',
+              radioClass: 'iradio_square-blue',
+              increaseArea: '20%' // optional
+            });
+            //判断之前是否有设置cookie，如果有，则设置【记住我】选择框
+            if ($.cookie("fonour_userName") != undefined) {
+                //$("#RememberMe").attr("checked", "checked");
+                $("#RememberMe").iCheck('check');
+            }
+            else {
+                //$("#RememberMe").removeAttr("checked");
+                $("#RememberMe").iCheck('uncheck');
+            }
+              //读取cookie
+            if ($("#RememberMe:checked").length > 0) {
+                $("#UserName").val($.cookie("fonour_userName"));
+                $("#Password").val($.cookie("fonour_password"));
+            }
+
+            $('#RememberMe').on('ifChecked', function (event) {
+                //alert(event.target.value); // alert value
+            });
+          });
+          //根据是否勾选记住我记录或清除cookie
+          function onSubmit() {
+              if ($("#RememberMe:checked").length > 0) {//设置cookie
+                  $.cookie("fonour_userName", $("#UserName").val());
+                  $.cookie("fonour_password", $("#Password").val());
+              }
+              else {//清除cookie
+                  $.removeCookie("fonour_userName");
+                  $.removeCookie("fonour_password");
+              }
+          };
+    </script>    
+</body>
+</html>
