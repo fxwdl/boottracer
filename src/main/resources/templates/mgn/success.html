@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{_layout/main}" th:with="module='首页',functionName='首页',smallTitle=''">
+<head>
+  <title>授权失败</title>
+  
+</head>
+<body>
+	<div layout:fragment="doBody">
+      <div class="error-page">
+        <h2 class="headline text-green">OK</h2>
+
+        <div class="error-content">
+          <h3><i class="fa fa-warning text-green"></i> 操作成功.</h3>
+
+          <p>
+            点击链接返回首页 <a href="@{/}">返回首页</a> 
+          </p>
+
+        </div>
+      </div>
+	</div>
+
+</body>
+</html>
