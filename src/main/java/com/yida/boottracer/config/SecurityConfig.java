@@ -12,6 +12,10 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.yida.boottracer.service.auth.SysUserDetailsService;
 
@@ -22,10 +26,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 	@Autowired
 	DataSource dataSource;
 	
+	//加入userDetailsService bean
 	@Bean
-	SysUserDetailsService customUserService()
+	public UserDetailsService createUserDetailsService()
 	{
 		return new SysUserDetailsService();
+	}
+	
+	/**加入密码encoder bean
+	参考文章 https://www.cnkirito.moe/spring-security-6/
+	加密码的密码前面要包含加密方式的前缀
+	{bcrypt}$2a$10$dXJ3SW6G7P50lGmMkkmwe.20cQQubK3.HZWzG3YB1tlRy.fqvM/BG 
+	{noop}password 
+	{pbkdf2}5d923b44a6d129f3ddf3e3c8d29412723dcbde72445e8ef6bf3b508fbf17fa4ed4d6b99ca763d8dc 
+	{scrypt}$e0801$8bWJaSu2IKSn9Z9kM+TPXfOc/9bdYSrN1oD9qfVThWEwdRTnO7re7Ei+fUZRJ68k9lTyuTeUp4of4g24hHnazw==$OAOec05+bXxvuu/1qZ6NUR+xQYvYv7BeL1QxwRpY5Pc=  
+	{sha256}97cde38028ad898ebc02e690819fa220e88c62e0699403e94fff291cfffaf8410849f27605abcbc0
+	*/
+	@Bean
+	PasswordEncoder passwordEncoder(){
+	    //return new BCryptPasswordEncoder();
+		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
 	}
 
 	/**
@@ -37,10 +57,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
         web.ignoring().antMatchers("/bower_components/**", "/js/**", "/images/**");
     }
 
+    
+    
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception
 	{
-		auth.userDetailsService(customUserService());
+		//如果未声明UserDetailsService、PasswordEncoder bean的话，也可以这样加入，但二者不可以同时，会产生2次验证
+		//auth.userDetailsService(createUserDetailsService()).passwordEncoder(new BCryptPasswordEncoder());
+		
+		//增加自定义的AuthenticationProvider
+		//auth.authenticationProvider(authenticationProvider);
 //		auth.inMemoryAuthentication().withUser("user").password("password").roles("USER");
 //		auth.jdbcAuthentication().dataSource(dataSource).withUser("user").password("password").roles("USER");
 		super.configure(auth);
@@ -60,7 +86,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 			//非管理端所有资源都授权所有用户访问
 			.authorizeRequests().anyRequest().permitAll().and()
 			//配置login相关
-			.formLogin().loginPage("/login").usernameParameter("userName").passwordParameter("password").loginProcessingUrl("/logincheck").failureUrl("/login?error").defaultSuccessUrl("/mgn/index",true).and()
+			.formLogin().loginPage("/login").usernameParameter("username").passwordParameter("password").loginProcessingUrl("/logincheck").failureUrl("/login?error").defaultSuccessUrl("/mgn/index",true).and()
 			//配置登出相关
 			.logout().permitAll().logoutUrl("/mgn/logout").logoutSuccessUrl("/index").deleteCookies("JSESSIONID").and()			
 			//配置csrf
