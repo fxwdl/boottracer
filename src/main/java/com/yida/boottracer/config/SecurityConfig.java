@@ -1,6 +1,7 @@
 package com.yida.boottracer.config;
 
 import javax.sql.DataSource;
+import javax.swing.text.html.HTML;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -16,8 +17,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.yida.boottracer.service.auth.MyAuthenticationFailHandler;
+import com.yida.boottracer.service.auth.MyAuthenticationSuccessHandler;
 import com.yida.boottracer.service.auth.SysUserDetailsService;
+import com.yida.boottracer.service.auth.ValidateCodeFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -26,6 +31,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 	@Autowired
 	DataSource dataSource;
 	
+	@Autowired
+    private MyAuthenticationSuccessHandler mySuccessHandler;
+	
+	@Autowired
+    private MyAuthenticationFailHandler myFailHandler;
+	
+    @Autowired
+    private ValidateCodeFilter validateCodeFilter;
+    
 	//加入userDetailsService bean
 	@Bean
 	public UserDetailsService createUserDetailsService()
@@ -43,7 +57,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 	{sha256}97cde38028ad898ebc02e690819fa220e88c62e0699403e94fff291cfffaf8410849f27605abcbc0
 	*/
 	@Bean
-	PasswordEncoder passwordEncoder(){
+	public PasswordEncoder passwordEncoder(){
 	    //return new BCryptPasswordEncoder();
 		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
 	}
@@ -57,8 +71,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
         web.ignoring().antMatchers("/bower_components/**", "/js/**", "/images/**");
     }
 
-    
-    
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception
 	{
@@ -76,24 +88,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 	protected void configure(HttpSecurity http) throws Exception
 	{
 
-		Authentication a;
-		ProviderManager p;
 		//permitAll是允许授权与非授权用户访问，anonymous是只授权匿名账户访问
-		
+		http.addFilterBefore(this.validateCodeFilter, UsernamePasswordAuthenticationFilter.class);
 		http
 			//管理端需认证			
-			.authorizeRequests().antMatchers("/mgn/**").authenticated().and()
+			.authorizeRequests().antMatchers("/mgn/**").authenticated().and()			
 			//非管理端所有资源都授权所有用户访问
 			.authorizeRequests().anyRequest().permitAll().and()
 			//配置login相关
-			.formLogin().loginPage("/login").usernameParameter("username").passwordParameter("password").loginProcessingUrl("/logincheck").failureUrl("/login?error").defaultSuccessUrl("/mgn/index",true).and()
+			.formLogin().loginPage("/login.html").usernameParameter("username")
+				.passwordParameter("password").loginProcessingUrl("/logincheck").failureUrl("/login?error")
+				.defaultSuccessUrl("/mgn/index",true).successHandler(mySuccessHandler).failureHandler(myFailHandler)
+				.and()
 			//配置登出相关
-			.logout().permitAll().logoutUrl("/mgn/logout").logoutSuccessUrl("/index").deleteCookies("JSESSIONID").and()			
+			.logout().logoutUrl("/mgn/logout").permitAll().logoutSuccessUrl("/index.html").deleteCookies("JSESSIONID").and()			
 			//配置csrf
 			
 			//配置授权失败时相关处理
 			.exceptionHandling().accessDeniedPage("/403.html");
 		http.csrf().disable();
 		http.formLogin();
+		
 	}
 }

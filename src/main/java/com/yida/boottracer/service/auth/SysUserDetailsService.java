@@ -42,7 +42,6 @@ public class SysUserDetailsService implements UserDetailsService
 		else
 		{
 			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-			String salt=BCrypt.gensalt();
 			user = new SysUser();
 			user.setUserName("user");
 			user.setPassword("{bcrypt}" + encoder.encode("pass"));
