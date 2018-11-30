@@ -18,6 +18,7 @@ import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.yida.boottracer.dto.SimpleResponse;
 
 @Component
 public class MyAuthenticationSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler
@@ -32,12 +33,13 @@ public class MyAuthenticationSuccessHandler extends SavedRequestAwareAuthenticat
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 			Authentication authentication) throws IOException, ServletException
 	{
+		
 		logger.info("登录成功");
-		String type = "html";
+		String type = "json";
 		if (type.equals("json"))
 		{
 			response.setContentType("application/json;charset=UTF-8");
-			response.getWriter().write(objectMapper.writeValueAsString(authentication));
+			response.getWriter().write(objectMapper.writeValueAsString(new SimpleResponse(true, /*authentication*/"登录成功")));
 		}
 		else
 		{

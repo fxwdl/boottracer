@@ -101,7 +101,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 				.defaultSuccessUrl("/mgn/index",true).successHandler(mySuccessHandler).failureHandler(myFailHandler)
 				.and()
 			//配置登出相关
-			.logout().logoutUrl("/mgn/logout").permitAll().logoutSuccessUrl("/index.html").deleteCookies("JSESSIONID").and()			
+			.logout().logoutUrl("/mgn/logout").permitAll().logoutSuccessUrl("/login.html").deleteCookies("JSESSIONID").and()			
 			//配置csrf
 			
 			//配置授权失败时相关处理

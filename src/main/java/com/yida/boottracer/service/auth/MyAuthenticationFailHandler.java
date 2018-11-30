@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
@@ -21,7 +22,7 @@ import com.yida.boottracer.dto.SimpleResponse;
 public class MyAuthenticationFailHandler extends SimpleUrlAuthenticationFailureHandler
 {
 	private Logger logger = LoggerFactory.getLogger(getClass());
-	
+
 	@Autowired
 	private ObjectMapper objectMapper;
 
@@ -41,8 +42,17 @@ public class MyAuthenticationFailHandler extends SimpleUrlAuthenticationFailureH
 		// {
 		// super.onAuthenticationFailure(request, response, e);
 		// }
-		response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+		//response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
 		response.setContentType("application/json;charset=utf-8");
-		response.getWriter().write(objectMapper.writeValueAsString(new SimpleResponse(false, e.getMessage())));
+		String msg = "";
+		if (e instanceof BadCredentialsException)
+		{
+			msg = "用户名或密码错误";
+		}
+		else
+		{
+			msg = e.getMessage();
+		}
+		response.getWriter().write(objectMapper.writeValueAsString(new SimpleResponse(false, msg)));
 	}
 }

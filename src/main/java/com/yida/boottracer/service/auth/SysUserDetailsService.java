@@ -45,6 +45,7 @@ public class SysUserDetailsService implements UserDetailsService
 			user = new SysUser();
 			user.setUserName("user");
 			user.setPassword("{bcrypt}" + encoder.encode("pass"));
+			user.setUserNameCn("吴东雷");
 			user.setIsLockedOut(false);
 
 			dbAuthsSet.add(new SimpleGrantedAuthority("admin"));

@@ -18,6 +18,7 @@
     "html5shiv":"",
     "respond":"",
     "jquery-cookie":"",
+    "jquery-form":"",
     "css":"",
     "vue":"",
     "es6-promise":"",

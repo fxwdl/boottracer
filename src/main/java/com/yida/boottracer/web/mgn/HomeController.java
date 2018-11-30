@@ -20,15 +20,15 @@ import com.yida.boottracer.domain.DictSystemFunction;
 import com.yida.boottracer.domain.test.Order;
 import com.yida.boottracer.domain.test.User;
 import com.yida.boottracer.service.UserService;
+import com.yida.boottracer.web.BaseController;
 import com.yida.enums.FunctionEnum;
 
 @Controller(value = "mgn_HomeController")
-public class HomeController
+public class HomeController extends BaseController
 {
 	private static final Logger log = LoggerFactory.getLogger(HomeController.class);
 
-	@Value("${my.title}")
-	private String appName;
+
 
 	@Autowired
 	private UserService userService;
@@ -47,7 +47,6 @@ public class HomeController
 		user.setName("商务公司");
 		Order o = new Order();
 		o.setOrderNumber("20190101");
-		request.setAttribute("appName", appName);
 		request.setAttribute("order", o);
 
 		List<DictSystemFunction> menu = new ArrayList<DictSystemFunction>();
