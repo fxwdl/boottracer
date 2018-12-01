@@ -48,7 +48,7 @@ public class SysUserDetailsService implements UserDetailsService
 			user.setUserNameCn("吴东雷");
 			user.setIsLockedOut(false);
 
-			dbAuthsSet.add(new SimpleGrantedAuthority("admin"));
+			dbAuthsSet.add(new SimpleGrantedAuthority("admin123"));
 			user.setAuthorities(dbAuthsSet);
 		}
 		return user;

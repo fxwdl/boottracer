@@ -44,7 +44,7 @@
 
         <header class="main-header">
             <!--/* Logo */-->
-            <a th:href="@{/}" class="logo" style="height:52px;">
+            <a th:href="@{/mgn}" class="logo" style="height:52px;">
                 <!--/* mini logo for sidebar mini 50x50 pixels */-->
                 <span class="logo-mini"><b>A</b>LT</span>
                 <!--/* logo for regular state and mobile devices */-->
@@ -102,7 +102,7 @@
             <section class="sidebar">                    
                 <!--/* sidebar menu: : style can be found in sidebar.less */-->
                 <ul class="sidebar-menu"  data-widget="tree">
-            		<th:block th:if="${!menu.isEmpty()}">
+            		<th:block th:if="${menu!=null}">
             			<th:block th:each="m:${menu}" th:with="cssClass=${m.cssClass}?${m.cssClass}:'fa fa-dashboard',isMActive=${m.displayName == module}?'active':''">            				
 		           			<li th:class="${isMActive}+' treeview'">
 						        <a href="#">

@@ -1,30 +1,40 @@
 package com.yida.boottracer.dto;
 
+import net.bytebuddy.asm.Advice.This;
+
 public class SimpleResponse
 {
-	/** * 返回 内容 （json格式） */
+	private boolean flag = false;
+
 	private Object content;
 
-	private boolean flag=false;
-	
+	private Object attInfo;
+
 	public SimpleResponse(Object content)
 	{
 		this(false, content);
 	}
-	
-	public SimpleResponse(boolean flag,Object content)
+
+	public SimpleResponse(boolean flag, Object content)
+	{
+		this(flag, content, null);
+	}
+
+	public SimpleResponse(boolean flag, Object content, Object attInfo)
 	{
 		this.content = content;
-		this.flag=flag;
+		this.flag = flag;
+		this.attInfo = attInfo;
 	}
-	
-	public boolean getFlag() {
+
+	public boolean getFlag()
+	{
 		return flag;
 	}
-	
+
 	public void setFlag(boolean flag)
 	{
-		this.flag=flag;
+		this.flag = flag;
 	}
 
 	public void setContent(Object content)
@@ -35,5 +45,15 @@ public class SimpleResponse
 	public Object getContent()
 	{
 		return this.content;
+	}
+
+	public void setAttInfo(Object attInfo)
+	{
+		this.attInfo = attInfo;
+	}
+
+	public Object getAttInfo()
+	{
+		return this.attInfo;
 	}
 }
