@@ -27,4 +27,13 @@
 	<table-filter match-name="sys_user"
 		match-catalog="sourcetracerdb" exclude="true">
 	</table-filter>
+	<table-filter match-name="dict_region"
+		match-catalog="sourcetracerdb" exclude="true">
+	</table-filter>
+	<table-filter match-name="sys_member"
+		match-catalog="sourcetracerdb" exclude="true">
+	</table-filter>
+	<table-filter match-name="dict_common"
+		match-catalog="sourcetracerdb" exclude="true">
+	</table-filter>
 </hibernate-reverse-engineering>

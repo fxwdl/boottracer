@@ -57,4 +57,5 @@ public class BeanConfig
 	    //return new BCryptPasswordEncoder();
 		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
 	}
+	
 }

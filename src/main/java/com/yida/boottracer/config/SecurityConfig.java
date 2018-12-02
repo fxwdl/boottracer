@@ -1,5 +1,8 @@
 package com.yida.boottracer.config;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.sql.DataSource;
 import javax.swing.text.html.HTML;
 
@@ -9,6 +12,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -17,6 +21,8 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -24,6 +30,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.yida.boottracer.domain.SysUser;
 import com.yida.boottracer.service.auth.MyAuthenticationFailHandler;
 import com.yida.boottracer.service.auth.MyAuthenticationSuccessHandler;
 import com.yida.boottracer.service.auth.SysUserDetailsService;
@@ -64,7 +71,28 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 		
 		//增加自定义的AuthenticationProvider
 		//auth.authenticationProvider(authenticationProvider);
-//		auth.inMemoryAuthentication().withUser("user").password("password").roles("USER");
+		
+//		
+//		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+//		auth.userDetailsService(inMemoryUserDetailsManager).passwordEncoder(encoder);
+//		auth.authenticationProvider(authenticationProvider);
+//		
+//		
+//		Set<GrantedAuthority> dbAuthsSet = new HashSet<GrantedAuthority>();
+//		
+//		SysUser user = new SysUser();
+//		user.setUserName("user");
+//		user.setPassword("{bcrypt}" + encoder.encode("pass"));
+//		user.setUserNameCn("吴东雷");
+//		user.setIsLockedOut(false);
+//
+//		dbAuthsSet.add(new SimpleGrantedAuthority("admin123"));
+//		user.setAuthorities(dbAuthsSet);		
+//		
+//		auth.inMemoryAuthentication().withUser(user);
+//		
+		
+		
 //		auth.jdbcAuthentication().dataSource(dataSource).withUser("user").password("password").roles("USER");
 		super.configure(auth);
 	}

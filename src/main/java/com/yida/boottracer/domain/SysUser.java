@@ -6,10 +6,21 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 /**
@@ -45,6 +56,8 @@ public class SysUser implements java.io.Serializable, UserDetails
 	private Date failedPasswordAnswerAttemptWindowStart;
 	private String comment;
 	private Set<SysRole> roles = new HashSet<>();
+	private SysMember sysMember;
+	private Boolean isMemberAdmin;
 
 	private Collection<? extends GrantedAuthority> authorities = new HashSet<>();
 
@@ -52,61 +65,7 @@ public class SysUser implements java.io.Serializable, UserDetails
 	{
 	}
 
-	public SysUser(String userId, String userName, String userNameCn, boolean isAnonymous, String password,
-			boolean isApproved, boolean isLockedOut, Date createDate, Date lastLoginDate, Date lastPasswordChangedDate,
-			Date lastLockoutDate, int failedPasswordAttemptCount, Date failedPasswordAttemptWindowStart,
-			int failedPasswordAnswerAttemptCount, Date failedPasswordAnswerAttemptWindowStart)
-	{
-		this.userId = userId;
-		this.userName = userName;
-		this.userNameCn = userNameCn;
-		this.isAnonymous = isAnonymous;
-		this.password = password;
-		this.isApproved = isApproved;
-		this.isLockedOut = isLockedOut;
-		this.createDate = createDate;
-		this.lastLoginDate = lastLoginDate;
-		this.lastPasswordChangedDate = lastPasswordChangedDate;
-		this.lastLockoutDate = lastLockoutDate;
-		this.failedPasswordAttemptCount = failedPasswordAttemptCount;
-		this.failedPasswordAttemptWindowStart = failedPasswordAttemptWindowStart;
-		this.failedPasswordAnswerAttemptCount = failedPasswordAnswerAttemptCount;
-		this.failedPasswordAnswerAttemptWindowStart = failedPasswordAnswerAttemptWindowStart;
-	}
-
-	public SysUser(String userId, String userName, String userNameCn, String tel, String email, String qq,
-			String webChat, boolean isAnonymous, String password, Integer passwordFormat, String passwordSalt,
-			String passwordQuestion, String passwordAnswer, boolean isApproved, boolean isLockedOut, Date createDate,
-			Date lastLoginDate, Date lastPasswordChangedDate, Date lastLockoutDate, int failedPasswordAttemptCount,
-			Date failedPasswordAttemptWindowStart, int failedPasswordAnswerAttemptCount,
-			Date failedPasswordAnswerAttemptWindowStart, String comment)
-	{
-		this.userId = userId;
-		this.userName = userName;
-		this.userNameCn = userNameCn;
-		this.tel = tel;
-		this.email = email;
-		this.qq = qq;
-		this.webChat = webChat;
-		this.isAnonymous = isAnonymous;
-		this.password = password;
-		this.passwordFormat = passwordFormat;
-		this.passwordSalt = passwordSalt;
-		this.passwordQuestion = passwordQuestion;
-		this.passwordAnswer = passwordAnswer;
-		this.isApproved = isApproved;
-		this.isLockedOut = isLockedOut;
-		this.createDate = createDate;
-		this.lastLoginDate = lastLoginDate;
-		this.lastPasswordChangedDate = lastPasswordChangedDate;
-		this.lastLockoutDate = lastLockoutDate;
-		this.failedPasswordAttemptCount = failedPasswordAttemptCount;
-		this.failedPasswordAttemptWindowStart = failedPasswordAttemptWindowStart;
-		this.failedPasswordAnswerAttemptCount = failedPasswordAnswerAttemptCount;
-		this.failedPasswordAnswerAttemptWindowStart = failedPasswordAnswerAttemptWindowStart;
-		this.comment = comment;
-	}
-
+	
 	@Id
 	@Column(name = "UserId", unique = true, nullable = false, length = 64)
 	public String getUserId()
@@ -389,6 +348,33 @@ public class SysUser implements java.io.Serializable, UserDetails
 	{
 		this.roles = roles;
 	}
+	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "Member_ID")
+	public SysMember getSysMember()
+	{
+		return this.sysMember;
+	}
+
+	public void setSysMember(SysMember sysMember)
+	{
+		this.sysMember = sysMember;
+	}
+
+	/**
+	 * 是否为企业会员的管理员账户
+	 * @return
+	 */
+	@Column(name = "IsMemberAdmin")
+	public Boolean getIsMemberAdmin()
+	{
+		return this.isMemberAdmin;
+	}
+
+	public void setIsMemberAdmin(Boolean isMemberAdmin)
+	{
+		this.isMemberAdmin = isMemberAdmin;
+	}
 
 	/**
 	 * 设置权限集合
@@ -426,7 +412,7 @@ public class SysUser implements java.io.Serializable, UserDetails
 	@Transient
 	public boolean isAccountNonLocked()
 	{
-		return !this.isLockedOut;
+		return this.isLockedOut;
 	}
 
 	@Override
@@ -440,7 +426,7 @@ public class SysUser implements java.io.Serializable, UserDetails
 	@Transient
 	public boolean isEnabled()
 	{
-		return !this.isLockedOut;
+		return this.isLockedOut;
 	}
 
 }
