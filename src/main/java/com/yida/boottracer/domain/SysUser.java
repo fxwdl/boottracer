@@ -412,7 +412,7 @@ public class SysUser implements java.io.Serializable, UserDetails
 	@Transient
 	public boolean isAccountNonLocked()
 	{
-		return this.isLockedOut;
+		return !this.isLockedOut;
 	}
 
 	@Override
@@ -426,7 +426,7 @@ public class SysUser implements java.io.Serializable, UserDetails
 	@Transient
 	public boolean isEnabled()
 	{
-		return this.isLockedOut;
+		return !this.isLockedOut;
 	}
 
 }

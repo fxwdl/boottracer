@@ -31,24 +31,11 @@ public class SysUserDetailsService implements UserDetailsService
 		Set<GrantedAuthority> dbAuthsSet = new HashSet<GrantedAuthority>();
 		if (user != null)
 		{
-
 			for (SysRole r : user.getRoles())
 			{
 				String roleName = this.rolePrefix + r.getName();
 				dbAuthsSet.add(new SimpleGrantedAuthority(roleName));
 			}
-			user.setAuthorities(dbAuthsSet);
-		}
-		else
-		{
-			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-			user = new SysUser();
-			user.setUserName("user");
-			user.setPassword("{bcrypt}" + encoder.encode("pass"));
-			user.setUserNameCn("吴东雷");
-			user.setIsLockedOut(false);
-
-			dbAuthsSet.add(new SimpleGrantedAuthority("admin123"));
 			user.setAuthorities(dbAuthsSet);
 		}
 		return user;
