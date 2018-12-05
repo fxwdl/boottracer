@@ -11,7 +11,12 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- 正在导出表  sourcetracerdb.dict_region 的数据：~0 rows (大约)
+-- 正在导出表  sourcetracerdb.dict_common 的数据：~0 rows (大约)
+DELETE FROM `dict_common`;
+/*!40000 ALTER TABLE `dict_common` DISABLE KEYS */;
+/*!40000 ALTER TABLE `dict_common` ENABLE KEYS */;
+
+-- 正在导出表  sourcetracerdb.dict_region 的数据：~70 rows (大约)
 DELETE FROM `dict_region`;
 /*!40000 ALTER TABLE `dict_region` DISABLE KEYS */;
 INSERT INTO `dict_region` (`ID`, `Code`, `Name`, `Parent_ID`, `Level`, `Order`, `Name_En`, `ShortName_En`) VALUES
@@ -87,9 +92,12 @@ INSERT INTO `dict_region` (`ID`, `Code`, `Name`, `Parent_ID`, `Level`, `Order`, 
 	(977, '220382', '双辽市', 87, 3, 0, 'Shuangliao Shi', 'SLS');
 /*!40000 ALTER TABLE `dict_region` ENABLE KEYS */;
 
--- 正在导出表  sourcetracerdb.dict_system_function 的数据：~0 rows (大约)
+-- 正在导出表  sourcetracerdb.dict_system_function 的数据：~2 rows (大约)
 DELETE FROM `dict_system_function`;
 /*!40000 ALTER TABLE `dict_system_function` DISABLE KEYS */;
+INSERT INTO `dict_system_function` (`Id`, `CssClass`, `DisplayName`, `FullName`, `FunType`, `Name`, `Page`, `Seq`, `ParentId`) VALUES
+	('2a5c67c2-f888-11e8-8fb3-3c970ea599ca', 'fa fa-book', '通用字典', 'mgn-system-dict_common_list', 1, 'dict_common_list', '/mgn/system/dict_common_list.html', 'Z_01', 'e589bb14-f887-11e8-8fb3-3c970ea599ca'),
+	('e589bb14-f887-11e8-8fb3-3c970ea599ca', '', '系统管理', 'mgn-system', 0, 'system', '#', 'Z', NULL);
 /*!40000 ALTER TABLE `dict_system_function` ENABLE KEYS */;
 
 -- 正在导出表  sourcetracerdb.sys_member 的数据：~0 rows (大约)
@@ -125,7 +133,7 @@ INSERT INTO `test_order` (`id`, `order_number`, `version`, `created_at`, `update
 	(3, '2018-001', 0, '2018-11-22 12:36:57', '2018-11-22 12:36:57', NULL, NULL);
 /*!40000 ALTER TABLE `test_order` ENABLE KEYS */;
 
--- 正在导出表  sourcetracerdb.test_order_item 的数据：~0 rows (大约)
+-- 正在导出表  sourcetracerdb.test_order_item 的数据：~2 rows (大约)
 DELETE FROM `test_order_item`;
 /*!40000 ALTER TABLE `test_order_item` DISABLE KEYS */;
 INSERT INTO `test_order_item` (`id`, `quantity`, `version`, `order_id`, `product_id`) VALUES
@@ -133,7 +141,7 @@ INSERT INTO `test_order_item` (`id`, `quantity`, `version`, `order_id`, `product
 	(6, 5, 0, 3, 6);
 /*!40000 ALTER TABLE `test_order_item` ENABLE KEYS */;
 
--- 正在导出表  sourcetracerdb.test_product 的数据：~0 rows (大约)
+-- 正在导出表  sourcetracerdb.test_product 的数据：~2 rows (大约)
 DELETE FROM `test_product`;
 /*!40000 ALTER TABLE `test_product` DISABLE KEYS */;
 INSERT INTO `test_product` (`id`, `name`, `version`) VALUES
@@ -141,7 +149,7 @@ INSERT INTO `test_product` (`id`, `name`, `version`) VALUES
 	(6, '办公桌', 0);
 /*!40000 ALTER TABLE `test_product` ENABLE KEYS */;
 
--- 正在导出表  sourcetracerdb.test_user 的数据：~0 rows (大约)
+-- 正在导出表  sourcetracerdb.test_user 的数据：~2 rows (大约)
 DELETE FROM `test_user`;
 /*!40000 ALTER TABLE `test_user` DISABLE KEYS */;
 INSERT INTO `test_user` (`id`, `age`, `name`) VALUES

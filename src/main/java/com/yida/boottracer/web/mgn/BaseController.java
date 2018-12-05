@@ -3,7 +3,9 @@ package com.yida.boottracer.web.mgn;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.servlet.RequestDispatcher;
@@ -12,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.aspectj.weaver.ast.Var;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
@@ -31,10 +34,15 @@ import org.springframework.web.servlet.ModelAndView;
 import com.yida.boottracer.domain.DictSystemFunction;
 import com.yida.boottracer.domain.SysUser;
 import com.yida.boottracer.dto.SimpleResponse;
+import com.yida.boottracer.enums.SystemFunctionType;
+import com.yida.boottracer.service.UserService;
 import com.yida.enums.FunctionEnum;
 
 public abstract class BaseController
 {
+	@Autowired
+	private UserService userService;
+
 	// @ModelAttribute先于RequestMapping来构造Model
 	@ModelAttribute
 	public void initSystemMenu(Model model)
@@ -43,26 +51,16 @@ public abstract class BaseController
 		// m = this.getAccountService().GetSystemMenu(u.getUsername());
 		// model.addAttribute("menu", m);
 
+		List<DictSystemFunction> all = userService.GetSystemMenu(getUser().getUsername());
 		List<DictSystemFunction> menu = new ArrayList<DictSystemFunction>();
-
-		DictSystemFunction L1 = new DictSystemFunction(UUID.randomUUID().toString(), "L1", "一级菜单A", "L1",
-				FunctionEnum.Module.ordinal());
-		L1.setCssClass("fa fa-ambulance");
-		L1.getChildren().add(new DictSystemFunction(UUID.randomUUID().toString(), L1, "L1_1", "二级菜单A1", "L1|L1_1",
-				FunctionEnum.Menu.ordinal(), "M001", "#", "", null));
-		L1.getChildren().add(new DictSystemFunction(UUID.randomUUID().toString(), L1, "L1_2", "二级菜单A2", "L1|L1_2",
-				FunctionEnum.Menu.ordinal(), "M002", "#", "", null));
-		menu.add(L1);
-
-		DictSystemFunction L2 = new DictSystemFunction(UUID.randomUUID().toString(), "L2", "一级菜单B", "L2",
-				FunctionEnum.Module.ordinal());
-		L2.getChildren().add(new DictSystemFunction(UUID.randomUUID().toString(), L1, "L2_1", "二级菜单B1", "L2|L2_1",
-				FunctionEnum.Menu.ordinal(), "M001", "#", "", null));
-		L2.getChildren().add(new DictSystemFunction(UUID.randomUUID().toString(), L1, "L2_2", "二级菜单B2", "L2|L2_2",
-				FunctionEnum.Menu.ordinal(), "M002", "#", "", null));
-		L2.setCssClass("fa fa-calculator");
-		menu.add(L2);
-
+		all.forEach(item ->
+		{
+			if (item.getFunType() == SystemFunctionType.Module.ordinal())
+			{
+				menu.add(item);
+			}
+		});
+		
 		model.addAttribute("menu", menu);
 	}
 
@@ -132,33 +130,33 @@ public abstract class BaseController
 	// return v;
 	// }
 
-	
 	@ExceptionHandler(AccessDeniedException.class)
 	@ResponseBody
 	public Object accessDeniedErrorHandler(HttpServletRequest request, HttpServletResponse response, Exception ex)
 			throws Exception, IOException
 	{
-		return errorHandler(request,response,ex,"mgn/403");
+		return errorHandler(request, response, ex, "mgn/403");
 	}
-	
+
 	@ExceptionHandler(RuntimeException.class)
 	@ResponseBody
 	public Object defaultErrorHandler(HttpServletRequest request, HttpServletResponse response, Exception ex)
 			throws Exception, IOException
-	{	
-		return errorHandler(request,response,ex,"mgn/error");
+	{
+		return errorHandler(request, response, ex, "mgn/error");
 	}
-	
-	protected  Object errorHandler(HttpServletRequest request, HttpServletResponse response, Exception ex,String redirect)
+
+	protected Object errorHandler(HttpServletRequest request, HttpServletResponse response, Exception ex,
+			String redirect)
 	{
 		String url = request.getRequestURI();
 		if (StringUtils.endsWithIgnoreCase(url, "html"))
 		{
-			 ModelAndView v=new ModelAndView();
-			 v.addObject("msg", ex.getMessage());
-			 v.addObject("exception",ex);
-			 v.setViewName(redirect);
-			 return v;
+			ModelAndView v = new ModelAndView();
+			v.addObject("msg", ex.getMessage());
+			v.addObject("exception", ex);
+			v.setViewName(redirect);
+			return v;
 		}
 		else
 		{

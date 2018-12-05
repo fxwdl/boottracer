@@ -15,10 +15,10 @@
     <!--/* Ionicons */-->
     <link rel="stylesheet" th:href="@{/bower_components/ionicons/css/ionicons.min.css}">
     <!--/* Theme style */-->
-    <link rel="stylesheet" th:href="@{/bower_components/adminLTE/dist/css/AdminLTE.min.css}">
+    <link rel="stylesheet" th:href="@{/bower_components/adminLTE/dist/css/AdminLTE.css}">
 
     <!--/* AdminLTE Skins. Choose a skin from the css/skins folder instead of downloading all of them to reduce the load. */-->
-    <link rel="stylesheet" th:href="@{/bower_components/adminLTE/dist/css/skins/_all-skins.min.css}">
+    <link rel="stylesheet" th:href="@{/bower_components/adminLTE/dist/css/skins/skin-blue-light.css}">
     <!--/* HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries */-->
     <!--/* WARNING: Respond.js doesn't work if you view the page via file:// */-->
     <!--/*[if lt IE 9]>
@@ -44,7 +44,7 @@
 
         <header class="main-header">
             <!--/* Logo */-->
-            <a th:href="@{/mgn}" class="logo" style="height:52px;">
+            <a th:href="@{/}" class="logo" style="height:52px;">
                 <!--/* mini logo for sidebar mini 50x50 pixels */-->
                 <span class="logo-mini"><b>A</b>LT</span>
                 <!--/* logo for regular state and mobile devices */-->
@@ -113,11 +113,10 @@
 						        </a>
 						        <ul class="treeview-menu">
 						        	<th:block th:each="i:${m.children}" th:with="isFActive=${i.displayName == functionName}?'active':''">						        		
-						        		<li th:class="${isFActive}">
-						        			<a th:href="@{/}+${i.page }" th:data-href="@{/}+${i.page }" 
-						        				th:data-title="${i.displayName }" data-my-type="menu" 
-						        				th:data-my-menu-id="${i.fullName }" th:text="${i.displayName }">
-						        				<i class="fa fa-circle-o"></i>
+						        		<li th:class="${isFActive}">						        			
+						        			<a th:href="@{/}+${i.page}" th:data-href="@{/}+${i.page}" th:data-title="${i.displayName}" data-my-type="menu" th:data-my-menu-id="${i.fullName}">						        				
+						        				<i th:class="${i.cssClass}"></i>
+						        				[[${i.displayName}]]
 						        			</a>
 						        		</li>
 						        	</th:block>
@@ -141,7 +140,7 @@
                 </th:block>            
 
                 <ol class="breadcrumb">
-                    <li><a th:href="@{/}"><i class="fa fa-dashboard"></i> 主页</a></li>
+                    <li><a th:href="@{/mgn}"><i class="fa fa-dashboard"></i> 主页</a></li>
                     <th:block th:if="${module!='首页'}">
 	                    <li><a href="#" th:text="${module }">模块</a></li>
 	                    <li class="active" th:text="${functionName }">功能</li>

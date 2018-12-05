@@ -1,20 +1,27 @@
 package com.yida.boottracer.service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.yida.boottracer.domain.DictSystemFunction;
 import com.yida.boottracer.domain.test.User;
 import com.yida.boottracer.domain.test.UserRepository;
+import com.yida.boottracer.repo.DictSystemFunctionRepository;
 
 @Service
 public class UserService
 {
 	@Autowired
 	private UserRepository userRepository;
+
+	@Autowired
+	private DictSystemFunctionRepository dictSystemFunctionRepository;
 
 	public Optional<User> getUser()
 	{
@@ -37,5 +44,10 @@ public class UserService
 		u.setAge(2);
 
 		userRepository.save(u);
+	}
+
+	public List<DictSystemFunction> GetSystemMenu(String userName)
+	{
+		return dictSystemFunctionRepository.getByUserName(userName);
 	}
 }

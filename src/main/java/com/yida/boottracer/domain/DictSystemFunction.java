@@ -1,13 +1,17 @@
 package com.yida.boottracer.domain;
 // Generated 2018-11-24 12:44:01 by Hibernate Tools 5.2.10.Final
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -29,34 +33,11 @@ public class DictSystemFunction implements java.io.Serializable
 	private String seq;
 	private String page;
 	private String cssClass;
-	private Set<DictSystemFunction> children = new HashSet<>();
-
+	private List<DictSystemFunction> children = new ArrayList<>();
+	private Set<SysRole> roles = new HashSet<>();
+	
 	public DictSystemFunction()
 	{
-	}
-
-	public DictSystemFunction(String id, String name, String displayName, String fullName, int funType)
-	{
-		this.id = id;
-		this.name = name;
-		this.displayName = displayName;
-		this.fullName = fullName;
-		this.funType = funType;
-	}
-
-	public DictSystemFunction(String id, DictSystemFunction parent, String name, String displayName, String fullName,
-			int funType, String seq, String page, String cssClass, Set<DictSystemFunction> children)
-	{
-		this.id = id;
-		this.parent = parent;
-		this.name = name;
-		this.displayName = displayName;
-		this.fullName = fullName;
-		this.funType = funType;
-		this.seq = seq;
-		this.page = page;
-		this.cssClass = cssClass;
-		this.children = children;
 	}
 
 	@Id
@@ -161,14 +142,24 @@ public class DictSystemFunction implements java.io.Serializable
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "parent")
-	public Set<DictSystemFunction> getChildren()
+	public List<DictSystemFunction> getChildren()
 	{
 		return this.children;
 	}
 
-	public void setChildren(Set<DictSystemFunction> children)
+	public void setChildren(List<DictSystemFunction> children)
 	{
 		this.children = children;
 	}
 
+	@ManyToMany(mappedBy = "functions", fetch = FetchType.LAZY)
+	public Set<SysRole> getRoles()
+	{
+		return this.roles;
+	}
+
+	public void setRoles(Set<SysRole> roles)
+	{
+		this.roles = roles;
+	}
 }

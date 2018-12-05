@@ -3,12 +3,7 @@ package com.yida.boottracer.domain;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "sys_role")
@@ -18,6 +13,7 @@ public class SysRole
 	private String name;
 	private String comment;
 	private Set<SysUser> users = new HashSet<>();
+	private Set<DictSystemFunction> functions = new HashSet<>();
 
 	public SysRole()
 	{
@@ -73,5 +69,18 @@ public class SysRole
 	public void setUsers(Set<SysUser> users)
 	{
 		this.users = users;
+	}
+
+	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@JoinTable(name = "sys_role_permission", joinColumns = { @JoinColumn(name = "Role_ID") }, inverseJoinColumns = {
+			@JoinColumn(name = "Function_ID") })
+	public Set<DictSystemFunction> getFunctions()
+	{
+		return this.functions;
+	}
+
+	public void setFunctions(Set<DictSystemFunction> functions)
+	{
+		this.functions = functions;
 	}
 }
