@@ -1,114 +1,78 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-  layout:decorate="~{_layout/main}" th:with="module='系统管理',functionName='通用字典',smallTitle='字典列表'">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{_layout/main}"
+	th:with="module='系统管理',functionName='通用字典',smallTitle='字典列表'">
 <head>
-  <title>通用字典管理</title>
-  
+<title>通用字典管理</title>
+
 </head>
 <body>
 	<div layout:fragment="doBody">
-		<div class="row">
-			<div class="span12">
-				<form class="form-search">
-					<input class="input-medium search-query" type="text" /> <button type="submit" class="btn">查找</button>
-				</form>
+		<div class="container-fluid">
+			<div class="form-inline" role="form">
+				<div class="form-group">
+					<label for="ds_type">字典类型：</label> 
+					<select id="ds_type" name="ds_type" class="form-control">
+						<option>行业类型</option>
+						<option>企业类型</option>
+					</select>
+				</div>
+				<div class="form-group">
+					<label for="ds_status">状态：</label> 
+					<select id="ds_status" name="ds_status" class="form-control">
+						<option>启用</option>
+						<option>停用</option>
+					</select>
+				</div>
+				<button type="submit" class="btn btn-default">搜索</button>
 			</div>
 		</div>
-		<div class="row">
-			<div class="span12">
-				<table class="table">
+		<div class="row" style="padding-top: 5px;">
+			<div class="col-md-12">
+				<div id="toolbar" class="btn-group">
+					<button type="button" class="btn btn-default">
+						<i class="glyphicon glyphicon-plus"></i>
+					</button>
+					<button type="button" class="btn btn-default">
+						<i class="glyphicon glyphicon-pencil"></i>
+					</button>
+					<button type="button" class="btn btn-default">
+						<i class="glyphicon glyphicon-trash"></i>
+					</button>
+				</div>
+				<table id="tbl" data-toolbar="#toolbar" data-toggle="table"
+					data-cache="false" data-pagination="true"
+					data-side-pagination="server" data-search="true"
+					data-search-on-enter-key="false" data-show-refresh="true"
+					data-show-pagination-switch="true" data-id-field="Code"
+					data-click-to-select="true" data-single-select="true"
+					data-striped="true" data-sort-name="code" data-sort-order="asc"
+					data-show-columns="true" data-select-item-name="myRadioName"
+					data-url="${pageContext.request.contextPath}/DictStdDisease/GetData"
+					data-query-params="queryParams">
 					<thead>
 						<tr>
-							<th>
-								编号
-							</th>
-							<th>
-								产品
-							</th>
-							<th>
-								交付时间
-							</th>
-							<th>
-								状态
-							</th>
+							<th data-field="code" data-halign="center" data-align="left">代码</th>
+							<th data-field="name" data-halign="center" data-align="left">名称</th>
+							<th data-field="comment" data-halign="center" data-align="left">备注</th>
+							<th data-field="isDeleted" data-halign="center" data-align="left">停用</th>
 						</tr>
 					</thead>
-					<tbody>
-						<tr>
-							<td>
-								1
-							</td>
-							<td>
-								TB - Monthly
-							</td>
-							<td>
-								01/04/2012
-							</td>
-							<td>
-								Default
-							</td>
-						</tr>
-						<tr class="success">
-							<td>
-								1
-							</td>
-							<td>
-								TB - Monthly
-							</td>
-							<td>
-								01/04/2012
-							</td>
-							<td>
-								Approved
-							</td>
-						</tr>
-						<tr class="error">
-							<td>
-								2
-							</td>
-							<td>
-								TB - Monthly
-							</td>
-							<td>
-								02/04/2012
-							</td>
-							<td>
-								Declined
-							</td>
-						</tr>
-						<tr class="warning">
-							<td>
-								3
-							</td>
-							<td>
-								TB - Monthly
-							</td>
-							<td>
-								03/04/2012
-							</td>
-							<td>
-								Pending
-							</td>
-						</tr>
-						<tr class="info">
-							<td>
-								4
-							</td>
-							<td>
-								TB - Monthly
-							</td>
-							<td>
-								04/04/2012
-							</td>
-							<td>
-								Call in to confirm
-							</td>
-						</tr>
-					</tbody>
 				</table>
 			</div>
-		</div>		
-	</div>
 
+		</div>
+
+	</div>
+	<th:block layout:fragment="script">
+		<script
+			th:src="@{/bower_components/bootstrap-table/dist/bootstrap-table.js}"></script>
+		<script
+			th:src="@{/bower_components/bootstrap-table/dist/locale/bootstrap-table-zh-CN.js}"></script>
+		<script type="text/javascript">
+			$('tbl').bootstrapTable();
+		</script>
+	</th:block>
 </body>
 </html>
