@@ -47,10 +47,6 @@ public abstract class BaseController
 	@ModelAttribute
 	public void initSystemMenu(Model model)
 	{
-		// List<SystemMenuModel> m = new ArrayList<SystemMenuModel>();
-		// m = this.getAccountService().GetSystemMenu(u.getUsername());
-		// model.addAttribute("menu", m);
-
 		List<DictSystemFunction> all = userService.GetSystemMenu(getUser().getUsername());
 		List<DictSystemFunction> menu = new ArrayList<DictSystemFunction>();
 		all.forEach(item ->

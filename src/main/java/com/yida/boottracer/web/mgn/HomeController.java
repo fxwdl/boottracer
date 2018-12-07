@@ -32,11 +32,12 @@ import com.yida.boottracer.service.UserService;
 import com.yida.enums.FunctionEnum;
 
 @Controller(value = "mgn_HomeController")
+@RequestMapping(value = "/mgn")
 public class HomeController extends BaseController
 {
 	private static final Logger log = LoggerFactory.getLogger(HomeController.class);
 
-	@GetMapping(value = { "/mgn", "/mgn/index", "/mgn/index.html" })
+	@GetMapping(value = { "", "index", "index.html" })
 	public String Index(HttpServletRequest request)
 	{
 		Order o = new Order();
@@ -46,19 +47,19 @@ public class HomeController extends BaseController
 		return "mgn/index";
 	}
 
-	@GetMapping(value = { "/mgn/403.html" })
+	@GetMapping(value = { "403.html" })
 	public String handle403()
 	{
 		return "mgn/403";
 	}
 
-	@GetMapping(value = { "/mgn/test" })
+	@GetMapping(value = { "test" })
 	public String test(HttpServletRequest request)
 	{
 		throw new RuntimeException("test error");
 	}
 
-	@GetMapping(value = "/mgn/testAdmin")
+	@GetMapping(value = "testAdmin")
 	// @Secured(value = "ROLE_管理员")
 	@PreAuthorize("hasAuthority('admin')")
 	public ModelAndView testAdmin()
@@ -71,7 +72,7 @@ public class HomeController extends BaseController
 		return m;
 	}
 	
-	@GetMapping(value = "/mgn/testAdmin.html")
+	@GetMapping(value = "testAdmin.html")
 	// @Secured(value = "ROLE_管理员")
 	@PreAuthorize("hasAuthority('admin')")
 	public ModelAndView testAdminHtml()

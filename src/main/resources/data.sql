@@ -96,8 +96,8 @@ INSERT INTO `dict_region` (`ID`, `Code`, `Name`, `Parent_ID`, `Level`, `Order`, 
 DELETE FROM `dict_system_function`;
 /*!40000 ALTER TABLE `dict_system_function` DISABLE KEYS */;
 INSERT INTO `dict_system_function` (`Id`, `CssClass`, `DisplayName`, `FullName`, `FunType`, `Name`, `Page`, `Seq`, `ParentId`) VALUES
-	('2a5c67c2-f888-11e8-8fb3-3c970ea599ca', 'fa fa-book', '通用字典', 'mgn-system-dict_common_list', 1, 'dict_common_list', '/mgn/system/dict_common_list.html', 'Z_01', 'e589bb14-f887-11e8-8fb3-3c970ea599ca'),
-	('e589bb14-f887-11e8-8fb3-3c970ea599ca', '', '系统管理', 'mgn-system', 0, 'system', '#', 'Z', NULL);
+	('2a5c67c2-f888-11e8-8fb3-3c970ea599ca', 'fa fa-book', '通用字典', 'mgn-system-dict_common_list', 1, 'dict_common_list', 'mgn/system/dict_common_list.html', 'Z_01', 'e589bb14-f887-11e8-8fb3-3c970ea599ca'),
+	('e589bb14-f887-11e8-8fb3-3c970ea599ca', 'fa fa-dashboard', '系统管理', 'mgn-system', 0, 'system', '#', 'Z', NULL);
 /*!40000 ALTER TABLE `dict_system_function` ENABLE KEYS */;
 
 -- 正在导出表  sourcetracerdb.sys_member 的数据：~0 rows (大约)
@@ -111,6 +111,14 @@ DELETE FROM `sys_role`;
 INSERT INTO `sys_role` (`Id`, `Comment`, `Name`) VALUES
 	('841edad4-f7d7-11e8-a03b-3c970ea599ca', NULL, '管理员');
 /*!40000 ALTER TABLE `sys_role` ENABLE KEYS */;
+
+-- 正在导出表  sourcetracerdb.sys_role_permission 的数据：~2 rows (大约)
+DELETE FROM `sys_role_permission`;
+/*!40000 ALTER TABLE `sys_role_permission` DISABLE KEYS */;
+INSERT INTO `sys_role_permission` (`Role_ID`, `Function_ID`) VALUES
+	('841edad4-f7d7-11e8-a03b-3c970ea599ca', '2a5c67c2-f888-11e8-8fb3-3c970ea599ca'),
+	('841edad4-f7d7-11e8-a03b-3c970ea599ca', 'e589bb14-f887-11e8-8fb3-3c970ea599ca');
+/*!40000 ALTER TABLE `sys_role_permission` ENABLE KEYS */;
 
 -- 正在导出表  sourcetracerdb.sys_user 的数据：~0 rows (大约)
 DELETE FROM `sys_user`;

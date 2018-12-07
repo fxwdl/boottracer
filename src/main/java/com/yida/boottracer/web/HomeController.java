@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @Controller
 public class HomeController 
 {
-	@GetMapping(value = { "/", "/index.html" })
+	@GetMapping(value = { "", "index.html" })
 	public String Index(HttpServletRequest request)
 	{
 		return "index";

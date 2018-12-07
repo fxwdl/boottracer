@@ -14,11 +14,10 @@
 				<div class="form-group">
 					<label for="ds_type">字典类型：</label> 
 					<select id="ds_type" name="ds_type" class="form-control">
-						<option>行业类型</option>
-						<option>企业类型</option>
+						<option th:each="t:${dictType}" th:value="${t.value}" th:text="${t.name}"></option>
 					</select>
 				</div>
-				<div class="form-group">
+				<div class="form-group" style="display: none">
 					<label for="ds_status">状态：</label> 
 					<select id="ds_status" name="ds_status" class="form-control">
 						<option>启用</option>
@@ -45,18 +44,18 @@
 					data-cache="false" data-pagination="true"
 					data-side-pagination="server" data-search="true"
 					data-search-on-enter-key="false" data-show-refresh="true"
-					data-show-pagination-switch="true" data-id-field="Code"
+					data-show-pagination-switch="true" data-id-field="code"
 					data-click-to-select="true" data-single-select="true"
 					data-striped="true" data-sort-name="code" data-sort-order="asc"
 					data-show-columns="true" data-select-item-name="myRadioName"
-					data-url="${pageContext.request.contextPath}/DictStdDisease/GetData"
+					th:data-url="@{/mgn/system/dictCommon/GetData}"
 					data-query-params="queryParams">
 					<thead>
 						<tr>
-							<th data-field="code" data-halign="center" data-align="left">代码</th>
-							<th data-field="name" data-halign="center" data-align="left">名称</th>
-							<th data-field="comment" data-halign="center" data-align="left">备注</th>
-							<th data-field="isDeleted" data-halign="center" data-align="left">停用</th>
+							<th class="col-xs-2" data-field="code" data-halign="center" data-align="left">代码</th>
+							<th class="col-xs-2" data-field="name" data-halign="center" data-align="left">名称</th>
+							<th class="col-xs-8"  data-field="comment" data-halign="center" data-align="left">备注</th>
+							<!-- <th data-field="isDeleted" data-halign="center" data-align="left">停用</th> -->
 						</tr>
 					</thead>
 				</table>
@@ -72,6 +71,11 @@
 			th:src="@{/bower_components/bootstrap-table/dist/locale/bootstrap-table-zh-CN.js}"></script>
 		<script type="text/javascript">
 			$('tbl').bootstrapTable();
+		    function queryParams(params) {
+				var type = $('select[name=ds_type]').val();
+		        var o = $.extend(params, { type:  type});
+		        return o;
+		    }			
 		</script>
 	</th:block>
 </body>
