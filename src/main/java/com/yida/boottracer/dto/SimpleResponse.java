@@ -10,6 +10,11 @@ public class SimpleResponse
 
 	private Object attInfo;
 
+	public SimpleResponse()
+	{
+		this(false, null);
+	}
+	
 	public SimpleResponse(Object content)
 	{
 		this(false, content);

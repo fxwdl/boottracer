@@ -11,7 +11,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- 正在导出表  sourcetracerdb.dict_common 的数据：~0 rows (大约)
+-- 正在导出表  sourcetracerdb.dict_common 的数据：~78 rows (大约)
 DELETE FROM `dict_common`;
 /*!40000 ALTER TABLE `dict_common` DISABLE KEYS */;
 INSERT INTO `dict_common` (`ID`, `DictType`, `Code`, `Name`, `IsDeleted`, `Comment`) VALUES
@@ -184,7 +184,7 @@ DELETE FROM `sys_member`;
 /*!40000 ALTER TABLE `sys_member` DISABLE KEYS */;
 /*!40000 ALTER TABLE `sys_member` ENABLE KEYS */;
 
--- 正在导出表  sourcetracerdb.sys_role 的数据：~0 rows (大约)
+-- 正在导出表  sourcetracerdb.sys_role 的数据：~1 rows (大约)
 DELETE FROM `sys_role`;
 /*!40000 ALTER TABLE `sys_role` DISABLE KEYS */;
 INSERT INTO `sys_role` (`Id`, `Comment`, `Name`) VALUES
@@ -199,21 +199,21 @@ INSERT INTO `sys_role_permission` (`Role_ID`, `Function_ID`) VALUES
 	('841edad4-f7d7-11e8-a03b-3c970ea599ca', 'e589bb14-f887-11e8-8fb3-3c970ea599ca');
 /*!40000 ALTER TABLE `sys_role_permission` ENABLE KEYS */;
 
--- 正在导出表  sourcetracerdb.sys_user 的数据：~0 rows (大约)
+-- 正在导出表  sourcetracerdb.sys_user 的数据：~1 rows (大约)
 DELETE FROM `sys_user`;
 /*!40000 ALTER TABLE `sys_user` DISABLE KEYS */;
 INSERT INTO `sys_user` (`UserId`, `Comment`, `CreateDate`, `Email`, `FailedPasswordAnswerAttemptCount`, `FailedPasswordAnswerAttemptWindowStart`, `FailedPasswordAttemptCount`, `FailedPasswordAttemptWindowStart`, `IsAnonymous`, `IsApproved`, `IsLockedOut`, `LastLockoutDate`, `LastLoginDate`, `LastPasswordChangedDate`, `Password`, `PasswordAnswer`, `PasswordFormat`, `PasswordQuestion`, `PasswordSalt`, `QQ`, `Tel`, `UserName`, `UserNameCN`, `WebChat`, `Member_ID`, `IsMemberAdmin`) VALUES
 	('25367d3b-f7d7-11e8-a03b-3c970ea599ca', NULL, '2018-12-04 23:06:21', NULL, 0, '2018-12-04 23:06:36', 0, '2018-12-04 23:06:42', b'0', b'1', b'0', '2018-12-04 23:06:59', '2018-12-04 23:07:07', '2018-12-04 23:07:09', '{bcrypt}$2a$10$4ZNTtNTXi3Is4AtxiuKin.P.XTyJ9so7ACJzxU0mZSHWVmGWWOfuS', '', NULL, NULL, NULL, NULL, NULL, 'admin', '系统管理员', NULL, NULL, NULL);
 /*!40000 ALTER TABLE `sys_user` ENABLE KEYS */;
 
--- 正在导出表  sourcetracerdb.sys_user_in_role 的数据：~0 rows (大约)
+-- 正在导出表  sourcetracerdb.sys_user_in_role 的数据：~1 rows (大约)
 DELETE FROM `sys_user_in_role`;
 /*!40000 ALTER TABLE `sys_user_in_role` DISABLE KEYS */;
 INSERT INTO `sys_user_in_role` (`user_id`, `role_id`) VALUES
 	('25367d3b-f7d7-11e8-a03b-3c970ea599ca', '841edad4-f7d7-11e8-a03b-3c970ea599ca');
 /*!40000 ALTER TABLE `sys_user_in_role` ENABLE KEYS */;
 
--- 正在导出表  sourcetracerdb.test_order 的数据：~0 rows (大约)
+-- 正在导出表  sourcetracerdb.test_order 的数据：~1 rows (大约)
 DELETE FROM `test_order`;
 /*!40000 ALTER TABLE `test_order` DISABLE KEYS */;
 INSERT INTO `test_order` (`id`, `order_number`, `version`, `created_at`, `updated_at`, `createdAt`, `updatedAt`) VALUES
