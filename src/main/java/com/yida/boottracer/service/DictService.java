@@ -96,6 +96,11 @@ public class DictService
 		result.setContent("删除成功!");
 		return result;
 	}
+	
+	public Optional<DictCommon> getCommonById(int id)
+	{
+		return dictCommonRepository.findById(id);
+	}
 
 	public SimpleResponse addCommonItem(DictCommon item)
 	{

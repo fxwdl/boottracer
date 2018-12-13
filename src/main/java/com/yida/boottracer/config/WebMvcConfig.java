@@ -1,5 +1,7 @@
 package com.yida.boottracer.config;
 
+import java.util.List;
+
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistration;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
@@ -14,4 +16,5 @@ public class WebMvcConfig implements WebMvcConfigurer
 //		ViewControllerRegistration login = registry.addViewController("/login");
 //		login.setViewName("login");
 	}
+	
 }

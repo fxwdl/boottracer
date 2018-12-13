@@ -31,7 +31,7 @@
 		<div class="row" style="padding-top: 5px;">
 			<div class="col-md-12">
 				<div id="toolbar" class="btn-group">
-					<button type="button" class="btn btn-default">
+					<button type="button" id="addNew" class="btn btn-default">
 						<i class="glyphicon glyphicon-plus" style="padding-right: 3px;"></i><span>新增</span>
 					</button>
 				</div>
@@ -61,7 +61,7 @@
 		</div>
 
 	</div>
-	<th:block layout:fragment="script">
+	<th:block layout:fragment="script">	
 		<script th:src="@{/bower_components/bootstrap-table/dist/bootstrap-table.js}"></script>
 		<script th:src="@{/bower_components/bootstrap-table/dist/locale/bootstrap-table-zh-CN.js}"></script>
 		<script th:src="@{/bower_components/bootstrap-dialog/dist/js/bootstrap-dialog.js}"></script>
@@ -101,7 +101,11 @@
 					events: operateEvents
 				}
 				]
-			});	
+			});
+			
+			$('#addNew').click(function(){
+				edit();
+			});
 		});
 		
 	    function queryParams(params) {
@@ -121,37 +125,7 @@
 	    }
 	    window.operateEvents = {
 	            'click .edit': function (e, value, row, index) {
-	            	var showOpt = {
-	                        buttons: [{
-	                            icon: 'glyphicon glyphicon-saved',
-	                            label: '确定',
-	                            cssClass: 'btn-primary',
-	                            action: function (dialog) {
-	                                
-	                                dialog.close();
-	                            }
-	                        }, {
-	                            icon: 'glyphicon glyphicon-ban-circle',
-	                            label: '取消',
-	                            action: function (dialog) {
-	                                dialog.close();
-	                            }
-	                        }],
-	                        data: {
-	                            'pageToLoad': ctx+'mgn/system/dict_common_form.html'
-	                        },
-	                        message: function (dialog) {
-	                            var $d = $('<div></div>');
-	                            var page = dialog.getData('pageToLoad');  
-	                            $d.load(page);
-
-	                            return $d;
-	                        },
-	                        title: '修改',
-	                        draggable: true,
-	                        closeByBackdrop: false
-	                    };
-	                    BootstrapDialog.show(showOpt);
+					edit(row);
 	            },
 	            'click .remove': function (e, value, row, index) {
 	            	$.showConfirm("确定要删除'"+row.name+"'吗?",function(){
@@ -170,7 +144,79 @@
 		            	});	
 	            	});
 	            }
-	        };	    
+	        };
+	    
+		function edit(row){
+        	var showOpt = {
+                    buttons: [{
+                        icon: 'glyphicon glyphicon-saved',
+                        label: '确定',
+                        cssClass: 'btn-primary',
+                        action: function (dialog) {
+                        	var form=$('#editForm');
+                        	/*
+                        	$('#editForm').validator().on('submit', function (e) {
+                        		  if (e.isDefaultPrevented()) {
+                        		    // handle the invalid form...
+                        		  } else {
+                        		    // everything looks good!
+                        		  }
+                        		});
+                        	$('#editForm').submit();
+                        	form.validator('update').on('valid.bs.validator', function (e) {
+                        		console.log('ok');
+                            });    */                    	
+                        	form.validator('validate');
+                        	if(form.data('bs.validator').validate().hasErrors()){
+                        		return;
+                        	}
+                        	var d={id:0};
+                        	if(row){
+                        		d.id=row.id;
+                        	}
+                        	d.code=$('#editForm_code').val();
+                        	d.code=$('#editForm_code').val();
+                        	d.name=$('#editForm_name').val();
+                        	d.comment=$('#editForm_comment').val();
+                        	d.dictType=$('select[name=ds_type]').val();
+                        	d.isDeleted=false;
+                        	
+                        	$.ajax({
+                        		type:'POST',
+                        		url:ctx+'mgn/system/dictCommon/Save',
+                        		data:JSON.stringify(d),
+                        		dataTye:'json',
+                        		contentType:'application/json; charset=UTF-8'
+                        	})
+                        	.done(function(r){
+                        		console.log(r);
+                        	})
+                        	.fail(function(e){
+								console.log(e);
+                        	});
+                        }                    	
+                    }, {
+                        icon: 'glyphicon glyphicon-ban-circle',
+                        label: '取消',
+                        action: function (dialog) {
+                            dialog.close();
+                        }
+                    }],
+                    message: function (dialog) {
+                        var $d = $('<div></div>');
+                        var page = ctx+'mgn/system/dict_common_form.html';
+                        if(row){
+                        	page+='?id='+ row.id;
+                        }
+                        $d.load(page);
+                        return $d;
+                    },
+                    title: '修改',
+                    draggable: true,
+                    closeByBackdrop: false
+                };
+            BootstrapDialog.show(showOpt);			
+		}		
 		</script>
 	</th:block>
 </body>

@@ -1,7 +1,10 @@
 package com.yida.boottracer.web.mgn.system;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.yida.boottracer.domain.DictCommon;
 import com.yida.boottracer.domain.PagingModel;
@@ -20,6 +24,7 @@ import com.yida.boottracer.dto.SimpleResponse;
 import com.yida.boottracer.enums.DictCommomType;
 import com.yida.boottracer.service.DictService;
 import com.yida.boottracer.web.mgn.BaseController;
+import com.yida.web.exception.ResourceNotFoundException;
 
 @Controller
 @RequestMapping(value = "/mgn/system")
@@ -34,11 +39,22 @@ public class DictCommonController extends BaseController
 		model.addAttribute("dictType", DictCommomType.getList());
 		return "mgn/system/dict_common_list";
 	}
-	
+
 	@GetMapping(value = { "dict_common_form.html" })
-	public String showDictCommonForm(Model model)
+	public ModelAndView showDictCommonForm(@RequestParam(name = "id", required = false) Integer id)
 	{
-		return "mgn/system/dict_common_form";
+		ModelAndView v = new ModelAndView();
+		v.setViewName("mgn/system/dict_common_form");
+
+		if (id != null)
+		{
+			Optional<DictCommon> item = dictService.getCommonById(id);
+			if (!item.isPresent())
+				throw new ResourceNotFoundException("未找到id为'" + id + "'的数据！");
+			v.addObject("m", item.get());
+		}
+
+		return v;
 	}
 
 	@GetMapping(value = { "dictCommon/GetData" })
@@ -60,15 +76,17 @@ public class DictCommonController extends BaseController
 		return dictService.deleteCommonItem(id);
 	}
 
-	@PostMapping(value = { "dictCommon/Save" })
+	@PostMapping(value = { "dictCommon/Save"}/*,consumes=MediaType.APPLICATION_JSON_VALUE*/)
 	@ResponseBody
-	public SimpleResponse save(@RequestBody DictCommon item, BindingResult result)
+	public SimpleResponse save(@RequestBody DictCommon item)
 	{
+		/*
 		if (result.hasErrors())
 		{
-			//return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);
+			// return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);
 			return new SimpleResponse(false, result.getAllErrors(), HttpStatus.BAD_REQUEST);
 		}
+		*/
 		return dictService.updateCommonItem(item);
 	}
 }
