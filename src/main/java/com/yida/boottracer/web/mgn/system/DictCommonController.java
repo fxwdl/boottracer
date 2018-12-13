@@ -2,6 +2,8 @@ package com.yida.boottracer.web.mgn.system;
 
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -9,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -78,15 +81,12 @@ public class DictCommonController extends BaseController
 
 	@PostMapping(value = { "dictCommon/Save"}/*,consumes=MediaType.APPLICATION_JSON_VALUE*/)
 	@ResponseBody
-	public SimpleResponse save(@RequestBody DictCommon item)
-	{
-		/*
-		if (result.hasErrors())
+	public ResponseEntity<?> save(@Valid @RequestBody DictCommon item,Errors errors)
+	{		
+		if (errors.hasErrors())
 		{
-			// return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);
-			return new SimpleResponse(false, result.getAllErrors(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(errors.getAllErrors(), HttpStatus.BAD_REQUEST);
 		}
-		*/
-		return dictService.updateCommonItem(item);
+		return new ResponseEntity<>(dictService.saveCommonItem(item), HttpStatus.OK);
 	}
 }

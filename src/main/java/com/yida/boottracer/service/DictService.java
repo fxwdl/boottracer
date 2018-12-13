@@ -102,17 +102,10 @@ public class DictService
 		return dictCommonRepository.findById(id);
 	}
 
-	public SimpleResponse addCommonItem(DictCommon item)
+	public DictCommon saveCommonItem(DictCommon item)
 	{
 		DictCommon newItem = dictCommonRepository.saveAndFlush(item);
 
-		return new SimpleResponse(true, "新增成功!", newItem);
-	}
-
-	public SimpleResponse updateCommonItem(DictCommon item)
-	{
-		DictCommon newItem = dictCommonRepository.saveAndFlush(item);
-
-		return new SimpleResponse(true, "修改成功!", newItem);
+		return newItem;
 	}
 }

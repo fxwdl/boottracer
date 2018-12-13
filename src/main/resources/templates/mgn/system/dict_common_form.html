@@ -25,7 +25,7 @@
 		<div class="form-group">
 			<label for="name" class="col-sm-2 control-label">备注</label>
 			<div class="col-sm-9">
-				<textarea class="form-control" rows="3" id="editForm_comment" name="comment" th:value="${m?.comment}"></textarea>
+				<textarea class="form-control" rows="3" id="editForm_comment" name="comment" th:text="${m?.comment}" ></textarea>
 				<div class="help-block with-errors"></div>
 			</div>
 		</div>
