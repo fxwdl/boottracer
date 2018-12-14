@@ -38,13 +38,10 @@
 				<table id="tbl" 
 					data-toolbar="#toolbar" 					
 					data-show-export="true"
-					data-cache="false" 
-					data-pagination="true"
-					data-side-pagination="server" 
+					data-cache="false" 					
 					data-search="true"
 					data-search-on-enter-key="false" 
 					data-show-refresh="true"
-					data-show-pagination-switch="true" 
 					data-id-field="id"
 					data-click-to-select="true" 
 					data-single-select="true"
@@ -53,6 +50,10 @@
 					data-sort-order="asc"
 					data-show-columns="true" 
 					data-select-item-name="myRadioName"
+					data-side-pagination="server" 
+					data-pagination="true"
+					data-page-list="[10, 25, 50, 100, ALL]"
+		           	data-show-pagination-switch="true"		           						
 					th:data-url="@{/mgn/system/dictCommon/GetData}"
 					data-query-params="queryParams">
 				</table>
@@ -62,7 +63,10 @@
 
 	</div>
 	<th:block layout:fragment="script">	
-		<script th:src="@{/bower_components/bootstrap-table/dist/bootstrap-table.js}"></script>
+		<script th:src="@{/bower_components/bootstrap-table/dist/bootstrap-table.js}"></script>		
+		<script th:src="@{/bower_components/bootstrap-table/dist/extensions/export/bootstrap-table-export.js}"></script>
+		<!--/* https://github.com/hhurz/tableExport.jquery.plugin */-->
+		<script th:src="@{/bower_components/tableExport.jquery.plugin/tableExport.js}"></script>	
 		<script th:src="@{/bower_components/bootstrap-table/dist/locale/bootstrap-table-zh-CN.js}"></script>
 		<script th:src="@{/bower_components/bootstrap-dialog/dist/js/bootstrap-dialog.js}"></script>
 		<script th:src="@{/js/bootstrap-dialog-zh-CN.js}"></script>
@@ -131,13 +135,11 @@
 	            	$.showConfirm("确定要删除'"+row.name+"'吗?",function(){
 		            	$.get(ctx+"mgn/system/dictCommon/Delete/"+row.id)
 		            	.done(function(d){
-		            		if (d.flag){	            			
-		            			$.showSuccessTimeout(d.content);
-		    	            	$('#tbl').bootstrapTable('remove', {
-		    	                    field: 'id',
-		    	                    values: [row.id]
-		    	                });	
-		            		}
+	            			$.showSuccessTimeout('删除操作成功！');
+	    	            	$('#tbl').bootstrapTable('remove', {
+	    	                    field: 'id',
+	    	                    values: [row.id]
+	    	                });	
 		            	})
 		            	.fail(function(e){
 		            		$.showErr("执行操作失败!");
@@ -154,18 +156,6 @@
                         cssClass: 'btn-primary',
                         action: function (dialog) {
                         	var form=$('#editForm');
-                        	/*
-                        	$('#editForm').validator().on('submit', function (e) {
-                        		  if (e.isDefaultPrevented()) {
-                        		    // handle the invalid form...
-                        		  } else {
-                        		    // everything looks good!
-                        		  }
-                        		});
-                        	$('#editForm').submit();
-                        	form.validator('update').on('valid.bs.validator', function (e) {
-                        		console.log('ok');
-                            });    */                    	
                         	form.validator('validate');
                         	if(form.data('bs.validator').validate().hasErrors()){
                         		return;
@@ -173,6 +163,7 @@
                         	var d={id:0};
                         	if(row){
                         		d.id=row.id;
+                        		d.version=row.version;
                         	}
                         	d.code=$('#editForm_code').val();
                         	d.name=$('#editForm_name').val();
@@ -188,10 +179,11 @@
                         		contentType:'application/json; charset=UTF-8'
                         	})
                         	.done(function(r){
-                        		console.log(r);
+                        		refresh();
+                        		dialog.close();
                         	})
                         	.fail(function(e){
-								console.log(e);
+                        		$.showErr(e.responseText);
                         	});
                         }                    	
                     }, {
@@ -207,7 +199,11 @@
                         if(row){
                         	page+='?id='+ row.id;
                         }
-                        $d.load(page);
+                        $d.load(page,function(response, status, xhr){
+                        	/*console.log(response);
+                        	console.log(status);
+                        	console.log(xhr);*/
+                        });
                         return $d;
                     },
                     title: '修改',
@@ -215,7 +211,10 @@
                     closeByBackdrop: false
                 };
             BootstrapDialog.show(showOpt);			
-		}		
+		}
+		function refresh(){
+			$('#tbl').bootstrapTable('refresh');
+		}
 		</script>
 	</th:block>
 </body>

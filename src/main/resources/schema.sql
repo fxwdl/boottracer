@@ -20,8 +20,10 @@ CREATE TABLE IF NOT EXISTS `dict_common` (
   `Name` varchar(256) NOT NULL,
   `IsDeleted` bit(1) NOT NULL,
   `Comment` varchar(256) DEFAULT NULL,
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `version` bigint(19) NOT NULL,
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `DictCommonUnique` (`DictType`,`Code`)
+) ENGINE=InnoDB AUTO_INCREMENT=90 DEFAULT CHARSET=utf8;
 
 -- 数据导出被取消选择。
 -- 导出  表 sourcetracerdb.dict_region 结构
@@ -38,7 +40,7 @@ CREATE TABLE IF NOT EXISTS `dict_region` (
   PRIMARY KEY (`ID`),
   KEY `dict_region_p_idx` (`Parent_ID`),
   CONSTRAINT `dict_region_pppp` FOREIGN KEY (`Parent_ID`) REFERENCES `dict_region` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=5001 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=978 DEFAULT CHARSET=utf8;
 
 -- 数据导出被取消选择。
 -- 导出  表 sourcetracerdb.dict_system_function 结构
@@ -104,6 +106,19 @@ CREATE TABLE IF NOT EXISTS `sys_role` (
   `Comment` varchar(256) DEFAULT NULL,
   `Name` varchar(256) NOT NULL,
   PRIMARY KEY (`Id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- 数据导出被取消选择。
+-- 导出  表 sourcetracerdb.sys_role_permission 结构
+DROP TABLE IF EXISTS `sys_role_permission`;
+CREATE TABLE IF NOT EXISTS `sys_role_permission` (
+  `Role_ID` varchar(64) NOT NULL,
+  `Function_ID` varchar(64) NOT NULL,
+  PRIMARY KEY (`Role_ID`,`Function_ID`),
+  KEY `FK_RolePermission_Role_idx` (`Role_ID`),
+  KEY `FK_RolePermission_SystemFunction_idx` (`Function_ID`),
+  CONSTRAINT `FK_RolePermission_Role` FOREIGN KEY (`Role_ID`) REFERENCES `sys_role` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `FK_RolePermission_SystemFunction` FOREIGN KEY (`Function_ID`) REFERENCES `dict_system_function` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- 数据导出被取消选择。

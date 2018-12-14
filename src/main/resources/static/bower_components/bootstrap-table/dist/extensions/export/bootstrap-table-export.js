@@ -20,7 +20,6 @@
         powerpoint: 'MS-Powerpoint',
         pdf: 'PDF'
     };
-
     $.extend($.fn.bootstrapTable.defaults, {
         showExport: false,
         exportDataType: 'basic', // basic, all, selected

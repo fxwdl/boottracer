@@ -1,6 +1,7 @@
 package com.yida.boottracer.web.mgn.system;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -74,18 +75,19 @@ public class DictCommonController extends BaseController
 
 	@GetMapping(value = { "dictCommon/Delete/{id}" })
 	@ResponseBody
-	public SimpleResponse delete(@PathVariable("id") int id)
+	public ResponseEntity<?> delete(@PathVariable("id") int id)
 	{
-		return dictService.deleteCommonItem(id);
+		dictService.deleteCommonItem(id);
+		return new ResponseEntity<>("删除数据成功！", HttpStatus.OK);		
 	}
 
-	@PostMapping(value = { "dictCommon/Save"}/*,consumes=MediaType.APPLICATION_JSON_VALUE*/)
+	@PostMapping(value = { "dictCommon/Save" }/* ,consumes=MediaType.APPLICATION_JSON_VALUE */)
 	@ResponseBody
-	public ResponseEntity<?> save(@Valid @RequestBody DictCommon item,Errors errors)
-	{		
+	public ResponseEntity<?> save(@Valid @RequestBody DictCommon item, Errors errors)
+	{
 		if (errors.hasErrors())
 		{
-			return new ResponseEntity<>(errors.getAllErrors(), HttpStatus.BAD_REQUEST);
+			return ResponseEntity.badRequest().body(errors.getAllErrors().stream().map(x -> x.getDefaultMessage()).collect(Collectors.joining(",")));
 		}
 		return new ResponseEntity<>(dictService.saveCommonItem(item), HttpStatus.OK);
 	}

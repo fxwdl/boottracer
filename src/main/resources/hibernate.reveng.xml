@@ -22,25 +22,25 @@
 		exclude="true">
 	</table-filter>
 	<table-filter match-name="dict_system_function"
-		match-catalog="sourcetracerdb">
+		match-catalog="sourcetracerdb" exclude="true">
 	</table-filter>
-	<table-filter match-name="sys_user" match-catalog="sourcetracerdb">
+	<table-filter match-name="sys_user" match-catalog="sourcetracerdb" exclude="true">
 	</table-filter>
 	<table-filter match-name="dict_region"
-		match-catalog="sourcetracerdb">
+		match-catalog="sourcetracerdb" exclude="true">
 	</table-filter>
-	<table-filter match-name="sys_member" match-catalog="sourcetracerdb">
+	<table-filter match-name="sys_member" match-catalog="sourcetracerdb" exclude="true">
 	</table-filter>
 	<table-filter match-name="dict_common"
 		match-catalog="sourcetracerdb">
 	</table-filter>
 	<table-filter match-name="sys_role"
-		match-catalog="sourcetracerdb">
+		match-catalog="sourcetracerdb" exclude="true">
 	</table-filter>
 	<table-filter match-name="sys_role_permission"
-		match-catalog="sourcetracerdb">
+		match-catalog="sourcetracerdb" exclude="true">
 	</table-filter>
 	<table-filter match-name="sys_user_in_role"
-		match-catalog="sourcetracerdb">
+		match-catalog="sourcetracerdb" exclude="true">
 	</table-filter>
 </hibernate-reverse-engineering>

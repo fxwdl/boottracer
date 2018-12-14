@@ -8,6 +8,10 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 
 import org.apache.commons.lang3.StringUtils;
+import org.aspectj.weaver.ast.Var;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.query.criteria.internal.expression.SearchedCaseExpression;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.runner.ReactiveWebApplicationContextRunner;
 import org.springframework.data.domain.Example;
@@ -75,10 +79,8 @@ public class DictService
 		return paged;
 	}
 
-	public SimpleResponse deleteCommonItem(int id)
+	public void deleteCommonItem(int id)
 	{
-		SimpleResponse result = new SimpleResponse();
-
 		try
 		{
 			dictCommonRepository.deleteById(id);
@@ -92,11 +94,9 @@ public class DictService
 				dictCommonRepository.saveAndFlush(fItem.get());
 			}
 		}
-		result.setFlag(true);
-		result.setContent("删除成功!");
-		return result;
+
 	}
-	
+
 	public Optional<DictCommon> getCommonById(int id)
 	{
 		return dictCommonRepository.findById(id);
@@ -104,6 +104,20 @@ public class DictService
 
 	public DictCommon saveCommonItem(DictCommon item)
 	{
+		// 只做update不做select，提高性能的方式
+		// Session session = dictCommon_em.unwrap( Session.class );
+		// Transaction tx= session.beginTransaction();
+		// if (item.getId()==0) {
+		// session.persist(item);
+		// }
+		// else {
+		// session.update(item);
+		// }
+		// session.flush();
+		// tx.commit();
+		// DictCommon newItem=item;
+
+		// save执行的是persit或者merge，前者执行Insert,后者会先selectbyId，然后再执行update，效率较低，目前只找到上面的session的方式可以只做update(还需要用@Version配合才行，即乐观锁)
 		DictCommon newItem = dictCommonRepository.saveAndFlush(item);
 
 		return newItem;
