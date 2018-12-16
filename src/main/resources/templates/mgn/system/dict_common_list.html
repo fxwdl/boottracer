@@ -25,7 +25,7 @@
 						<option>停用</option>
 					</select>
 				</div>
-				<button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-search" style="padding-right: 3px;"></i><span>搜索</span></button>
+				<button id="btnSearch" class="btn btn-default"><i class="glyphicon glyphicon-search" style="padding-right: 3px;"></i><span>搜索</span></button>
 			</div>
 		</div>
 		<div class="row" style="padding-top: 5px;">
@@ -52,8 +52,7 @@
 					data-select-item-name="myRadioName"
 					data-side-pagination="server" 
 					data-pagination="true"
-					data-page-list="[10, 25, 50, 100, ALL]"
-		           	data-show-pagination-switch="true"		           						
+					data-page-list="[10, 25, 50, 100, ALL]"		           			           						
 					th:data-url="@{/mgn/system/dictCommon/GetData}"
 					data-query-params="queryParams">
 				</table>
@@ -106,7 +105,9 @@
 				}
 				]
 			});
-			
+			$('#btnSearch').click(function(){
+				refresh();
+			});
 			$('#addNew').click(function(){
 				edit();
 			});
