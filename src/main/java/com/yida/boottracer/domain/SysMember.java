@@ -7,6 +7,8 @@ import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -23,7 +25,7 @@ import javax.persistence.TemporalType;
 public class SysMember implements java.io.Serializable
 {
 
-	private String id;
+	private int id;
 	private DictCommon dictCompanyType;
 	private DictCommon dictIndustry;
 	private DictRegion dictRegion;
@@ -55,14 +57,14 @@ public class SysMember implements java.io.Serializable
 	}
 
 	@Id
-
-	@Column(name = "ID", unique = true, nullable = false, length = 64)
-	public String getId()
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "ID", unique = true, nullable = false)
+	public int getId()
 	{
 		return this.id;
 	}
 
-	public void setId(String id)
+	public void setId(int id)
 	{
 		this.id = id;
 	}
