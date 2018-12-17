@@ -16,13 +16,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.runner.ReactiveWebApplicationContextRunner;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers;
+import org.springframework.data.domain.ExampleMatcher.StringMatcher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.repository.JpaContext;
 import org.springframework.stereotype.Service;
 
 import com.yida.boottracer.domain.DictCommon;
+import com.yida.boottracer.domain.DictMemberType;
 import com.yida.boottracer.domain.PagingModel;
 import com.yida.boottracer.dto.SimpleResponse;
+import com.yida.boottracer.enums.DictCommomType;
 import com.yida.boottracer.repo.DictCommonRepository;
+import com.yida.boottracer.repo.DictMemberTypeRepository;
 
 @Service
 public class DictService
@@ -31,6 +40,8 @@ public class DictService
 
 	@Autowired
 	private DictCommonRepository dictCommonRepository;
+	@Autowired
+	private DictMemberTypeRepository dictMemberTypeRepository;
 
 	@Autowired
 	public DictService(JpaContext context)
@@ -122,4 +133,35 @@ public class DictService
 
 		return newItem;
 	}
+
+	public PagingModel<DictMemberType> getDictMemberTypeWithPagination(int limit, int offset, String search,
+			String sort, String order)
+	{
+		DictMemberType p = new DictMemberType();
+		p.setIsDeleted(false);
+		//https://www.cnblogs.com/rulian/p/6533109.html
+		ExampleMatcher matcher = ExampleMatcher.matching().withIgnoreNullValues() // 设置默认忽略空值，避免查询search为空的情况
+				.withMatcher("isDelete", GenericPropertyMatchers.exact());
+		
+		if (!StringUtils.isBlank(search))
+		{
+			p.setName(search);
+			matcher = matcher.withMatcher("name", GenericPropertyMatchers.contains());
+		}
+		matcher = matcher.withIgnorePaths("freeCodeQty", "holdTime", "id", "isDefault", "version"); // 设置忽略不查询的的属性值
+
+		Example<DictMemberType> example = Example.of(p, matcher);
+
+		Direction direction = Direction.fromString(order);
+		PageRequest pageInfo = PageRequest.of(offset, limit, direction, sort);
+
+		Page<DictMemberType> lst = dictMemberTypeRepository.findAll(example, pageInfo);
+
+		PagingModel<DictMemberType> paged = new PagingModel<>();
+		paged.setRows(lst.getContent());
+		paged.setTotal(lst.getTotalElements());
+
+		return paged;
+	}
+
 }

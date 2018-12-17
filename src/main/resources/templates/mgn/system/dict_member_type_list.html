@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{_layout/main}"
-	th:with="module='系统管理',functionName='通用字典',smallTitle='字典列表'">
+	th:with="module='系统管理',functionName='企业会员类型',smallTitle='企业会员类型'">
 <head>
 <title>通用字典管理</title>
 	<link rel="stylesheet" th:href="@{/bower_components/bootstrap-table/dist/bootstrap-table.css}">
@@ -11,23 +11,6 @@
 <body>
 	<div class="container-fluid" layout:fragment="doBody">
 		
-		<div class="form-inline" role="form">
-			<div class="form-group">
-				<label for="ds_type">字典类型：</label> 
-				<select id="ds_type" name="ds_type" class="form-control">
-					<option th:each="t:${dictType}" th:value="${t.value}" th:text="${t.name}"></option>
-				</select>
-			</div>
-			<div class="form-group" style="display: none">
-				<label for="ds_status">状态：</label> 
-				<select id="ds_status" name="ds_status" class="form-control">
-					<option>启用</option>
-					<option>停用</option>
-				</select>
-			</div>
-			<button id="btnSearch" class="btn btn-default"><i class="glyphicon glyphicon-search" style="padding-right: 3px;"></i><span>搜索</span></button>
-		</div>
-
 		<div id="toolbar" class="btn-group">
 			<button type="button" id="addNew" class="btn btn-default">
 				<i class="glyphicon glyphicon-plus" style="padding-right: 3px;"></i><span>新增</span>
@@ -44,15 +27,14 @@
 			data-click-to-select="true" 
 			data-single-select="true"
 			data-striped="true" 
-			data-sort-name="code" 
+			data-sort-name="id" 
 			data-sort-order="asc"
 			data-show-columns="true" 
 			data-select-item-name="myRadioName"
 			data-side-pagination="server" 
 			data-pagination="true"
 			data-page-list="[10, 25, 50, 100, ALL]"		           			           						
-			th:data-url="@{/mgn/system/dictCommon/GetData}"
-			data-query-params="queryParams">
+			th:data-url="@{/mgn/system/dictMemberType/GetData}">
 		</table>			
 	</div>
 	<th:block layout:fragment="script">	
@@ -68,47 +50,57 @@
 		$(function(){
 			$('#tbl').bootstrapTable({
 				columns:[{
-					field:'code',
-					title:'代码',
+					field:'id',
+					title:'编号',
 					halign:'center',
-					class:'col-xs-3',
+					class:'col-xs-1',
 					sortable:true
 				},{
 					field:'name',
 					title:'名称',
 					halign:'center',
-					class:'col-xs-3',
+					class:'col-xs-2',
 					sortable:true					
-				}
-				,{
+				},{
+					field:'freeCodeQty',
+					title:'免费码量',
+					align:'center',
+					class:'col-xs-1',
+					sortable:true					
+				},{
+					field:'holdTime',
+					title:'保存期限',
+					align:'center',
+					class:'col-xs-1',
+					sortable:true					
+				},{
+					field:'isDefault',
+					title:'默认类型',
+					align:'center',
+					class:'col-xs-1',
+					sortable:true,
+					formatter:'boolToString'
+				},{
 					field:'comment',
 					title:'备注',
 					halign:'center',
-					class:'col-xs-3',
+					class:'col-xs-5',
 					sortable:true					
 				},{
 					field:'operate',
 					title:'操作',
 					align:'center',
-					class:'col-xs-3',
+					class:'col-xs-1',
 					formatter: operateFormatter,
 					events: operateEvents
 				}
 				]
 			});
-			$('#btnSearch').click(function(){
-				refresh();
-			});
 			$('#addNew').click(function(){
 				edit();
 			});
-		});
+		});	
 		
-	    function queryParams(params) {
-			var type = $('select[name=ds_type]').val();
-	        var o = $.extend(params, { type:  type});
-	        return o;
-	    }
 	    function operateFormatter(value, row, index) {
 	        return [
 	            '<a class="edit" href="javascript:void(0)" title="编辑">',

@@ -21,10 +21,10 @@ public class DictCommon implements java.io.Serializable
 
 	private int id;
 	private int dictType;
-	private String code;
-	private String name;
+	private String code;	
 	private boolean isDeleted;
 	private String comment;
+	private String name;
 	private Long version=0L;
 
 	public DictCommon()

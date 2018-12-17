@@ -36,6 +36,7 @@ CREATE TABLE IF NOT EXISTS `dict_member_price` (
   `Price` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '价格',
   `Comment` varchar(256) DEFAULT NULL,
   `IsDeleted` bit(1) NOT NULL DEFAULT b'0',
+  `version` bigint(19) NOT NULL,
   PRIMARY KEY (`ID`),
   KEY `FK_dict_member_price2dict_member_type_idx` (`MemberTypeId`),
   CONSTRAINT `FK_dict_member_price2dict_member_type` FOREIGN KEY (`MemberTypeId`) REFERENCES `dict_member_type` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -46,13 +47,15 @@ CREATE TABLE IF NOT EXISTS `dict_member_price` (
 DROP TABLE IF EXISTS `dict_member_type`;
 CREATE TABLE IF NOT EXISTS `dict_member_type` (
   `ID` int(10) NOT NULL AUTO_INCREMENT,
+  `Name` varchar(256) NOT NULL COMMENT '名称',
   `FreeCodeQty` int(11) NOT NULL DEFAULT '0' COMMENT '免费生码量',
   `HoldTime` int(11) NOT NULL DEFAULT '0' COMMENT '数据保存时长（月）',
   `IsDefault` bit(1) NOT NULL DEFAULT b'0' COMMENT '默认注册会员类型',
   `IsDeleted` bit(1) NOT NULL DEFAULT b'0',
   `Comment` varchar(256) DEFAULT NULL COMMENT '备注',
+  `version` bigint(19) NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='会员类型';
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COMMENT='会员类型';
 
 -- 数据导出被取消选择。
 -- 导出  表 sourcetracerdb.dict_region 结构
