@@ -29,6 +29,7 @@ public class SysMember implements java.io.Serializable
 	private DictCommon dictCompanyType;
 	private DictCommon dictIndustry;
 	private DictRegion dictRegion;
+	private DictMemberType dictMemberType;
 	private String name;
 	private String nameEn;
 	private String shortName;
@@ -100,6 +101,18 @@ public class SysMember implements java.io.Serializable
 		return this.dictRegion;
 	}
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "MemberTypeId", nullable = false)
+	public DictMemberType getDictMemberType()
+	{
+		return this.dictMemberType;
+	}
+
+	public void setDictMemberType(DictMemberType dictMemberType)
+	{
+		this.dictMemberType = dictMemberType;
+	}
+	
 	public void setDictRegion(DictRegion dictRegion)
 	{
 		this.dictRegion = dictRegion;

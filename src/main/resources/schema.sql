@@ -23,7 +23,36 @@ CREATE TABLE IF NOT EXISTS `dict_common` (
   `version` bigint(19) NOT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `DictCommonUnique` (`DictType`,`Code`)
-) ENGINE=InnoDB AUTO_INCREMENT=90 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=91 DEFAULT CHARSET=utf8;
+
+-- 数据导出被取消选择。
+-- 导出  表 sourcetracerdb.dict_member_price 结构
+DROP TABLE IF EXISTS `dict_member_price`;
+CREATE TABLE IF NOT EXISTS `dict_member_price` (
+  `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `MemberTypeId` int(10) NOT NULL COMMENT '会员类型iD',
+  `Type` int(11) NOT NULL COMMENT '1:平台费；2码量费',
+  `Qty` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '数量（月/生码量）',
+  `Price` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '价格',
+  `Comment` varchar(256) DEFAULT NULL,
+  `IsDeleted` bit(1) NOT NULL DEFAULT b'0',
+  PRIMARY KEY (`ID`),
+  KEY `FK_dict_member_price2dict_member_type_idx` (`MemberTypeId`),
+  CONSTRAINT `FK_dict_member_price2dict_member_type` FOREIGN KEY (`MemberTypeId`) REFERENCES `dict_member_type` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='会员价格明细表';
+
+-- 数据导出被取消选择。
+-- 导出  表 sourcetracerdb.dict_member_type 结构
+DROP TABLE IF EXISTS `dict_member_type`;
+CREATE TABLE IF NOT EXISTS `dict_member_type` (
+  `ID` int(10) NOT NULL AUTO_INCREMENT,
+  `FreeCodeQty` int(11) NOT NULL DEFAULT '0' COMMENT '免费生码量',
+  `HoldTime` int(11) NOT NULL DEFAULT '0' COMMENT '数据保存时长（月）',
+  `IsDefault` bit(1) NOT NULL DEFAULT b'0' COMMENT '默认注册会员类型',
+  `IsDeleted` bit(1) NOT NULL DEFAULT b'0',
+  `Comment` varchar(256) DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='会员类型';
 
 -- 数据导出被取消选择。
 -- 导出  表 sourcetracerdb.dict_region 结构
@@ -64,18 +93,19 @@ CREATE TABLE IF NOT EXISTS `dict_system_function` (
 -- 导出  表 sourcetracerdb.sys_member 结构
 DROP TABLE IF EXISTS `sys_member`;
 CREATE TABLE IF NOT EXISTS `sys_member` (
-  `ID` varchar(64) NOT NULL,
+  `ID` int(4) unsigned zerofill NOT NULL,
   `Region_ID` int(11) NOT NULL COMMENT '区域',
-  `Name` varchar(256) NOT NULL,
+  `Name` varchar(256) NOT NULL COMMENT '企业名称',
   `Name_En` varchar(256) DEFAULT NULL COMMENT '英文名',
   `ShortName` varchar(256) DEFAULT NULL COMMENT '简称',
   `SocialCreditCode` varchar(256) NOT NULL COMMENT '社会信用代码',
   `LegalPerson` varchar(256) NOT NULL COMMENT '法人',
   `Industry_ID` int(11) NOT NULL COMMENT '行业',
   `CompanyType_ID` int(11) NOT NULL COMMENT '企业类型',
+  `MemberTypeId` int(10) NOT NULL,
   `Website` varchar(256) DEFAULT NULL COMMENT '企业网站',
   `Requirement` int(11) NOT NULL COMMENT '需求码量',
-  `RegAddress` varchar(500) NOT NULL,
+  `RegAddress` varchar(500) NOT NULL COMMENT '注册地址',
   `ExpressAddress` varchar(500) NOT NULL COMMENT '收货地址',
   `Postcode` varchar(45) NOT NULL,
   `Linkman` varchar(45) NOT NULL,
@@ -93,6 +123,8 @@ CREATE TABLE IF NOT EXISTS `sys_member` (
   KEY `FKsys_member_region_idx` (`Region_ID`),
   KEY `FK_sys_member_industry_id_idx` (`Industry_ID`),
   KEY `FK_sys_member_company_type_id_idx` (`CompanyType_ID`),
+  KEY `FK_sys_member2dict_member_type_idx` (`MemberTypeId`),
+  CONSTRAINT `FK_sys_member2dict_member_type` FOREIGN KEY (`MemberTypeId`) REFERENCES `dict_member_type` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_sys_member_company_type_id` FOREIGN KEY (`CompanyType_ID`) REFERENCES `dict_common` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_sys_member_industry_id` FOREIGN KEY (`Industry_ID`) REFERENCES `dict_common` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_sys_member_region` FOREIGN KEY (`Region_ID`) REFERENCES `dict_region` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -149,11 +181,11 @@ CREATE TABLE IF NOT EXISTS `sys_user` (
   `UserName` varchar(256) NOT NULL,
   `UserNameCN` varchar(256) NOT NULL,
   `WebChat` varchar(256) DEFAULT NULL,
-  `Member_ID` varchar(64) DEFAULT NULL,
+  `Member_ID` int(4) unsigned zerofill DEFAULT NULL,
   `IsMemberAdmin` bit(1) DEFAULT NULL COMMENT '是否为企业会员的管理员账户',
   PRIMARY KEY (`UserId`),
-  KEY `FK_sys_user_Member_ID_idx` (`Member_ID`),
-  CONSTRAINT `FK_sys_user_Member_ID` FOREIGN KEY (`Member_ID`) REFERENCES `sys_member` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  KEY `FK_sys_user_Member_ID_idx_idx` (`Member_ID`),
+  CONSTRAINT `FK_sys_user_Member_ID_idx` FOREIGN KEY (`Member_ID`) REFERENCES `sys_member` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- 数据导出被取消选择。

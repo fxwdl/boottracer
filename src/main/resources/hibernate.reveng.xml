@@ -4,13 +4,13 @@
 <hibernate-reverse-engineering>
 
 	<table-filter match-name="test_product"
-		match-catalog="sourcetracerdb" exclude="true">
+		match-catalog="sourcetracerdb">
 	</table-filter>
-	<table-filter match-name="test_order" match-catalog="sourcetracerdb"
-		exclude="true">
+	<table-filter match-name="test_order"
+		match-catalog="sourcetracerdb">
 	</table-filter>
 	<table-filter match-name="test_order_item"
-		match-catalog="sourcetracerdb" exclude="true">
+		match-catalog="sourcetracerdb">
 	</table-filter>
 
 
@@ -18,29 +18,40 @@
 
 
 
-	<table-filter match-name="test_user" match-catalog="sourcetracerdb"
-		exclude="true">
+	<table-filter match-name="test_user"
+		match-catalog="sourcetracerdb">
 	</table-filter>
 	<table-filter match-name="dict_system_function"
-		match-catalog="sourcetracerdb" exclude="true">
+		match-catalog="sourcetracerdb">
 	</table-filter>
-	<table-filter match-name="sys_user" match-catalog="sourcetracerdb" exclude="true">
+	<table-filter match-name="sys_user"
+		match-catalog="sourcetracerdb">
 	</table-filter>
 	<table-filter match-name="dict_region"
-		match-catalog="sourcetracerdb" exclude="true">
+		match-catalog="sourcetracerdb">
 	</table-filter>
-	<table-filter match-name="sys_member" match-catalog="sourcetracerdb" exclude="true">
+	<table-filter match-name="sys_member"
+		match-catalog="sourcetracerdb">
 	</table-filter>
 	<table-filter match-name="dict_common"
 		match-catalog="sourcetracerdb">
 	</table-filter>
 	<table-filter match-name="sys_role"
-		match-catalog="sourcetracerdb" exclude="true">
+		match-catalog="sourcetracerdb">
 	</table-filter>
 	<table-filter match-name="sys_role_permission"
-		match-catalog="sourcetracerdb" exclude="true">
+		match-catalog="sourcetracerdb">
 	</table-filter>
 	<table-filter match-name="sys_user_in_role"
-		match-catalog="sourcetracerdb" exclude="true">
+		match-catalog="sourcetracerdb">
+	</table-filter>
+	<table-filter match-name="dict_member_price"
+		match-catalog="sourcetracerdb">
+	</table-filter>
+	<table-filter match-name="dict_member_type"
+		match-catalog="sourcetracerdb">
+	</table-filter>
+	<table-filter match-name="dict_member_price"
+		match-catalog="sourcetracerdb">
 	</table-filter>
 </hibernate-reverse-engineering>
