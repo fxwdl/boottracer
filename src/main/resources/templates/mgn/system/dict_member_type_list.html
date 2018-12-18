@@ -9,8 +9,8 @@
 	<link rel="stylesheet" th:href="@{/bower_components/bootstrap-dialog/dist/css/bootstrap-dialog.css}">
 </head>
 <body>
-	<div class="container-fluid" layout:fragment="doBody">
-		
+	
+	<div class="container-fluid" layout:fragment="doBody">		
 		<div id="toolbar" class="btn-group">
 			<button type="button" id="addNew" class="btn btn-default">
 				<i class="glyphicon glyphicon-plus" style="padding-right: 3px;"></i><span>新增</span>
@@ -35,8 +35,48 @@
 			data-pagination="true"
 			data-page-list="[10, 25, 50, 100, ALL]"		           			           						
 			th:data-url="@{/mgn/system/dictMemberType/GetData}">
-		</table>			
+		</table>
+		
+		<div id="divForm" class="container" style="display: none;">
+			<form id="editForm" class="form-horizontal">
+				<div class="form-group">
+					<label for="code" class="col-sm-2 control-label">名称</label>
+					<div class="col-sm-9">
+						<input required type="text" class="form-control" id="editForm_name" name="name">
+						<div class="help-block with-errors"></div>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="show-error">
+						<label for="editForm_freeCodeQty" class="col-sm-2 control-label">免费码量</label>
+						<div class="col-sm-2">
+							<input required type="text" class="form-control" id="editForm_freeCodeQty" name="freeCodeQty">
+							<div class="help-block with-errors"></div>
+						</div>
+					</div>
+					<div class="show-error">
+						<label for="editForm_holdTime" class="col-sm-2 control-label">保存期限(月)</label>
+						<div class="col-sm-2">
+							<input required type="text" class="form-control" id="editForm_holdTime" name="holdTime">
+							<div class="help-block with-errors"></div>
+						</div>
+					</div>				
+					<div class="checkbox col-sm-2">
+						<label><input data-validate="false" type="checkbox" id="editForm_isDefault" name="isDefault">默认类型</label> 
+					</div>										
+				</div>
+				<div class="form-group">
+					<label for="editForm_comment" class="col-sm-2 control-label">备注</label>
+					<div class="col-sm-9">
+						<textarea class="form-control" rows="3" id="editForm_comment" name="editForm_comment"></textarea>
+						<div class="help-block with-errors"></div>
+					</div>
+				</div>
+			</form>	
+		</div>				
 	</div>
+	
+	
 	<th:block layout:fragment="script">	
 		<script th:src="@{/bower_components/bootstrap-table/dist/bootstrap-table.js}"></script>		
 		<script th:src="@{/bower_components/bootstrap-table/dist/extensions/export/bootstrap-table-export.js}"></script>
@@ -45,7 +85,8 @@
 		<script th:src="@{/bower_components/bootstrap-table/dist/locale/bootstrap-table-zh-CN.js}"></script>
 		<script th:src="@{/bower_components/bootstrap-dialog/dist/js/bootstrap-dialog.js}"></script>
 		<script th:src="@{/js/bootstrap-dialog-zh-CN.js}"></script>
-		<script th:src="@{/js/bootstrap-dialog-Ext.js}"></script>        			
+		<script th:src="@{/js/bootstrap-dialog-Ext.js}"></script>    
+		<script th:src="@{/bower_components/bootstrap-validator/dist/validator.custom.js}"></script>    			
 		<script type="text/javascript">
 		$(function(){
 			$('#tbl').bootstrapTable({
@@ -133,13 +174,15 @@
 	        };
 	    
 		function edit(row){
+			var form=$('#editForm');
+			form.validator('destroy');
+			form.validator('update');
         	var showOpt = {
                     buttons: [{
                         icon: 'glyphicon glyphicon-saved',
                         label: '确定',
                         cssClass: 'btn-primary',
-                        action: function (dialog) {
-                        	var form=$('#editForm');
+                        action: function (dialog) {                        	
                         	form.validator('validate');
                         	if(form.data('bs.validator').validate().hasErrors()){
                         		return;
@@ -178,21 +221,14 @@
                         }
                     }],
                     message: function (dialog) {
-                        var $d = $('<div></div>');
-                        var page = ctx+'mgn/system/dict_common_form.html';
-                        if(row){
-                        	page+='?id='+ row.id;
-                        }
-                        $d.load(page,function(response, status, xhr){
-                        	/*console.log(response);
-                        	console.log(status);
-                        	console.log(xhr);*/
-                        });
+                        var $d = $('#editForm');
                         return $d;
                     },
-                    title: '修改',
+                    title: row?'修改':'新增',
                     draggable: true,
-                    closeByBackdrop: false
+                    closeByBackdrop: false,
+                    autodestroy:false,
+                    size:BootstrapDialog.SIZE_WIDE
                 };
             BootstrapDialog.show(showOpt);			
 		}
