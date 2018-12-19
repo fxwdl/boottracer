@@ -5,44 +5,38 @@
 	th:with="module='系统管理',functionName='企业会员类型',smallTitle='企业会员类型'">
 <head>
 <title>通用字典管理</title>
-	<link rel="stylesheet" th:href="@{/bower_components/bootstrap-table/dist/bootstrap-table.css}">
-	<link rel="stylesheet" th:href="@{/bower_components/bootstrap-dialog/dist/css/bootstrap-dialog.css}">
+<link rel="stylesheet"
+	th:href="@{/bower_components/bootstrap-table/dist/bootstrap-table.css}">
+<link rel="stylesheet"
+	th:href="@{/bower_components/bootstrap-dialog/dist/css/bootstrap-dialog.css}">
 </head>
 <body>
-	
-	<div class="container-fluid" layout:fragment="doBody">		
+
+	<div class="container-fluid" layout:fragment="doBody">
 		<div id="toolbar" class="btn-group">
 			<button type="button" id="addNew" class="btn btn-default">
 				<i class="glyphicon glyphicon-plus" style="padding-right: 3px;"></i><span>新增</span>
 			</button>
 		</div>
-		<table id="tbl" 
-			data-toolbar="#toolbar" 					
-			data-show-export="true"
-			data-cache="false" 					
-			data-search="true"
-			data-search-on-enter-key="false" 
-			data-show-refresh="true"
-			data-id-field="id"
-			data-click-to-select="true" 
-			data-single-select="true"
-			data-striped="true" 
-			data-sort-name="id" 
-			data-sort-order="asc"
-			data-show-columns="true" 
-			data-select-item-name="myRadioName"
-			data-side-pagination="server" 
-			data-pagination="true"
-			data-page-list="[10, 25, 50, 100, ALL]"		           			           						
+		<table id="tbl" data-toolbar="#toolbar" data-show-export="true"
+			data-cache="false" data-search="true"
+			data-search-on-enter-key="false" data-show-refresh="true"
+			data-id-field="id" data-click-to-select="true"
+			data-single-select="true" data-striped="true" data-sort-name="id"
+			data-sort-order="asc" data-show-columns="true"
+			data-select-item-name="myRadioName" data-side-pagination="server"
+			data-pagination="true" data-page-list="[10, 25, 50, 100, ALL]"
 			th:data-url="@{/mgn/system/dictMemberType/GetData}">
 		</table>
-		
-		<div id="divForm" class="container" style="display: none;">
-			<form id="editForm" class="form-horizontal">
+
+		<!--/* 编辑主条目 */-->
+		<div class="container" style="display: none;">
+			<form id="dlgEdit" class="form-horizontal">
 				<div class="form-group">
-					<label for="code" class="col-sm-2 control-label">名称</label>
+					<label for="editForm_name" class="col-sm-2 control-label">名称</label>
 					<div class="col-sm-9">
-						<input required type="text" class="form-control" id="editForm_name" name="name">
+						<input required type="text" class="form-control"
+							id="editForm_name" name="name">
 						<div class="help-block with-errors"></div>
 					</div>
 				</div>
@@ -50,43 +44,136 @@
 					<div class="show-error">
 						<label for="editForm_freeCodeQty" class="col-sm-2 control-label">免费码量</label>
 						<div class="col-sm-2">
-							<input required type="text" class="form-control" id="editForm_freeCodeQty" name="freeCodeQty">
+							<input required type="number" min=0 class="form-control"
+								id="editForm_freeCodeQty" name="freeCodeQty"></input>
 							<div class="help-block with-errors"></div>
 						</div>
 					</div>
 					<div class="show-error">
 						<label for="editForm_holdTime" class="col-sm-2 control-label">保存期限(月)</label>
 						<div class="col-sm-2">
-							<input required type="text" class="form-control" id="editForm_holdTime" name="holdTime">
+							<input required type="number" min=0 class="form-control"
+								id="editForm_holdTime" name="holdTime"></input>
 							<div class="help-block with-errors"></div>
 						</div>
-					</div>				
+					</div>
 					<div class="checkbox col-sm-2">
-						<label><input data-validate="false" type="checkbox" id="editForm_isDefault" name="isDefault">默认类型</label> 
-					</div>										
+						<label><input data-validate="false" type="checkbox"
+							id="editForm_isDefault" name="isDefault">默认类型</label>
+					</div>
 				</div>
 				<div class="form-group">
 					<label for="editForm_comment" class="col-sm-2 control-label">备注</label>
 					<div class="col-sm-9">
-						<textarea class="form-control" rows="3" id="editForm_comment" name="editForm_comment"></textarea>
+						<textarea class="form-control" rows="3" id="editForm_comment"
+							name="editForm_comment"></textarea>
 						<div class="help-block with-errors"></div>
 					</div>
 				</div>
-			</form>	
-		</div>				
+				<div class="row">
+					<div class="col-md-6">
+						<div class="box box-default">
+							<div class="box-header with-border">
+								<i class="fa fa-barcode"></i>
+								<h3 class="box-title" style="font-size: 15px;">码量价格</h3>
+							</div>
+							<div class="box-body">
+								<div id="toolbar_codePrice" class="btn-group">
+									<button type="button" id="tblCodePrice_addNew"
+										class="btn btn-default">
+										<i class="fa fa-plus"></i>
+									</button>
+								</div>
+								<table id="tblCodePrice" data-toggle="table"
+									data-toolbar="#toolbar_codePrice" data-id-field="id"
+									data-click-to-select="true" data-single-select="true"
+									data-checkbox-header="false" data-sort-name="qty">
+									<thead>
+										<tr>
+											<th data-field="qty" data-halign="center" data-align="left">数量</th>
+											<th data-field="price" data-halign="center" data-align="left">价格</th>
+											<th data-field="Action" data-align="center"
+												data-formatter="actionFormatter" data-events="actionEvents"></th>
+										</tr>
+									</thead>
+								</table>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="box box-default">
+							<div class="box-header with-border">
+								<i class="fa fa-money"></i>
+								<h3 class="box-title" style="font-size: 15px;">平台价格</h3>
+							</div>
+							<div class="box-body">
+								<div id="toolbar_platformPrice" class="btn-group">
+									<button type="button" id="tblPlatformPrice_addNew"
+										class="btn btn-default">
+										<i class="fa fa-plus"></i>
+									</button>
+								</div>
+								<table id="tblPlatformPrice" data-toggle="table"
+									data-toolbar="#toolbar_platformPrice" data-id-field="id"
+									data-click-to-select="true" data-single-select="true"
+									data-checkbox-header="false" data-sort-name="qty">
+									<thead>
+										<tr>
+											<th data-field="qty" data-halign="center" data-align="left">月数</th>
+											<th data-field="price" data-halign="center" data-align="left">价格</th>
+											<th data-field="Action" data-align="center"
+												data-formatter="actionFormatter" data-events="actionEvents"></th>
+										</tr>
+									</thead>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+		<!--/* 编辑价格 */-->
+		<div class="container" style="display: none;">
+			<form id="dlgEditPrice" class="form-horizontal">
+				<div class="form-group">
+					<label id="lblQty" for="editPriceForm_Qty" class="col-sm-2 control-label">数量</label>
+					<div class="col-sm-9">
+						<input required type="number" min=0 class="form-control"
+							id="editPriceForm_Qty" name="qty">
+						<div class="help-block with-errors"></div>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="show-error">
+						<label for="editPriceForm_Price" class="col-sm-2 control-label">价格</label>
+						<div class="col-sm-9">
+							<input required type="number" min=0 class="form-control"
+								id="editPriceForm_Price" name="price"></input>
+							<div class="help-block with-errors"></div>
+						</div>
+					</div>
+				</div>
+			</form>			
+		</div>
 	</div>
-	
-	
-	<th:block layout:fragment="script">	
-		<script th:src="@{/bower_components/bootstrap-table/dist/bootstrap-table.js}"></script>		
-		<script th:src="@{/bower_components/bootstrap-table/dist/extensions/export/bootstrap-table-export.js}"></script>
+
+
+	<th:block layout:fragment="script">
+		<script
+			th:src="@{/bower_components/bootstrap-table/dist/bootstrap-table.js}"></script>
+		<script
+			th:src="@{/bower_components/bootstrap-table/dist/extensions/export/bootstrap-table-export.js}"></script>
 		<!--/* https://github.com/hhurz/tableExport.jquery.plugin */-->
-		<script th:src="@{/bower_components/tableExport.jquery.plugin/tableExport.js}"></script>	
-		<script th:src="@{/bower_components/bootstrap-table/dist/locale/bootstrap-table-zh-CN.js}"></script>
-		<script th:src="@{/bower_components/bootstrap-dialog/dist/js/bootstrap-dialog.js}"></script>
+		<script
+			th:src="@{/bower_components/tableExport.jquery.plugin/tableExport.js}"></script>
+		<script
+			th:src="@{/bower_components/bootstrap-table/dist/locale/bootstrap-table-zh-CN.js}"></script>
+		<script
+			th:src="@{/bower_components/bootstrap-dialog/dist/js/bootstrap-dialog.js}"></script>
 		<script th:src="@{/js/bootstrap-dialog-zh-CN.js}"></script>
-		<script th:src="@{/js/bootstrap-dialog-Ext.js}"></script>    
-		<script th:src="@{/bower_components/bootstrap-validator/dist/validator.custom.js}"></script>    			
+		<script th:src="@{/js/bootstrap-dialog-Ext.js}"></script>
+		<script
+			th:src="@{/bower_components/bootstrap-validator/dist/validator.custom.js}"></script>
 		<script type="text/javascript">
 		$(function(){
 			$('#tbl').bootstrapTable({
@@ -140,6 +227,12 @@
 			$('#addNew').click(function(){
 				edit();
 			});
+			$('#tblCodePrice_addNew').click(function(s){
+				editPrice(null,1);
+			});
+			$('#tblPlatformPrice_addNew').click(function(s){
+				editPrice(null,2);
+			});			
 		});	
 		
 	    function operateFormatter(value, row, index) {
@@ -174,7 +267,7 @@
 	        };
 	    
 		function edit(row){
-			var form=$('#editForm');
+			var form=$('#dlgEdit');
 			form.validator('destroy');
 			form.validator('update');
         	var showOpt = {
@@ -221,7 +314,7 @@
                         }
                     }],
                     message: function (dialog) {
-                        var $d = $('#editForm');
+                        var $d = $('#dlgEdit');
                         return $d;
                     },
                     title: row?'修改':'新增',
@@ -232,9 +325,72 @@
                 };
             BootstrapDialog.show(showOpt);			
 		}
-		function refresh(){
-			$('#tbl').bootstrapTable('refresh');
-		}
+		
+		function editPrice(row,t){
+			if(t==1){
+				$('#lblQty').html('数量');
+			}
+			else{
+				$('#lblQty').html('月数');
+			}
+			var form=$('#dlgEditPrice');
+			form.validator('destroy');
+			form.validator('update');
+        	var showOpt = {
+                    buttons: [{
+                        icon: 'glyphicon glyphicon-saved',
+                        label: '确定',
+                        cssClass: 'btn-primary',
+                        action: function (dialog) {                        	
+                        	form.validator('validate');
+                        	if(form.data('bs.validator').validate().hasErrors()){
+                        		return;
+                        	}
+                        	var d={id:0};
+                        	if(row){
+                        		d.id=row.id;
+                        		d.version=row.version;
+                        	}
+                        	d.code=$('#editForm_code').val();
+                        	d.name=$('#editForm_name').val();
+                        	d.comment=$('#editForm_comment').val();
+                        	d.dictType=$('select[name=ds_type]').val();
+                        	d.isDeleted=false;
+                        	
+                        	$.ajax({
+                        		type:'POST',
+                        		url:ctx+'mgn/system/dictCommon/Save',
+                        		data:JSON.stringify(d),
+                        		dataTye:'json',
+                        		contentType:'application/json; charset=UTF-8'
+                        	})
+                        	.done(function(r){
+                        		refresh();
+                        		dialog.close();
+                        	})
+                        	.fail(function(e){
+                        		$.showErr(e.responseText);
+                        	});
+                        }                    	
+                    }, {
+                        icon: 'glyphicon glyphicon-ban-circle',
+                        label: '取消',
+                        action: function (dialog) {
+                            dialog.close();
+                        }
+                    }],
+                    message: function (dialog) {
+                        var $d = $('#dlgEditPrice');
+                        return $d;
+                    },
+                    title: row?'修改':'新增',
+                    draggable: true,
+                    closeByBackdrop: false,
+                    autodestroy:false
+                };
+            BootstrapDialog.show(showOpt);			
+		}		
+
 		</script>
 	</th:block>
 </body>
