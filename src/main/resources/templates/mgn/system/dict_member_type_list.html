@@ -3,7 +3,7 @@
  th:with="module='系统管理',functionName='企业会员类型',smallTitle='企业会员类型'">
 
 <head>
-	<title>通用字典管理</title>
+	<title>企业会员类型</title>
 	<link rel="stylesheet" th:href="@{/bower_components/bootstrap-table/dist/bootstrap-table.css}">
 	<link rel="stylesheet" th:href="@{/bower_components/bootstrap-dialog/dist/css/bootstrap-dialog.css}">
 </head>
@@ -19,8 +19,7 @@
 		<table id="tbl" data-toolbar="#toolbar" data-show-export="true" data-cache="false" data-search="true"
 		 data-search-on-enter-key="false" data-show-refresh="true" data-id-field="id" data-click-to-select="true"
 		 data-single-select="true" data-striped="true" data-sort-name="id" data-sort-order="asc" data-show-columns="true"
-		 data-select-item-name="myRadioName" data-side-pagination="server" data-pagination="true" data-page-list="[10, 25, 50, 100, ALL]"
-		 th:data-url="@{/mgn/system/dictMemberType/GetData}">
+		 data-side-pagination="server" data-pagination="true" data-page-list="[10, 25, 50, 100, ALL]" th:data-url="@{/mgn/system/dictMemberType/GetData}">
 		</table>
 
 		<!--/* 编辑主条目 */-->
@@ -72,13 +71,13 @@
 								</div>
 							</div>
 							<div class="box-body">
-								<table id="tblPlatformPrice" data-toggle="table" data-id-field="id"
-								 data-click-to-select="true" data-single-select="true" data-checkbox-header="false" data-sort-name="qty">
+								<table id="tblPlatformPrice" data-toggle="table" data-id-field="id" data-click-to-select="true"
+								 data-single-select="true" data-checkbox-header="false" data-sort-name="qty">
 									<thead>
 										<tr>
 											<th data-field="qty" data-halign="center" data-align="left">月数</th>
 											<th data-field="price" data-halign="center" data-align="left">价格</th>
-											<th data-field="Action" data-align="center" data-formatter="operateFormatter" data-events="priceOperateEvents">操作</th>
+											<th data-field="Action" data-align="center" data-formatter="gridAction_Platform" data-events="priceOperateEvents">操作</th>
 										</tr>
 									</thead>
 								</table>
@@ -88,22 +87,22 @@
 					<div class="col-md-6">
 						<div class="box box-default">
 							<div class="box-header with-border">
-								<i class="fa fa-barcode"></i>
+								<i class="fa fa-qrcode"></i>
 								<h3 class="box-title" style="font-size: 15px;">码量价格</h3>
 								<div class="box-tools">
-										<button type="button" id="tblCodePrice_addNew" class="btn btn-default">
-												<i class="fa fa-plus"></i>
-											</button>
-									</div>								
+									<button type="button" id="tblCodePrice_addNew" class="btn btn-default">
+										<i class="fa fa-plus"></i>
+									</button>
+								</div>
 							</div>
 							<div class="box-body">
-								<table id="tblCodePrice" data-toggle="table" data-id-field="id"
-								 data-click-to-select="true" data-single-select="true" data-checkbox-header="false" data-sort-name="qty">
+								<table id="tblCodePrice" data-toggle="table" data-id-field="id" data-click-to-select="true" data-single-select="true"
+								 data-checkbox-header="false" data-sort-name="qty">
 									<thead>
 										<tr>
 											<th data-field="qty" data-halign="center" data-align="left">数量</th>
 											<th data-field="price" data-halign="center" data-align="left">价格</th>
-											<th data-field="Action" data-align="center" data-formatter="operateFormatter" data-events="priceOperateEvents">操作</th>
+											<th data-field="Action" data-align="center" data-formatter="gridAction_Code" data-events="priceOperateEvents">操作</th>
 										</tr>
 									</thead>
 								</table>
@@ -137,8 +136,7 @@
 		</div>
 
 	</div>
-
-
+	
 	<th:block layout:fragment="script">
 		<script th:src="@{/bower_components/bootstrap-table/dist/bootstrap-table.js}"></script>
 		<script th:src="@{/bower_components/bootstrap-table/dist/extensions/export/bootstrap-table-export.js}"></script>
@@ -173,7 +171,7 @@
 						sortable: true
 					}, {
 						field: 'holdTime',
-						title: '保存期限',
+						title: '保存期限(月)',
 						align: 'center',
 						class: 'col-xs-1',
 						sortable: true
@@ -195,7 +193,7 @@
 						title: '操作',
 						align: 'center',
 						class: 'col-xs-1',
-						formatter: operateFormatter,
+						formatter: gridAction_Main,
 						events: operateEvents
 					}
 					]
@@ -215,8 +213,8 @@
 			function defaultData() {
 				return {
 					comment: '',
-					freeCodeQty: 0,
-					holdTime: 0,
+					freeCodeQty: '',
+					holdTime: '',
 					id: 0,
 					isDefault: false,
 					isDeleted: false,
@@ -236,15 +234,25 @@
 					}
 				}
 			});
-			function operateFormatter(value, row, index) {
+			function operateFormatter(value, row, index, type) {
 				return [
 					'<a class="edit" href="javascript:void(0)" title="编辑">',
-					'<i class="glyphicon glyphicon-pencil"></i>',
+					'<i class="glyphicon glyphicon-pencil" data-type=' + type + '></i>',
 					'</a>  ',
 					'<a class="remove" href="javascript:void(0)" title="删除">',
-					'<i class="glyphicon glyphicon-trash"></i>',
+					'<i class="glyphicon glyphicon-trash" data-type=' + type + '></i>',
 					'</a>'
 				].join('');
+			}
+
+			function gridAction_Main(value, row, index) {
+				return operateFormatter(value, row, index, 0)
+			}
+			function gridAction_Platform(value, row, index) {
+				return operateFormatter(value, row, index, 1)
+			}
+			function gridAction_Code(value, row, index) {
+				return operateFormatter(value, row, index, 2)
 			}
 
 			window.operateEvents = {
@@ -253,7 +261,7 @@
 				},
 				'click .remove': function (e, value, row, index) {
 					$.showConfirm("确定要删除'" + row.name + "'吗?", function () {
-						$.get(ctx + "mgn/system/dictCommon/Delete/" + row.id)
+						$.get(ctx + "mgn/system/dictMemberType/Delete/" + row.id)
 							.done(function (d) {
 								$.showSuccessTimeout('删除操作成功！');
 								$('#tbl').bootstrapTable('remove', {
@@ -270,21 +278,24 @@
 
 			window.priceOperateEvents = {
 				'click .edit': function (e, value, row, index) {
-					edit(row);
+					var type = e.target.getAttribute("data-type");
+					editPrice(row, type);
 				},
 				'click .remove': function (e, value, row, index) {
-					$.showConfirm("确定要删除'" + row.name + "'吗?", function () {
-						$.get(ctx + "mgn/system/dictCommon/Delete/" + row.id)
-							.done(function (d) {
-								$.showSuccessTimeout('删除操作成功！');
-								$('#tbl').bootstrapTable('remove', {
-									field: 'id',
-									values: [row.id]
-								});
-							})
-							.fail(function (e) {
-								$.showErr("执行操作失败!");
-							});
+					var type = e.target.getAttribute("data-type");
+					$.showConfirm("确定要删除吗?", function () {
+						if (row.id == 0) {
+							for (var i = 0; i < vm.dictMemberPrices.length; i++) {
+								if (vm.dictMemberPrices[i] == row) {
+									vm.dictMemberPrices.splice(i, 1);
+									break;
+								}
+							}
+						}
+						else {
+							row.isDeleted = true;
+						}
+						refreshPriceTable();
 					});
 				}
 			};
@@ -294,7 +305,7 @@
 				form.validator('destroy');
 				form.validator('update');
 				if (row) {
-					vm.data = row;
+					Object.assign(vm.$data, row)
 				}
 				else {
 					vm.resetData();
@@ -331,6 +342,7 @@
 						icon: 'glyphicon glyphicon-ban-circle',
 						label: '取消',
 						action: function (dialog) {
+							refresh();
 							dialog.close();
 						}
 					}],
@@ -347,7 +359,7 @@
 				BootstrapDialog.show(showOpt);
 			}
 
-			function refreshPriceTable(){
+			function refreshPriceTable() {
 				$('#tblCodePrice').bootstrapTable('load', vm.dictMemberPrices)
 				$('#tblPlatformPrice').bootstrapTable('load', vm.dictMemberPrices)
 				$('#tblPlatformPrice').bootstrapTable('filterBy', { isDeleted: false, type: 1 });
@@ -355,19 +367,21 @@
 			}
 
 			function editPrice(row, t) {
+				var addNew = false;
 				if (t == 1) {
-					$('#lblQty').html('数量');
-				}
-				else {
 					$('#lblQty').html('月数');
 				}
+				else {
+					$('#lblQty').html('数量');
+				}
 				if (!row) {
+					addNew = true;
 					row = {
 						comment: '',
 						id: 0,
 						isDeleted: false,
-						price: 0,
-						qty: 0,
+						price: '',
+						qty: '',
 						type: t,
 						version: 0
 					};
@@ -379,7 +393,6 @@
 				form.validator('destroy');
 				form.validator('update');
 				var showOpt = {
-					data:{"row":row},
 					buttons: [{
 						icon: 'glyphicon glyphicon-saved',
 						label: '确定',
@@ -389,11 +402,11 @@
 							if (form.data('bs.validator').validate().hasErrors()) {
 								return;
 							}
-							var d=dialog.getData('row');
-							d.qty=$('#editPriceForm_Qty').val();
-							d.price=$('#editPriceForm_Price').val();
-							vm.$data.dictMemberPrices.push(d);
-							//console.log(vm.$data);
+							row.qty = $('#editPriceForm_Qty').val();
+							row.price = $('#editPriceForm_Price').val();
+							if (addNew) {
+								vm.$data.dictMemberPrices.push(row);
+							}
 							refreshPriceTable();
 							dialog.close();
 						}
@@ -415,7 +428,9 @@
 				};
 				BootstrapDialog.show(showOpt);
 			}
-
+			function refresh() {
+				$('#tbl').bootstrapTable('refresh');
+			}
 		</script>
 	</th:block>
 </body>

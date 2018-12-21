@@ -1,9 +1,12 @@
 package com.yida.boottracer.web.mgn.system;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -32,9 +35,14 @@ public class DictMemberTypeController  extends BaseController
 			@RequestParam("search") String search, @RequestParam("sort") String sort,
 			@RequestParam("order") String order)
 	{
-		// return dictService.getStdDiseaseListWithPagination(limit, offset, search,
-		// sort, order, rt_id);
-
 		return dictService.getDictMemberTypeWithPagination(limit, offset, search, sort, order);
-	}	
+	}
+	
+	@GetMapping(value = { "dictMemberType/Delete/{id}" })
+	@ResponseBody
+	public ResponseEntity<?> delete(@PathVariable("id") int id)
+	{
+		dictService.deleteMemberTypeItem(id);
+		return new ResponseEntity<>("删除数据成功！", HttpStatus.OK);
+	}
 }

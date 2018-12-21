@@ -32,6 +32,7 @@ import com.yida.boottracer.dto.SimpleResponse;
 import com.yida.boottracer.enums.DictCommomType;
 import com.yida.boottracer.repo.DictCommonRepository;
 import com.yida.boottracer.repo.DictMemberTypeRepository;
+import com.yida.boottracer.repo.SysMemberRepository;
 
 @Service
 public class DictService
@@ -42,6 +43,8 @@ public class DictService
 	private DictCommonRepository dictCommonRepository;
 	@Autowired
 	private DictMemberTypeRepository dictMemberTypeRepository;
+	@Autowired
+	private SysMemberRepository sysMemberRepository;
 
 	@Autowired
 	public DictService(JpaContext context)
@@ -139,10 +142,10 @@ public class DictService
 	{
 		DictMemberType p = new DictMemberType();
 		p.setIsDeleted(false);
-		//https://www.cnblogs.com/rulian/p/6533109.html
+		// https://www.cnblogs.com/rulian/p/6533109.html
 		ExampleMatcher matcher = ExampleMatcher.matching().withIgnoreNullValues() // 设置默认忽略空值，避免查询search为空的情况
 				.withMatcher("isDelete", GenericPropertyMatchers.exact());
-		
+
 		if (!StringUtils.isBlank(search))
 		{
 			p.setName(search);
@@ -164,4 +167,21 @@ public class DictService
 		return paged;
 	}
 
+	public void deleteMemberTypeItem(int id)
+	{
+		int c = sysMemberRepository.myCountBydictCompanyType(id);
+		if (c == 0)
+		{
+			dictMemberTypeRepository.deleteById(id);
+		}
+		else
+		{
+			Optional<DictMemberType> fItem = dictMemberTypeRepository.findById(id);
+			if (fItem.isPresent())
+			{
+				fItem.get().setIsDeleted(true);
+			}
+		}
+
+	}
 }
