@@ -1,38 +1,36 @@
 package com.yida.boottracer.service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaQuery;
 
 import org.apache.commons.lang3.StringUtils;
-import org.aspectj.weaver.ast.Var;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.hibernate.query.criteria.internal.expression.SearchedCaseExpression;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.runner.ReactiveWebApplicationContextRunner;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers;
-import org.springframework.data.domain.ExampleMatcher.StringMatcher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.repository.JpaContext;
 import org.springframework.stereotype.Service;
 
+import com.cosium.spring.data.jpa.entity.graph.domain.EntityGraphs;
 import com.yida.boottracer.domain.DictCommon;
+import com.yida.boottracer.domain.DictMemberPrice;
 import com.yida.boottracer.domain.DictMemberType;
 import com.yida.boottracer.domain.PagingModel;
-import com.yida.boottracer.dto.SimpleResponse;
-import com.yida.boottracer.enums.DictCommomType;
 import com.yida.boottracer.repo.DictCommonRepository;
 import com.yida.boottracer.repo.DictMemberTypeRepository;
 import com.yida.boottracer.repo.SysMemberRepository;
+import com.yida.infrastructure.MyUtils;
 
 @Service
 public class DictService
@@ -132,7 +130,7 @@ public class DictService
 		// DictCommon newItem=item;
 
 		// save执行的是persit或者merge，前者执行Insert,后者会先selectbyId，然后再执行update，效率较低，目前只找到上面的session的方式可以只做update(还需要用@Version配合才行，即乐观锁)
-		DictCommon newItem = dictCommonRepository.saveAndFlush(item);
+		DictCommon newItem = dictCommonRepository.save(item);
 
 		return newItem;
 	}
@@ -140,6 +138,7 @@ public class DictService
 	public PagingModel<DictMemberType> getDictMemberTypeWithPagination(int limit, int offset, String search,
 			String sort, String order)
 	{
+
 		DictMemberType p = new DictMemberType();
 		p.setIsDeleted(false);
 		// https://www.cnblogs.com/rulian/p/6533109.html
@@ -158,7 +157,8 @@ public class DictService
 		Direction direction = Direction.fromString(order);
 		PageRequest pageInfo = PageRequest.of(offset, limit, direction, sort);
 
-		Page<DictMemberType> lst = dictMemberTypeRepository.findAll(example, pageInfo);
+		Page<DictMemberType> lst = dictMemberTypeRepository.findAll(example, pageInfo,
+				EntityGraphs.named("DictMemberType.dictMemberPrices"));
 
 		PagingModel<DictMemberType> paged = new PagingModel<>();
 		paged.setRows(lst.getContent());
@@ -183,5 +183,28 @@ public class DictService
 			}
 		}
 
+	}
+
+	public DictMemberType saveMemberTypeItem(DictMemberType item)
+	{
+
+		item.getDictMemberPrices().removeIf(p -> p.isIsDeleted());
+
+		List<DictMemberPrice> list  = item.getDictMemberPrices().stream().filter(p -> p.getType() == DictMemberPrice.PLATFORM).collect(Collectors.toList());
+		
+		if (list.size() > list.stream().filter(MyUtils.distinctByKey(p -> p.getQty())).count())
+		{
+			throw new RuntimeException("平台价格中月数有重复");
+		}
+		
+		list  = item.getDictMemberPrices().stream().filter(p -> p.getType() == DictMemberPrice.BARCODE).collect(Collectors.toList());
+		if (list.size() > list.stream().filter(MyUtils.distinctByKey(p -> p.getQty())).count())
+		{
+			throw new RuntimeException("码量价格中数量有重复");
+		}
+		
+		DictMemberType newItem = dictMemberTypeRepository.save(item);
+
+		return newItem;
 	}
 }

@@ -25,7 +25,7 @@ public class DictCommon implements java.io.Serializable
 	private boolean isDeleted;
 	private String comment;
 	private String name;
-	private Long version=0L;
+	private Long version;
 
 	public DictCommon()
 	{

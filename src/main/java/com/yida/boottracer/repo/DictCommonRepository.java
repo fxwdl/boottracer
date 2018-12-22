@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.stereotype.Repository;
 
+import com.cosium.spring.data.jpa.entity.graph.repository.EntityGraphJpaRepository;
 import com.yida.boottracer.domain.DictCommon;
 import com.yida.boottracer.domain.SysRole;
 import com.yida.boottracer.domain.SysUser;

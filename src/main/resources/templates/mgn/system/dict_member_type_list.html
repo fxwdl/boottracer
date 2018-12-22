@@ -75,8 +75,8 @@
 								 data-single-select="true" data-checkbox-header="false" data-sort-name="qty">
 									<thead>
 										<tr>
-											<th data-field="qty" data-halign="center" data-align="left">月数</th>
-											<th data-field="price" data-halign="center" data-align="left">价格</th>
+											<th data-field="qty" data-halign="center" data-align="right">月数</th>
+											<th data-field="price" data-halign="center" data-align="right">价格</th>
 											<th data-field="Action" data-align="center" data-formatter="gridAction_Platform" data-events="priceOperateEvents">操作</th>
 										</tr>
 									</thead>
@@ -100,8 +100,8 @@
 								 data-checkbox-header="false" data-sort-name="qty">
 									<thead>
 										<tr>
-											<th data-field="qty" data-halign="center" data-align="left">数量</th>
-											<th data-field="price" data-halign="center" data-align="left">价格</th>
+											<th data-field="qty" data-halign="center" data-align="right">数量</th>
+											<th data-field="price" data-halign="center" data-align="right">价格</th>
 											<th data-field="Action" data-align="center" data-formatter="gridAction_Code" data-events="priceOperateEvents">操作</th>
 										</tr>
 									</thead>
@@ -136,7 +136,7 @@
 		</div>
 
 	</div>
-	
+
 	<th:block layout:fragment="script">
 		<script th:src="@{/bower_components/bootstrap-table/dist/bootstrap-table.js}"></script>
 		<script th:src="@{/bower_components/bootstrap-table/dist/extensions/export/bootstrap-table-export.js}"></script>
@@ -152,12 +152,6 @@
 			$(function () {
 				$('#tbl').bootstrapTable({
 					columns: [{
-						field: 'id',
-						title: '编号',
-						halign: 'center',
-						class: 'col-xs-1',
-						sortable: true
-					}, {
 						field: 'name',
 						title: '名称',
 						halign: 'center',
@@ -166,13 +160,15 @@
 					}, {
 						field: 'freeCodeQty',
 						title: '免费码量',
-						align: 'center',
+						halign:'center',
+						align: 'right',
 						class: 'col-xs-1',
 						sortable: true
 					}, {
 						field: 'holdTime',
 						title: '保存期限(月)',
-						align: 'center',
+						halign:'center',
+						align: 'right',
 						class: 'col-xs-1',
 						sortable: true
 					}, {
@@ -186,7 +182,7 @@
 						field: 'comment',
 						title: '备注',
 						halign: 'center',
-						class: 'col-xs-5',
+						class: 'col-xs-6',
 						sortable: true
 					}, {
 						field: 'operate',
@@ -219,7 +215,7 @@
 					isDefault: false,
 					isDeleted: false,
 					name: '',
-					version: 0,
+					version: null,
 					dictMemberPrices: []
 
 				}
@@ -230,7 +226,7 @@
 				data: defaultData(),
 				methods: {
 					resetData: function () {
-						Object.assign(this.$data, this.$options.data())
+						Object.assign(this.$data, defaultData());
 					}
 				}
 			});
@@ -325,8 +321,8 @@
 
 							$.ajax({
 								type: 'POST',
-								url: ctx + 'mgn/system/dictCommon/Save',
-								data: JSON.stringify(d),
+								url: ctx + 'mgn/system/dictMemberType/Save',
+								data: JSON.stringify(vm.$data),
 								dataTye: 'json',
 								contentType: 'application/json; charset=UTF-8'
 							})
@@ -383,7 +379,7 @@
 						price: '',
 						qty: '',
 						type: t,
-						version: 0
+						version: null
 					};
 				}
 				$('#editPriceForm_Qty').val(row.qty);

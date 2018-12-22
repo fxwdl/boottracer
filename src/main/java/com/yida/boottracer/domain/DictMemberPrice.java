@@ -5,6 +5,8 @@ import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -21,6 +23,16 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 public class DictMemberPrice implements java.io.Serializable
 {
 
+	/**
+	 * 平台费
+	 */
+	public static final int PLATFORM=1;
+	
+	/**
+	 * 生码费
+	 */
+	public static final int BARCODE=2;
+	
 	private int id;
 	private DictMemberType dictMemberType;
 	private int type;
@@ -28,14 +40,14 @@ public class DictMemberPrice implements java.io.Serializable
 	private BigDecimal price;
 	private String comment;
 	private boolean isDeleted;
-	private Long version=0L;
+	private Long version;
 	
 	public DictMemberPrice()
 	{
 	}
 
 	@Id
-
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID", unique = true, nullable = false)
 	public int getId()
 	{

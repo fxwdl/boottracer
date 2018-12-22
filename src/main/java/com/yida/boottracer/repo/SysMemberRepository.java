@@ -3,6 +3,9 @@ package com.yida.boottracer.repo;
 import java.util.List;
 import java.util.Set;
 
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -19,4 +22,5 @@ public interface SysMemberRepository extends JpaRepository<SysMember, String>
 {
 	@Query("SELECT COUNT(d) FROM SysMember d WHERE d.dictMemberType.id=?1")
 	int myCountBydictCompanyType(int typeId);
+
 }

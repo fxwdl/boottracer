@@ -6,17 +6,20 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.cosium.spring.data.jpa.entity.graph.repository.support.EntityGraphJpaRepositoryFactoryBean;
 import com.yida.boottracer.properties.SecurityProperties;
 import com.yida.boottracer.service.auth.ImageCodeGenerator;
 import com.yida.boottracer.service.auth.SysUserDetailsService;
 import com.yida.boottracer.service.auth.ValidateCodeGenerator;
 
 @Configuration
+
 public class BeanConfig
 {
 	@Bean()
