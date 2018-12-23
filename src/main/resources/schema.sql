@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS `dict_common` (
 -- 导出  表 sourcetracerdb.dict_member_price 结构
 DROP TABLE IF EXISTS `dict_member_price`;
 CREATE TABLE IF NOT EXISTS `dict_member_price` (
-  `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `ID` int(10) NOT NULL AUTO_INCREMENT,
   `MemberTypeId` int(10) NOT NULL COMMENT '会员类型iD',
   `Type` int(11) NOT NULL COMMENT '1:平台费；2码量费',
   `Qty` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '数量（月/生码量）',
@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS `dict_member_price` (
   PRIMARY KEY (`ID`),
   KEY `FK_dict_member_price2dict_member_type_idx` (`MemberTypeId`),
   CONSTRAINT `FK_dict_member_price2dict_member_type` FOREIGN KEY (`MemberTypeId`) REFERENCES `dict_member_type` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='会员价格明细表';
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8 COMMENT='会员价格明细表';
 
 -- 数据导出被取消选择。
 -- 导出  表 sourcetracerdb.dict_member_type 结构
@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS `dict_member_type` (
   `Comment` varchar(256) DEFAULT NULL COMMENT '备注',
   `version` bigint(19) NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COMMENT='会员类型';
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8 COMMENT='会员类型';
 
 -- 数据导出被取消选择。
 -- 导出  表 sourcetracerdb.dict_region 结构
@@ -117,11 +117,12 @@ CREATE TABLE IF NOT EXISTS `sys_member` (
   `Fax` varchar(45) DEFAULT NULL,
   `Email` varchar(256) NOT NULL,
   `QQ` varchar(45) DEFAULT NULL,
-  `WetChat` varchar(45) DEFAULT NULL,
+  `WebChat` varchar(45) DEFAULT NULL,
   `FromDate` datetime DEFAULT NULL COMMENT '有效期',
   `EndDate` datetime DEFAULT NULL,
   `Status` int(11) NOT NULL DEFAULT '0' COMMENT '0申请中/1已拒绝/2/已通过/3已停用',
   `Comment` varchar(1000) DEFAULT NULL,
+  `Version` bigint(20) NOT NULL DEFAULT '0',
   PRIMARY KEY (`ID`),
   KEY `FKsys_member_region_idx` (`Region_ID`),
   KEY `FK_sys_member_industry_id_idx` (`Industry_ID`),
