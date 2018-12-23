@@ -1,13 +1,14 @@
 package com.yida.boottracer.service.auth;
 
 import java.awt.image.BufferedImage;
+import java.beans.Transient;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
 public class ImageCode implements Serializable
 {
 
-	private BufferedImage image;
+	private transient BufferedImage image;
 
 	private String code;
 
