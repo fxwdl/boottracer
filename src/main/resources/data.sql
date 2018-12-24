@@ -95,7 +95,7 @@ INSERT INTO `dict_common` (`ID`, `DictType`, `Code`, `Name`, `IsDeleted`, `Comme
 	(78, 1, 'Q008', '其他企业', b'0', '', 0);
 /*!40000 ALTER TABLE `dict_common` ENABLE KEYS */;
 
--- 正在导出表  sourcetracerdb.dict_member_price 的数据：~0 rows (大约)
+-- 正在导出表  sourcetracerdb.dict_member_price 的数据：~3 rows (大约)
 DELETE FROM `dict_member_price`;
 /*!40000 ALTER TABLE `dict_member_price` DISABLE KEYS */;
 INSERT INTO `dict_member_price` (`ID`, `MemberTypeId`, `Type`, `Qty`, `Price`, `Comment`, `IsDeleted`, `version`) VALUES
@@ -104,7 +104,7 @@ INSERT INTO `dict_member_price` (`ID`, `MemberTypeId`, `Type`, `Qty`, `Price`, `
 	(3, 1, 2, 20000, 180.00, NULL, b'0', 0);
 /*!40000 ALTER TABLE `dict_member_price` ENABLE KEYS */;
 
--- 正在导出表  sourcetracerdb.dict_member_type 的数据：~0 rows (大约)
+-- 正在导出表  sourcetracerdb.dict_member_type 的数据：~1 rows (大约)
 DELETE FROM `dict_member_type`;
 /*!40000 ALTER TABLE `dict_member_type` DISABLE KEYS */;
 INSERT INTO `dict_member_type` (`ID`, `Name`, `FreeCodeQty`, `HoldTime`, `IsDefault`, `IsDeleted`, `Comment`, `version`) VALUES
@@ -192,20 +192,26 @@ DELETE FROM `dict_system_function`;
 /*!40000 ALTER TABLE `dict_system_function` DISABLE KEYS */;
 INSERT INTO `dict_system_function` (`Id`, `CssClass`, `DisplayName`, `FullName`, `FunType`, `Name`, `Page`, `Seq`, `ParentId`) VALUES
 	('2a5c67c2-f888-11e8-8fb3-3c970ea599ca', 'fa fa-book', '通用字典', 'mgn-system-dict_common_list', 1, 'dict_common_list', 'mgn/system/dict_common_list.html', 'Z_01', 'e589bb14-f887-11e8-8fb3-3c970ea599ca'),
+	('ab3a9f73-077c-11e9-97bc-3c970ea599ca', 'fa fa-info', '资料管理', 'mgn-info', 0, 'info', '#', 'B', NULL),
 	('ab5d51b9-01ff-11e9-97bc-3c970ea599ca', 'fa fa-building', '企业会员类型', 'mgn-system-dict_member_type', 1, 'dict_member_type', 'mgn/system/dict_member_type_list.html', 'Z_02', 'e589bb14-f887-11e8-8fb3-3c970ea599ca'),
-	('e589bb14-f887-11e8-8fb3-3c970ea599ca', 'fa fa-dashboard', '系统管理', 'mgn-system', 0, 'system', '#', 'Z', NULL);
+	('e589bb14-f887-11e8-8fb3-3c970ea599ca', 'fa fa-dashboard', '系统管理', 'mgn-system', 0, 'system', '#', 'Z', NULL),
+	('f2fb4d19-077c-11e9-97bc-3c970ea599ca', 'fa fa-home', '企业信息', 'mgn-info-sys_member_edit', 1, 'sys_member_edit', 'mgn/info/sys_member_edit.html', 'B_01', 'ab3a9f73-077c-11e9-97bc-3c970ea599ca');
 /*!40000 ALTER TABLE `dict_system_function` ENABLE KEYS */;
 
 -- 正在导出表  sourcetracerdb.sys_member 的数据：~0 rows (大约)
 DELETE FROM `sys_member`;
 /*!40000 ALTER TABLE `sys_member` DISABLE KEYS */;
+INSERT INTO `sys_member` (`ID`, `Region_ID`, `Name`, `Name_En`, `ShortName`, `SocialCreditCode`, `LegalPerson`, `Industry_ID`, `CompanyType_ID`, `MemberTypeId`, `Website`, `Requirement`, `RegAddress`, `ExpressAddress`, `Postcode`, `Linkman`, `Tel`, `Mobile`, `Fax`, `Email`, `QQ`, `WebChat`, `FromDate`, `EndDate`, `Status`, `Comment`, `Version`) VALUES
+	(0001, 71, '沈阳郝运德网络科技有限公司', NULL, '沈阳郝运德', '12345678901234', '陈钢', 9, 76, 1, NULL, 10, '沈阳市沈河区奉天街346号(1-3-18室)', '沈阳市和平区文萃路4-3号', '110000', '白光', '024-23901855', '13002494007', '024-23901855', 'HLM_BG@126.com', NULL, NULL, '2018-01-01 00:00:00', '2118-01-01 00:00:00', 2, NULL, 0);
 /*!40000 ALTER TABLE `sys_member` ENABLE KEYS */;
 
--- 正在导出表  sourcetracerdb.sys_role 的数据：~1 rows (大约)
+-- 正在导出表  sourcetracerdb.sys_role 的数据：~0 rows (大约)
 DELETE FROM `sys_role`;
 /*!40000 ALTER TABLE `sys_role` DISABLE KEYS */;
 INSERT INTO `sys_role` (`Id`, `Comment`, `Name`) VALUES
-	('841edad4-f7d7-11e8-a03b-3c970ea599ca', NULL, '管理员');
+	('841edad4-f7d7-11e8-a03b-3c970ea599ca', NULL, '管理员'),
+	('a7fa0929-077b-11e9-97bc-3c970ea599ca', NULL, '企业会员'),
+	('ccbe0d7b-077b-11e9-97bc-3c970ea599ca', NULL, '后台员工');
 /*!40000 ALTER TABLE `sys_role` ENABLE KEYS */;
 
 -- 正在导出表  sourcetracerdb.sys_role_permission 的数据：~2 rows (大约)
@@ -213,24 +219,28 @@ DELETE FROM `sys_role_permission`;
 /*!40000 ALTER TABLE `sys_role_permission` DISABLE KEYS */;
 INSERT INTO `sys_role_permission` (`Role_ID`, `Function_ID`) VALUES
 	('841edad4-f7d7-11e8-a03b-3c970ea599ca', '2a5c67c2-f888-11e8-8fb3-3c970ea599ca'),
-	('841edad4-f7d7-11e8-a03b-3c970ea599ca', 'e589bb14-f887-11e8-8fb3-3c970ea599ca');
+	('841edad4-f7d7-11e8-a03b-3c970ea599ca', 'e589bb14-f887-11e8-8fb3-3c970ea599ca'),
+	('a7fa0929-077b-11e9-97bc-3c970ea599ca', 'ab3a9f73-077c-11e9-97bc-3c970ea599ca'),
+	('a7fa0929-077b-11e9-97bc-3c970ea599ca', 'f2fb4d19-077c-11e9-97bc-3c970ea599ca');
 /*!40000 ALTER TABLE `sys_role_permission` ENABLE KEYS */;
 
--- 正在导出表  sourcetracerdb.sys_user 的数据：~1 rows (大约)
+-- 正在导出表  sourcetracerdb.sys_user 的数据：~0 rows (大约)
 DELETE FROM `sys_user`;
 /*!40000 ALTER TABLE `sys_user` DISABLE KEYS */;
 INSERT INTO `sys_user` (`UserId`, `Comment`, `CreateDate`, `Email`, `FailedPasswordAnswerAttemptCount`, `FailedPasswordAnswerAttemptWindowStart`, `FailedPasswordAttemptCount`, `FailedPasswordAttemptWindowStart`, `IsAnonymous`, `IsApproved`, `IsLockedOut`, `LastLockoutDate`, `LastLoginDate`, `LastPasswordChangedDate`, `Password`, `PasswordAnswer`, `PasswordFormat`, `PasswordQuestion`, `PasswordSalt`, `QQ`, `Tel`, `UserName`, `UserNameCN`, `WebChat`, `Member_ID`, `IsMemberAdmin`) VALUES
-	('25367d3b-f7d7-11e8-a03b-3c970ea599ca', NULL, '2018-12-04 23:06:21', NULL, 0, '2018-12-04 23:06:36', 0, '2018-12-04 23:06:42', b'0', b'1', b'0', '2018-12-04 23:06:59', '2018-12-04 23:07:07', '2018-12-04 23:07:09', '{bcrypt}$2a$10$4ZNTtNTXi3Is4AtxiuKin.P.XTyJ9so7ACJzxU0mZSHWVmGWWOfuS', '', NULL, NULL, NULL, NULL, NULL, 'admin', '系统管理员', NULL, NULL, NULL);
+	('25367d3b-f7d7-11e8-a03b-3c970ea599ca', NULL, '2018-12-04 23:06:21', NULL, 0, '2018-12-04 23:06:36', 0, '2018-12-04 23:06:42', b'0', b'1', b'0', '2018-12-04 23:06:59', '2018-12-04 23:07:07', '2018-12-04 23:07:09', '{bcrypt}$2a$10$YuYJObX97FQMuT0.PW0PSe1kDBzzqex4WKVre4IT21bsJXR8TaG7y', '', NULL, NULL, NULL, NULL, NULL, 'admin', '系统管理员', NULL, NULL, NULL),
+	('628b54d4-077b-11e9-97bc-3c970ea599ca', NULL, '2018-12-04 23:06:21', NULL, 0, '2018-12-04 23:06:36', 0, '2018-12-04 23:06:42', b'0', b'1', b'0', '2018-12-04 23:06:59', '2018-12-04 23:07:07', '2018-12-04 23:07:09', '{bcrypt}$2a$10$YuYJObX97FQMuT0.PW0PSe1kDBzzqex4WKVre4IT21bsJXR8TaG7y', '', NULL, NULL, NULL, NULL, NULL, 'syhyd', '沈阳郝运德', NULL, 0001, b'1');
 /*!40000 ALTER TABLE `sys_user` ENABLE KEYS */;
 
--- 正在导出表  sourcetracerdb.sys_user_in_role 的数据：~1 rows (大约)
+-- 正在导出表  sourcetracerdb.sys_user_in_role 的数据：~0 rows (大约)
 DELETE FROM `sys_user_in_role`;
 /*!40000 ALTER TABLE `sys_user_in_role` DISABLE KEYS */;
 INSERT INTO `sys_user_in_role` (`user_id`, `role_id`) VALUES
-	('25367d3b-f7d7-11e8-a03b-3c970ea599ca', '841edad4-f7d7-11e8-a03b-3c970ea599ca');
+	('25367d3b-f7d7-11e8-a03b-3c970ea599ca', '841edad4-f7d7-11e8-a03b-3c970ea599ca'),
+	('628b54d4-077b-11e9-97bc-3c970ea599ca', 'a7fa0929-077b-11e9-97bc-3c970ea599ca');
 /*!40000 ALTER TABLE `sys_user_in_role` ENABLE KEYS */;
 
--- 正在导出表  sourcetracerdb.test_order 的数据：~1 rows (大约)
+-- 正在导出表  sourcetracerdb.test_order 的数据：~0 rows (大约)
 DELETE FROM `test_order`;
 /*!40000 ALTER TABLE `test_order` DISABLE KEYS */;
 INSERT INTO `test_order` (`id`, `order_number`, `version`, `created_at`, `updated_at`, `createdAt`, `updatedAt`) VALUES

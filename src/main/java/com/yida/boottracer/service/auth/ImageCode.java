@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 public class ImageCode implements Serializable
 {
 
+	//transient指明不需要序列化
 	private transient BufferedImage image;
 
 	private String code;
