@@ -18,6 +18,7 @@ import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.repository.JpaContext;
 import org.springframework.stereotype.Service;
@@ -26,9 +27,12 @@ import com.cosium.spring.data.jpa.entity.graph.domain.EntityGraphs;
 import com.yida.boottracer.domain.DictCommon;
 import com.yida.boottracer.domain.DictMemberPrice;
 import com.yida.boottracer.domain.DictMemberType;
+import com.yida.boottracer.domain.DictRegion;
 import com.yida.boottracer.domain.PagingModel;
+import com.yida.boottracer.enums.DictCommomType;
 import com.yida.boottracer.repo.DictCommonRepository;
 import com.yida.boottracer.repo.DictMemberTypeRepository;
+import com.yida.boottracer.repo.DictRegionRepository;
 import com.yida.boottracer.repo.SysMemberRepository;
 import com.yida.infrastructure.MyUtils;
 
@@ -43,6 +47,8 @@ public class DictService
 	private DictMemberTypeRepository dictMemberTypeRepository;
 	@Autowired
 	private SysMemberRepository sysMemberRepository;
+	@Autowired
+	private DictRegionRepository dictRegionRepository;
 
 	@Autowired
 	public DictService(JpaContext context)
@@ -50,6 +56,18 @@ public class DictService
 		this.dictCommon_em = context.getEntityManagerByManagedType(DictCommon.class);
 	}
 
+	public List<DictCommon> getCommonListByType(DictCommomType type)
+	{
+		return dictCommonRepository.findByDictTypeAndIsDeleted(type.ordinal(),false,Sort.by("code"));
+	}
+	
+	public List<DictRegion> getRegionListByParentId(int id)
+	{
+		DictRegion p=new DictRegion();
+		p.setId(id);
+		return dictRegionRepository.findByParent(p,Sort.by("code"));
+	}	
+	
 	public PagingModel<DictCommon> getCommonListWithPagination(int limit, int offset, String search, String sort,
 			String order, int type)
 	{

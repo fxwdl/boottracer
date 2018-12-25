@@ -52,6 +52,7 @@ public class SysMember implements java.io.Serializable
 	private Date endDate;
 	private int status;
 	private String comment;
+	private long barcodeQty;
 	private Long version;
 	private Set<SysUser> sysUsers = new HashSet<>();
 
@@ -362,6 +363,17 @@ public class SysMember implements java.io.Serializable
 	public void setSysUsers(Set<SysUser> sysUsers)
 	{
 		this.sysUsers = sysUsers;
+	}
+
+	@Column(name = "BarcodeQty", nullable = false)
+	public Long getBarcodeQty()
+	{
+		return this.barcodeQty;
+	}
+
+	public void setBarcodeQty(Long barcodeQty)
+	{
+		this.barcodeQty = barcodeQty;
 	}
 
 	@Version

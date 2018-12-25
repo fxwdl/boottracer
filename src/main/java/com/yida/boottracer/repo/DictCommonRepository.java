@@ -3,6 +3,7 @@ package com.yida.boottracer.repo;
 import java.util.List;
 import java.util.Set;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
@@ -16,5 +17,5 @@ import com.yida.boottracer.domain.SysUser;
 @Repository
 public interface DictCommonRepository extends JpaRepository<DictCommon, Integer>
 {
-
+	public List<DictCommon> findByDictTypeAndIsDeleted(int dictType, boolean isDeleted, Sort sort);
 }

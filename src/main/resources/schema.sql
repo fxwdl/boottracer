@@ -122,6 +122,7 @@ CREATE TABLE IF NOT EXISTS `sys_member` (
   `EndDate` datetime DEFAULT NULL,
   `Status` int(11) NOT NULL DEFAULT '0' COMMENT '0申请中/1已拒绝/2/已通过/3已停用',
   `Comment` varchar(1000) DEFAULT NULL,
+  `BarcodeQty` bigint(20) unsigned NOT NULL COMMENT '剩余生码数量',
   `Version` bigint(20) NOT NULL DEFAULT '0',
   PRIMARY KEY (`ID`),
   KEY `FKsys_member_region_idx` (`Region_ID`),

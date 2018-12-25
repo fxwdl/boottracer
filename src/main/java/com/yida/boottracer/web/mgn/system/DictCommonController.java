@@ -24,7 +24,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.yida.boottracer.domain.DictCommon;
 import com.yida.boottracer.domain.PagingModel;
-import com.yida.boottracer.dto.SimpleResponse;
 import com.yida.boottracer.enums.DictCommomType;
 import com.yida.boottracer.service.DictService;
 import com.yida.boottracer.web.mgn.BaseController;
