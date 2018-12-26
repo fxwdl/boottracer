@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,6 +23,12 @@ import com.yida.boottracer.service.auth.ValidateCodeGenerator;
 
 public class BeanConfig
 {
+	//@Bean 
+	public OpenEntityManagerInViewFilter openEntityManagerInViewFilter() 
+	 { 
+		 return new OpenEntityManagerInViewFilter(); 
+	 }
+
 	@Bean()
 	
 	public SecurityProperties createSecurityProperties()

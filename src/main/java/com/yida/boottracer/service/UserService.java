@@ -7,12 +7,17 @@ import java.util.Set;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.invocation.ReactiveReturnValueHandler;
 import org.springframework.stereotype.Service;
 
 import com.yida.boottracer.domain.DictSystemFunction;
+import com.yida.boottracer.domain.SysMember;
+import com.yida.boottracer.domain.SysUser;
 import com.yida.boottracer.domain.test.User;
 import com.yida.boottracer.domain.test.UserRepository;
 import com.yida.boottracer.repo.DictSystemFunctionRepository;
+import com.yida.boottracer.repo.SysMemberRepository;
+import com.yida.web.exception.ResourceNotFoundException;
 
 @Service
 public class UserService
@@ -22,6 +27,9 @@ public class UserService
 
 	@Autowired
 	private DictSystemFunctionRepository dictSystemFunctionRepository;
+
+	@Autowired
+	private SysMemberRepository sysMemberRepository;
 
 	public Optional<User> getUser()
 	{
@@ -49,5 +57,29 @@ public class UserService
 	public List<DictSystemFunction> GetSystemMenu(String userName)
 	{
 		return dictSystemFunctionRepository.getByUserName(userName);
+	}
+
+	public SysMember getSysMemberByUser(Integer id)
+	{
+		SysMember m = null;
+
+		if (id != null)
+		{
+			Optional<SysMember> r = this.sysMemberRepository.findById(id);
+			if (!r.isPresent())
+			{
+				throw new ResourceNotFoundException("未找到指定的企业信息");
+			}
+			else
+			{
+				m = r.get();
+			}
+		}
+		else
+		{
+			throw new RuntimeException("id不能为空");
+		}
+
+		return m;
 	}
 }

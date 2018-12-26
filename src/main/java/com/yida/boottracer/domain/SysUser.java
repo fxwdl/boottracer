@@ -377,6 +377,16 @@ public class SysUser implements java.io.Serializable, UserDetails
 	}
 
 	/**
+	 * 是否有企业会员
+	 * @return
+	 */
+	@Transient
+	public boolean IsEnterpriseMember()
+	{
+		return this.getSysMember()!=null;
+	}
+	
+	/**
 	 * 设置权限集合
 	 * 
 	 * @param authorities
