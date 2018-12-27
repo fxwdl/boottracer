@@ -12,11 +12,13 @@
         <div class="box box-primary">
             <div class="box-body">
                 <form id="editForm" class="form-horizontal">
+                    <input type="hidden" id="regionId" name="regionId" th:value="${m?.id}" />
+                    <input type="hidden" id="regionId" name="regionId" th:value="${m?.dictRegion?.id}" />
                     <div class="form-group">
                         <div class="show-error">
                             <label class="col-sm-2 control-label">企业代码</label>
                             <div class="col-sm-4">
-                                <label class="control-label" style="color: red" name="id" th:text="${m?.id}"></label>
+                                <label class="control-label" style="color: red" name="id" th:text="${m?.displayId}"></label>
                             </div>
                         </div>
                         <div class="show-error">
@@ -32,18 +34,22 @@
                         <div class="col-sm-10">
                             <div class="row">
                                 <div class="col-sm-4">
-                                    <select id="ds_province" class="form-control">
-                                        <option th:each="t:${ds_province}" th:value="${t.id}" th:text="${t.name}"></option>
+                                    <select id="ds_province" name="ds_province" class="form-control">
+                                        <option value="0"> -- 请选择 -- </option>
+                                        <option th:selected="${province eq t.id}" th:each="t:${ds_province}" th:value="${t.id}"
+                                            th:text="${t.name}"></option>
                                     </select>
                                 </div>
                                 <div class="col-sm-4">
-                                    <select id="ds_city" class="form-control">
-                                        <option th:each="t:${ds_city}" th:value="${t.id}" th:text="${t.name}"></option>
+                                    <select id="ds_city" name="ds_city" class="form-control">
+                                        <option th:selected="${city eq t.id}" th:each="t:${ds_city}" th:value="${t.id}"
+                                            th:text="${t.name}"></option>
                                     </select>
                                 </div>
                                 <div class="col-sm-4">
-                                    <select id="ds_county" class="form-control">
-                                        <option th:each="t:${ds_county}" th:value="${t.id}" th:text="${t.name}"></option>
+                                    <select id="ds_county" name="ds_county" class="form-control">
+                                        <option th:selected="${county eq t.id}" th:each="t:${ds_county}" th:value="${t.id}"
+                                            th:text="${t.name}"></option>
                                     </select>
                                 </div>
                             </div>
@@ -100,7 +106,7 @@
                             <label class="col-sm-2 control-label">行业</label>
                             <div class="col-sm-4">
                                 <select name="Industry_ID" class="form-control" th:field="*{m.dictIndustry.id}">
-                                    <option th:each="t:${ds_Industry}" th:value="${t.id}" th:text="${t.name}" selected></option>
+                                    <option th:each="t:${ds_Industry}" th:value="${t.id}" th:text="${t.name}"></option>
                                 </select>
                                 <div class="help-block with-errors"></div>
                             </div>
@@ -108,7 +114,7 @@
                         <div class="show-error">
                             <label class="col-sm-2 control-label">企业类型</label>
                             <div class="col-sm-4">
-                                <select name="CompanyType_ID" class="form-control"  th:field="*{m.dictCompanyType.id}">
+                                <select name="CompanyType_ID" class="form-control" th:field="*{m.dictCompanyType.id}">
                                     <option th:each="t:${ds_CompanyType}" th:value="${t.id}" th:text="${t.name}"></option>
                                 </select>
                                 <div class="help-block with-errors"></div>
@@ -233,23 +239,35 @@
                 $('#ds_province').change(function () {
                     $('#ds_city').empty();
                     $('#ds_county').empty();
-                    var id = +$(this).val();
+                    var id = $(this).val();
                     $.getJSON(ctx + 'mgn/system/dictRegion/GetChildren/' + id, function (data) {
                         $.each(data, function (idx, item) {
                             $('#ds_city').append($('<option></option>').attr('value', item.id).text(item.name));
                         })
-                        $('#ds_city').trigger("change");
                     })
+                        .always(function () {
+                            $('#ds_city').trigger("change");
+                        });
                 });
                 $('#ds_city').change(function () {
                     $('#ds_county').empty();
-                    var id = +$(this).val();
+                    var id = $(this).val();
+                    if (id == null) {
+                        $('#ds_county').trigger("change");
+                    }
                     $.getJSON(ctx + 'mgn/system/dictRegion/GetChildren/' + id, function (data) {
                         $.each(data, function (idx, item) {
                             $('#ds_county').append($('<option></option>').attr('value', item.id).text(item.name));
                         })
                     })
-                });                
+                        .always(function () {
+                            $('#ds_county').trigger("change");
+                        });
+                });
+                $('#ds_county').change(function () {
+                    var id = $(this).val();
+                    $('#regionId').val(id);
+                });
             });
 
 

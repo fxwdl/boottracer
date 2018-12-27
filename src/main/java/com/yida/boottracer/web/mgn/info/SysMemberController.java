@@ -1,6 +1,8 @@
 package com.yida.boottracer.web.mgn.info;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -40,22 +42,36 @@ public class SysMemberController extends BaseController
 				.addObject("ds_status", SysMemberStatus.getList());
 
 		List<DictRegion> dsRegion = dictService.getRegionListByParentId(1);
-		DictRegion empItem = new DictRegion();
-		empItem.setId(0);
-		empItem.setName("请选择");
-		dsRegion.add(0, empItem);
 		mv.addObject("ds_province", dsRegion);
 
 		if (this.getUser().IsEnterpriseMember())
 		{
-			id=this.getUser().getSysMember().getId();
+			id = this.getUser().getSysMember().getId();
 		}
-		
+
 		SysMember m = userService.getSysMemberByUser(id);
 
 		mv.addObject("m", m);
 
-		
+		Integer county = 0, city = 0, province = 0;
+		if (m.getDictRegion() != null)
+		{
+			county = m.getDictRegion().getId();
+			mv.addObject("ds_county", m.getDictRegion().getParent().getChildren().stream()
+					.sorted(Comparator.comparing(DictRegion::getCode)).collect(Collectors.toList()));
+
+			city = m.getDictRegion().getParent().getId();
+
+			mv.addObject("ds_city", m.getDictRegion().getParent().getParent().getChildren().stream()
+					.sorted(Comparator.comparing(DictRegion::getCode)).collect(Collectors.toList()));
+
+			province = m.getDictRegion().getParent().getParent().getId();
+
+		}
+
+		mv.addObject("county", county);
+		mv.addObject("city", city);
+		mv.addObject("province", province);
 		mv.setViewName("mgn/info/sys_member_edit.html");
 		return mv;
 	}
