@@ -54,11 +54,22 @@ public class UserService
 		userRepository.save(u);
 	}
 
+	//此方法应该试图只读到菜单一级
 	public List<DictSystemFunction> GetSystemMenu(String userName)
 	{
-		return dictSystemFunctionRepository.getByUserName(userName);
+		return dictSystemFunctionRepository.getMenuByUserName(userName);
 	}
-
+	
+	public List<DictSystemFunction> GetAllFunction(String userName)
+	{
+		return dictSystemFunctionRepository.getAllByUserName(userName);
+	}	
+	
+	public List<String> GetAllUrlFunction(String userName)
+	{
+		return dictSystemFunctionRepository.getAllUrlByUserName(userName);
+	}		
+	
 	public SysMember getSysMemberByUser(Integer id)
 	{
 		SysMember m = null;

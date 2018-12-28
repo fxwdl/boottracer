@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{_layout/main}"
-    th:with="module='资料管理',functionName='企业信息',smallTitle='企业信息'">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+    layout:decorate="~{_layout/main}" th:with="module='资料管理',functionName='企业信息',smallTitle='企业信息'">
 
 <head>
     <title>企业信息</title>
@@ -205,7 +205,8 @@
                                 <input type="text" class="form-control" name="webChat" th:value="${m?.webChat}">
                             </div>
                         </div>
-                        <div class="show-error">
+                        
+                        <div class="show-error" sec:authorize="" sec:authentication="" sec:authorize-acl="" sec:authorize-url="">
                             <label class="col-sm-2 control-label">状态</label>
                             <div class="col-sm-4">
                                 <select name="ds_status" class="form-control">

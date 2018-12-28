@@ -1,10 +1,11 @@
-package com.yida.boottracer.web.mgn.info;
+package com.yida.boottracer.web.mgn.ent;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +23,7 @@ import com.yida.boottracer.service.UserService;
 import com.yida.boottracer.web.mgn.BaseController;
 
 @Controller
-@RequestMapping(value = "/mgn/info")
+@RequestMapping(value = "/mgn/ent")
 
 public class SysMemberController extends BaseController
 {
@@ -32,6 +33,7 @@ public class SysMemberController extends BaseController
 	@Autowired
 	private UserService userService;
 
+	@PreAuthorize("hasPermission('SysMemberController.edit', 'admin')")
 	@GetMapping(value = { "sys_member_edit.html" })
 	public ModelAndView edit(@RequestParam(name = "id", required = false) Integer id)
 	{
