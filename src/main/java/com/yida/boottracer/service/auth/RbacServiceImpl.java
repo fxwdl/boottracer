@@ -27,7 +27,7 @@ public class RbacServiceImpl implements RbacService
 	private UserService userService;
 
 	@Value("${server.servlet.context-path}")
-	private String contextPath;
+	public static String contextPath;
 	
 	@Value("${my.debug:true}")
 	private boolean debug;
@@ -36,9 +36,7 @@ public class RbacServiceImpl implements RbacService
 
 	@Override
 	public boolean hasPermission(HttpServletRequest request, Authentication authentication)
-	{
-
-		
+	{	
 		Object principal = authentication.getPrincipal();
 		boolean hasPermission = false;
 		if (principal instanceof UserDetails)

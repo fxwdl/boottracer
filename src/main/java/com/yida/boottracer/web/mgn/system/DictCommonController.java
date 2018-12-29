@@ -29,11 +29,8 @@ import com.yida.boottracer.enums.DictCommomType;
 import com.yida.boottracer.service.DictService;
 import com.yida.boottracer.web.mgn.BaseController;
 import com.yida.web.exception.ResourceNotFoundException;
-
-
 @Controller
 @RequestMapping(value = "/mgn/system")
-
 public class DictCommonController extends BaseController
 {
 	@Autowired

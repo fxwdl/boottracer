@@ -23,7 +23,6 @@ import com.yida.boottracer.domain.DictMemberType;
 import com.yida.boottracer.domain.PagingModel;
 import com.yida.boottracer.service.DictService;
 import com.yida.boottracer.web.mgn.BaseController;
-
 @Controller
 @RequestMapping(value = "/mgn/system")
 public class DictMemberTypeController  extends BaseController

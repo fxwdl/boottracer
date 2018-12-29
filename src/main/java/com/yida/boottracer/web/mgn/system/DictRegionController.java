@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yida.boottracer.service.DictService;
-
+import com.yida.boottracer.web.mgn.BaseController;
 @Controller
 @RequestMapping(value = "/mgn/system")
-public class DictRegionController
+public class DictRegionController extends BaseController
 {
 	@Autowired
 	private DictService dictService;

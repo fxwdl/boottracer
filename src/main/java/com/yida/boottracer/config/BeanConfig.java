@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.context.WebApplicationContext;
+import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect;
 
 import com.cosium.spring.data.jpa.entity.graph.repository.support.EntityGraphJpaRepositoryFactoryBean;
 import com.yida.boottracer.properties.SecurityProperties;
@@ -23,6 +24,11 @@ import com.yida.boottracer.service.auth.ValidateCodeGenerator;
 
 public class BeanConfig
 {
+/*	@Bean
+	public SpringSecurityDialect securityDialect() {
+	    return new SpringSecurityDialect();
+	}*/
+	
 	//@Bean 
 	public OpenEntityManagerInViewFilter openEntityManagerInViewFilter() 
 	 { 

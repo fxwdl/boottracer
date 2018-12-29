@@ -24,7 +24,6 @@ import com.yida.boottracer.web.mgn.BaseController;
 
 @Controller
 @RequestMapping(value = "/mgn/ent")
-
 public class SysMemberController extends BaseController
 {
 	@Autowired
@@ -33,7 +32,7 @@ public class SysMemberController extends BaseController
 	@Autowired
 	private UserService userService;
 
-	@PreAuthorize("hasPermission('SysMemberController.edit', 'admin')")
+	
 	@GetMapping(value = { "sys_member_edit.html" })
 	public ModelAndView edit(@RequestParam(name = "id", required = false) Integer id)
 	{

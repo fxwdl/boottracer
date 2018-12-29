@@ -206,7 +206,7 @@
                             </div>
                         </div>
                         
-                        <div class="show-error" sec:authorize="" sec:authentication="" sec:authorize-acl="" sec:authorize-url="">
+                        <div class="show-error" sec:authorize-url="POST mgn/biz/SysMemberBiz/changeSysMemberInfo">
                             <label class="col-sm-2 control-label">状态</label>
                             <div class="col-sm-4">
                                 <select name="ds_status" class="form-control">
@@ -216,7 +216,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group">
+                    <!--/* 也可以用sec:authorize="hasPermission('','mgn/biz/SysMemberBiz/changeSysMemberInfo')"来控制 */-->
+                    <div class="form-group" sec:authorize-url="POST mgn/biz/SysMemberBiz/changeSysMemberInfo">
                         <label for="editForm_comment" class="col-sm-2 control-label">备注</label>
                         <div class="col-sm-10">
                             <textarea class="form-control" rows="3" id="editForm_comment" name="comment" th:text="${m?.comment}"></textarea>
