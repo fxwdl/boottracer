@@ -50,7 +50,7 @@ public abstract class BaseController
 	@ModelAttribute
 	public void initSystemMenu(Model model)
 	{
-		List<DictSystemFunction> all = userService.GetSystemMenu(getUser().getUsername());
+		List<DictSystemFunction> all = userService.getSystemMenu(getUser().getUsername());
 		List<DictSystemFunction> menu = new ArrayList<DictSystemFunction>();
 		all.forEach(item ->
 		{

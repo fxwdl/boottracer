@@ -1,6 +1,7 @@
 package com.yida.boottracer.service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,9 +64,16 @@ public class DictService
 	
 	public List<DictRegion> getRegionListByParentId(int id)
 	{
-		DictRegion p=new DictRegion();
-		p.setId(id);
-		return dictRegionRepository.findByParent(p,Sort.by("code"));
+		Optional<DictRegion> p=dictRegionRepository.findById(id);
+		if (p.isPresent())
+		{
+			return p.get().getChildren().stream().sorted(Comparator.comparing(DictRegion::getCode)).collect(Collectors.toList());
+		}
+		else 
+		{
+			return dictRegionRepository.findByParent(null,Sort.by("code"));
+		}
+		
 	}	
 	
 	public PagingModel<DictCommon> getCommonListWithPagination(int limit, int offset, String search, String sort,

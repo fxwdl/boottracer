@@ -15,6 +15,8 @@ import org.springframework.web.context.WebApplicationContext;
 import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect;
 
 import com.cosium.spring.data.jpa.entity.graph.repository.support.EntityGraphJpaRepositoryFactoryBean;
+import com.fasterxml.jackson.databind.Module;
+import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 import com.yida.boottracer.properties.SecurityProperties;
 import com.yida.boottracer.service.auth.ImageCodeGenerator;
 import com.yida.boottracer.service.auth.SysUserDetailsService;

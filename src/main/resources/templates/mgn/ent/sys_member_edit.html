@@ -11,34 +11,37 @@
     <div class="container-fluid" layout:fragment="doBody">
         <div class="box box-primary">
             <div class="box-body">
-                <form id="editForm" class="form-horizontal">
-                    <input type="hidden" id="regionId" name="regionId" th:value="${m?.id}" />
-                    <input type="hidden" id="regionId" name="regionId" th:value="${m?.dictRegion?.id}" />
+                <form data-toggle="validator" method="POST" id="editForm" class="form-horizontal" th:object="${m}"
+                    th:action="@{/mgn/ent/SysMember/save}">
+                    <input type="hidden" th:field="*{id}" />
+                    <input type="hidden" th:field="*{dictMemberType.id}" />
+                    <input type="hidden" th:field="*{dictRegion.id}" /> 
                     <div class="form-group">
                         <div class="show-error">
                             <label class="col-sm-2 control-label">企业代码</label>
                             <div class="col-sm-4">
-                                <label class="control-label" style="color: red" name="id" th:text="${m?.displayId}"></label>
+                                <label class="control-label" style="color: black" name="id" th:text="*{displayId}"></label>
                             </div>
                         </div>
                         <div class="show-error">
                             <label class="col-sm-2 control-label">会员类型</label>
                             <div class="col-sm-4">
-                                <label class="control-label" style="color: red" th:text="${m?.dictMemberType?.name}"></label>
+                                <label class="control-label" style="color: green" th:text="*{dictMemberType?.name}"></label>
                             </div>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label class="col-sm-2 control-label">区域</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-10 show-error">
                             <div class="row">
                                 <div class="col-sm-4">
-                                    <select id="ds_province" name="ds_province" class="form-control">
-                                        <option value="0"> -- 请选择 -- </option>
+                                    <select required id="ds_province" name="ds_province" class="form-control" data-error="请选择区域">
+                                        <option value=""> -- 请选择 -- </option>
                                         <option th:selected="${province eq t.id}" th:each="t:${ds_province}" th:value="${t.id}"
                                             th:text="${t.name}"></option>
-                                    </select>
+                                    </select>                                         
+                                    <div class="help-block with-errors"></div>                              
                                 </div>
                                 <div class="col-sm-4">
                                     <select id="ds_city" name="ds_city" class="form-control">
@@ -52,21 +55,23 @@
                                             th:text="${t.name}"></option>
                                     </select>
                                 </div>
+                                
                             </div>
+                            
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="show-error">
                             <label class="col-sm-2 control-label">企业名称</label>
                             <div class="col-sm-4">
-                                <input required type="text" class="form-control" name="name" th:value="${m?.name}">
+                                <input required type="text" class="form-control" name="name" th:value="*{name}">
                                 <div class="help-block with-errors"></div>
                             </div>
                         </div>
                         <div class="show-error">
                             <label class="col-sm-2 control-label">英文名称</label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" name="nameEn" th:value="${m?.nameEn}">
+                                <input type="text" class="form-control" name="nameEn" th:value="*{nameEn}">
                             </div>
                         </div>
                     </div>
@@ -74,13 +79,14 @@
                         <div class="show-error">
                             <label class="col-sm-2 control-label">企业简称</label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" name="shortName" th:value="${m?.shortName}">
+                                <input type="text" class="form-control" name="shortName" th:value="*{shortName}">
                             </div>
                         </div>
                         <div class="show-error">
                             <label class="col-sm-2 control-label">社会信用代码</label>
                             <div class="col-sm-4">
-                                <input type="text" min="0" class="form-control" name="socialCreditCode" th:value="${m?.socialCreditCode}">
+                                <input required type="text" min="0" class="form-control" name="socialCreditCode"
+                                    th:value="*{socialCreditCode}">
                                 <div class="help-block with-errors"></div>
                             </div>
                         </div>
@@ -89,14 +95,14 @@
                         <div class="show-error">
                             <label class="col-sm-2 control-label">法人</label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" name="legalPerson" th:value="${m?.legalPerson}">
+                                <input required type="text" class="form-control" name="legalPerson" th:value="*{legalPerson}">
                                 <div class="help-block with-errors"></div>
                             </div>
                         </div>
                         <div class="show-error">
                             <label class="col-sm-2 control-label">年赋码需求(万)</label>
                             <div class="col-sm-4">
-                                <input type="number" min="0" class="form-control" name="requirement" th:value="${m?.requirement}">
+                                <input required type="number" min="0" class="form-control" name="requirement" th:value="*{requirement}">
                                 <div class="help-block with-errors"></div>
                             </div>
                         </div>
@@ -105,7 +111,7 @@
                         <div class="show-error">
                             <label class="col-sm-2 control-label">行业</label>
                             <div class="col-sm-4">
-                                <select name="Industry_ID" class="form-control" th:field="*{m.dictIndustry.id}">
+                                <select required class="form-control" th:field="*{dictIndustry.id}">
                                     <option th:each="t:${ds_Industry}" th:value="${t.id}" th:text="${t.name}"></option>
                                 </select>
                                 <div class="help-block with-errors"></div>
@@ -114,7 +120,7 @@
                         <div class="show-error">
                             <label class="col-sm-2 control-label">企业类型</label>
                             <div class="col-sm-4">
-                                <select name="CompanyType_ID" class="form-control" th:field="*{m.dictCompanyType.id}">
+                                <select required class="form-control" th:field="*{dictCompanyType.id}">
                                     <option th:each="t:${ds_CompanyType}" th:value="${t.id}" th:text="${t.name}"></option>
                                 </select>
                                 <div class="help-block with-errors"></div>
@@ -125,13 +131,13 @@
                         <div class="show-error">
                             <label class="col-sm-2 control-label">企业网站</label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" name="website" th:value="${m?.website}">
+                                <input type="url" class="form-control" name="website" th:value="*{website}">
                             </div>
                         </div>
                         <div class="show-error">
                             <label class="col-sm-2 control-label">注册地址</label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" name="regAddress" th:value="${m?.regAddress}">
+                                <input required type="text" class="form-control" name="regAddress" th:value="*{regAddress}">
                                 <div class="help-block with-errors"></div>
                             </div>
                         </div>
@@ -140,14 +146,14 @@
                         <div class="show-error">
                             <label class="col-sm-2 control-label">通信地址</label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" name="expressAddress" th:value="${m?.expressAddress}">
+                                <input required type="text" class="form-control" name="expressAddress" th:value="*{expressAddress}">
                                 <div class="help-block with-errors"></div>
                             </div>
                         </div>
                         <div class="show-error">
                             <label class="col-sm-2 control-label">邮编</label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" name="postcode" th:value="${m?.postcode}">
+                                <input required type="text" class="form-control" name="postcode" th:value="*{postcode}">
                                 <div class="help-block with-errors"></div>
                             </div>
                         </div>
@@ -156,14 +162,14 @@
                         <div class="show-error">
                             <label class="col-sm-2 control-label">联系人</label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" name="linkman" th:value="${m?.linkman}">
+                                <input required type="text" class="form-control" name="linkman" th:value="*{linkman}">
                                 <div class="help-block with-errors"></div>
                             </div>
                         </div>
                         <div class="show-error">
                             <label class="col-sm-2 control-label">办公电话</label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" name="tel" th:value="${m?.tel}">
+                                <input required type="text" class="form-control" name="tel" th:value="*{tel}">
                                 <div class="help-block with-errors"></div>
                             </div>
                         </div>
@@ -172,14 +178,14 @@
                         <div class="show-error">
                             <label class="col-sm-2 control-label">手机号码</label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" name="mobile" th:value="${m?.mobile}">
+                                <input required type="text" class="form-control" name="mobile" th:value="*{mobile}">
                                 <div class="help-block with-errors"></div>
                             </div>
                         </div>
                         <div class="show-error">
                             <label class="col-sm-2 control-label">传真</label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" name="fax" th:value="${m?.fax}">
+                                <input type="text" class="form-control" name="fax" th:value="*{fax}">
                             </div>
                         </div>
                     </div>
@@ -187,14 +193,14 @@
                         <div class="show-error">
                             <label class="col-sm-2 control-label">电子邮件</label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" name="email" th:value="${m?.email}">
+                                <input required type="email" class="form-control" name="email" th:value="*{email}">
                                 <div class="help-block with-errors"></div>
                             </div>
                         </div>
                         <div class="show-error">
                             <label class="col-sm-2 control-label">QQ</label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" name="qq" th:value="${m?.qq}">
+                                <input type="text" class="form-control" name="qq" th:value="*{qq}">
                             </div>
                         </div>
                     </div>
@@ -202,14 +208,14 @@
                         <div class="show-error">
                             <label class="col-sm-2 control-label">微信号</label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" name="webChat" th:value="${m?.webChat}">
+                                <input type="text" class="form-control" name="webChat" th:value="*{webChat}">
                             </div>
                         </div>
-                        
+
                         <div class="show-error" sec:authorize-url="POST mgn/biz/SysMemberBiz/changeSysMemberInfo">
                             <label class="col-sm-2 control-label">状态</label>
                             <div class="col-sm-4">
-                                <select name="ds_status" class="form-control">
+                                <select name="ds_status" class="form-control" th:field="*{status}">
                                     <option th:each="t:${ds_status}" th:value="${t.value}" th:text="${t.name}"></option>
                                 </select>
                                 <div class="help-block with-errors"></div>
@@ -220,15 +226,14 @@
                     <div class="form-group" sec:authorize-url="POST mgn/biz/SysMemberBiz/changeSysMemberInfo">
                         <label for="editForm_comment" class="col-sm-2 control-label">备注</label>
                         <div class="col-sm-10">
-                            <textarea class="form-control" rows="3" id="editForm_comment" name="comment" th:text="${m?.comment}"></textarea>
+                            <textarea class="form-control" rows="3" id="editForm_comment" name="comment" th:text="*{comment}"></textarea>
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>
-
+                    <div class="box-footer">
+                        <button type="submit" class="btn btn-lg center-block btn-primary">提交</button>
+                    </div>
                 </form>
-            </div>
-            <div class="box-footer">
-                <button type="submit" class="btn btn-lg center-block btn-primary">提交</button>
             </div>
         </div>
     </div>
@@ -236,12 +241,18 @@
         <script th:src="@{/bower_components/bootstrap-dialog/dist/js/bootstrap-dialog.js}"></script>
         <script th:src="@{/js/bootstrap-dialog-zh-CN.js}"></script>
         <script th:src="@{/js/bootstrap-dialog-Ext.js}"></script>
+        <script th:src="@{/bower_components/bootstrap-validator/dist/validator.custom.js}"></script>
+        <script th:src="@{/bower_components/jquery-form/dist/jquery.form.min.js}"></script>
         <script type="text/javascript">
             $(function () {
                 $('#ds_province').change(function () {
                     $('#ds_city').empty();
                     $('#ds_county').empty();
                     var id = $(this).val();
+                    if(id=='0'){
+                        $('#dictRegion\\.id').val('');
+                        return;
+                    }
                     $.getJSON(ctx + 'mgn/system/dictRegion/GetChildren/' + id, function (data) {
                         $.each(data, function (idx, item) {
                             $('#ds_city').append($('<option></option>').attr('value', item.id).text(item.name));
@@ -268,8 +279,27 @@
                 });
                 $('#ds_county').change(function () {
                     var id = $(this).val();
-                    $('#regionId').val(id);
+                    $('#dictRegion\\.id').val(id);
                 });
+
+                $('form').validator().on('submit', function (e) {
+                    if (e.isDefaultPrevented()) {
+                        // handle the invalid form...
+                    } else {
+                        e.preventDefault(); // prevent native submit
+                        if( $('#ds_province').val()=="0"){
+                            $.showErr("请选择区域!");
+                            return;
+                        }                        
+                        var form = $(this).ajaxSubmit();
+                        var xhr = form.data('jqxhr');
+                        xhr.done(function (r) {
+                            $.showSuccessTimeout('提交成功！');
+                        }).fail(function (e) {
+                            $.showErr(e.responseText);
+                        });
+                    }
+                })
             });
 
 

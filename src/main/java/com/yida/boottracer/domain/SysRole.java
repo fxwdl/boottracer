@@ -5,8 +5,11 @@ import java.util.Set;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name = "sys_role")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class SysRole implements java.io.Serializable
 {
 	private String id;

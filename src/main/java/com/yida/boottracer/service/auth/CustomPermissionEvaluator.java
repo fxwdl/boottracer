@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 /**
  * 自定义hasPermission表达式
  * 还可以实现自定义己的表达式（不限于hasPermission），或者屏蔽掉自带的表达式
- * https://www.baeldung.com/spring-security-create-new-custom-security-expression
+ * https://www.baeldung.com/spring-security-create-new-custom-security-expression   也可以不需要MethodSecurityConfig ，需要声明@Component("permissionEvaluator")就可以。但是如果还需要配置其他项，就不清楚了
  * https://stackoverflow.com/questions/36696393/how-to-implement-custom-spring-security-acl
  *
  * @author fx__w

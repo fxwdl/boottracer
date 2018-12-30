@@ -49,7 +49,7 @@ public class RbacServiceImpl implements RbacService
 			// 首先判断先当前用户是否是我们UserDetails对象。
 			String userName = ((UserDetails) principal).getUsername();
 
-			List<String> urls = userService.GetAllUrlFunction(userName);
+			List<String> urls = userService.getAllUrlFunction(userName);
 
 			// 注意这里不能用equal来判断，因为有些URL是有参数的，所以要用AntPathMatcher来比较
 

@@ -11,19 +11,6 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- 导出  表 sourcetracerdb.dict_common 结构
-CREATE TABLE IF NOT EXISTS `dict_common` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `DictType` int(11) NOT NULL,
-  `Code` varchar(45) NOT NULL,
-  `Name` varchar(256) NOT NULL,
-  `IsDeleted` bit(1) NOT NULL,
-  `Comment` varchar(256) DEFAULT NULL,
-  `version` bigint(19) NOT NULL,
-  PRIMARY KEY (`ID`),
-  UNIQUE KEY `DictCommonUnique` (`DictType`,`Code`)
-) ENGINE=InnoDB AUTO_INCREMENT=91 DEFAULT CHARSET=utf8;
-
 -- 正在导出表  sourcetracerdb.dict_common 的数据：~78 rows (大约)
 DELETE FROM `dict_common`;
 /*!40000 ALTER TABLE `dict_common` DISABLE KEYS */;
@@ -108,21 +95,6 @@ INSERT INTO `dict_common` (`ID`, `DictType`, `Code`, `Name`, `IsDeleted`, `Comme
 	(78, 1, 'Q008', '其他企业', b'0', '', 0);
 /*!40000 ALTER TABLE `dict_common` ENABLE KEYS */;
 
--- 导出  表 sourcetracerdb.dict_member_price 结构
-CREATE TABLE IF NOT EXISTS `dict_member_price` (
-  `ID` int(10) NOT NULL AUTO_INCREMENT,
-  `MemberTypeId` int(10) NOT NULL COMMENT '会员类型iD',
-  `Type` int(11) NOT NULL COMMENT '1:平台费；2码量费',
-  `Qty` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '数量（月/生码量）',
-  `Price` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '价格',
-  `Comment` varchar(256) DEFAULT NULL,
-  `IsDeleted` bit(1) NOT NULL DEFAULT b'0',
-  `version` bigint(19) NOT NULL,
-  PRIMARY KEY (`ID`),
-  KEY `FK_dict_member_price2dict_member_type_idx` (`MemberTypeId`),
-  CONSTRAINT `FK_dict_member_price2dict_member_type` FOREIGN KEY (`MemberTypeId`) REFERENCES `dict_member_type` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8 COMMENT='会员价格明细表';
-
 -- 正在导出表  sourcetracerdb.dict_member_price 的数据：~3 rows (大约)
 DELETE FROM `dict_member_price`;
 /*!40000 ALTER TABLE `dict_member_price` DISABLE KEYS */;
@@ -132,40 +104,12 @@ INSERT INTO `dict_member_price` (`ID`, `MemberTypeId`, `Type`, `Qty`, `Price`, `
 	(3, 1, 2, 20000, 180.00, NULL, b'0', 0);
 /*!40000 ALTER TABLE `dict_member_price` ENABLE KEYS */;
 
--- 导出  表 sourcetracerdb.dict_member_type 结构
-CREATE TABLE IF NOT EXISTS `dict_member_type` (
-  `ID` int(10) NOT NULL AUTO_INCREMENT,
-  `Name` varchar(256) NOT NULL COMMENT '名称',
-  `FreeCodeQty` int(11) NOT NULL DEFAULT '0' COMMENT '免费生码量',
-  `HoldTime` int(11) NOT NULL DEFAULT '0' COMMENT '数据保存时长（月）',
-  `IsDefault` bit(1) NOT NULL DEFAULT b'0' COMMENT '默认注册会员类型',
-  `IsDeleted` bit(1) NOT NULL DEFAULT b'0',
-  `Comment` varchar(256) DEFAULT NULL COMMENT '备注',
-  `version` bigint(19) NOT NULL,
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8 COMMENT='会员类型';
-
--- 正在导出表  sourcetracerdb.dict_member_type 的数据：~1 rows (大约)
+-- 正在导出表  sourcetracerdb.dict_member_type 的数据：~0 rows (大约)
 DELETE FROM `dict_member_type`;
 /*!40000 ALTER TABLE `dict_member_type` DISABLE KEYS */;
 INSERT INTO `dict_member_type` (`ID`, `Name`, `FreeCodeQty`, `HoldTime`, `IsDefault`, `IsDeleted`, `Comment`, `version`) VALUES
 	(1, '免费企业会员', 1000, 12, b'1', b'0', NULL, 0);
 /*!40000 ALTER TABLE `dict_member_type` ENABLE KEYS */;
-
--- 导出  表 sourcetracerdb.dict_region 结构
-CREATE TABLE IF NOT EXISTS `dict_region` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `Code` varchar(100) NOT NULL,
-  `Name` varchar(100) NOT NULL,
-  `Parent_ID` int(11) DEFAULT NULL,
-  `Level` int(11) NOT NULL,
-  `Order` int(11) NOT NULL,
-  `Name_En` varchar(100) NOT NULL,
-  `ShortName_En` varchar(10) NOT NULL,
-  PRIMARY KEY (`ID`),
-  KEY `dict_region_p_idx` (`Parent_ID`),
-  CONSTRAINT `dict_region_pppp` FOREIGN KEY (`Parent_ID`) REFERENCES `dict_region` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=978 DEFAULT CHARSET=utf8;
 
 -- 正在导出表  sourcetracerdb.dict_region 的数据：~70 rows (大约)
 DELETE FROM `dict_region`;
@@ -243,73 +187,19 @@ INSERT INTO `dict_region` (`ID`, `Code`, `Name`, `Parent_ID`, `Level`, `Order`, 
 	(977, '220382', '双辽市', 87, 3, 0, 'Shuangliao Shi', 'SLS');
 /*!40000 ALTER TABLE `dict_region` ENABLE KEYS */;
 
--- 导出  表 sourcetracerdb.dict_system_function 结构
-CREATE TABLE IF NOT EXISTS `dict_system_function` (
-  `Id` varchar(64) NOT NULL,
-  `CssClass` varchar(256) DEFAULT NULL,
-  `DisplayName` varchar(256) NOT NULL,
-  `FullName` varchar(1000) NOT NULL,
-  `FunType` int(11) NOT NULL,
-  `Name` varchar(256) NOT NULL,
-  `Page` varchar(256) DEFAULT NULL,
-  `Seq` varchar(50) DEFAULT NULL,
-  `ParentId` varchar(64) DEFAULT NULL,
-  PRIMARY KEY (`Id`),
-  KEY `FKq3i1j5uiei87rwnui6s5cw3hd` (`ParentId`),
-  CONSTRAINT `FKq3i1j5uiei87rwnui6s5cw3hd` FOREIGN KEY (`ParentId`) REFERENCES `dict_system_function` (`Id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- 正在导出表  sourcetracerdb.dict_system_function 的数据：~5 rows (大约)
+-- 正在导出表  sourcetracerdb.dict_system_function 的数据：~7 rows (大约)
 DELETE FROM `dict_system_function`;
 /*!40000 ALTER TABLE `dict_system_function` DISABLE KEYS */;
 INSERT INTO `dict_system_function` (`Id`, `CssClass`, `DisplayName`, `FullName`, `FunType`, `Name`, `Page`, `Seq`, `ParentId`) VALUES
 	('2a5c67c2-f888-11e8-8fb3-3c970ea599ca', 'fa fa-book', '通用字典', 'mgn-system-dict_common_list', 1, 'dict_common_list', 'mgn/system/dict_common_list.html', 'Z_01', 'e589bb14-f887-11e8-8fb3-3c970ea599ca'),
-	('ab3a9f73-077c-11e9-97bc-3c970ea599ca', 'fa fa-info', '资料管理', 'mgn-info', 0, 'info', '#', 'B', NULL),
+	('2f1be29a-0b66-11e9-97bc-3c970ea599ca', 'fa  fa-laptop', '业务管理', 'mgn-biz', 0, 'biz', 'mgn', 'D', NULL),
+	('89ed5769-0b66-11e9-97bc-3c970ea599ca', 'fa fa-home', '企业管理', 'mgn-biz-sys_member_list', 1, 'sys_member_list', 'mgn/biz/sys_member_list.html', 'D_01', '2f1be29a-0b66-11e9-97bc-3c970ea599ca'),
+	('ab3a9f73-077c-11e9-97bc-3c970ea599ca', 'fa fa-info', '资料管理', 'mgn-info', 0, 'info', 'mgn', 'B', NULL),
 	('ab5d51b9-01ff-11e9-97bc-3c970ea599ca', 'fa fa-building', '企业会员类型', 'mgn-system-dict_member_type', 1, 'dict_member_type', 'mgn/system/dict_member_type_list.html', 'Z_02', 'e589bb14-f887-11e8-8fb3-3c970ea599ca'),
-	('e589bb14-f887-11e8-8fb3-3c970ea599ca', 'fa fa-dashboard', '系统管理', 'mgn-system', 0, 'system', '#', 'Z', NULL),
-	('f2fb4d19-077c-11e9-97bc-3c970ea599ca', 'fa fa-home', '企业信息', 'mgn-info-sys_member_edit', 1, 'sys_member_edit', 'mgn/info/sys_member_edit.html', 'B_01', 'ab3a9f73-077c-11e9-97bc-3c970ea599ca');
+	('e589bb14-f887-11e8-8fb3-3c970ea599ca', 'fa fa-dashboard', '系统管理', 'mgn-system', 0, 'system', 'mgn', 'Z', NULL),
+	('e93d3dee-0b66-11e9-97bc-3c970ea599ca', '', '修改会员信息', 'changeSysMemberInfo', 3, 'changeSysMemberInfo', 'mgn/biz/SysMemberBiz/changeSysMemberInfo', 'D_01_02', '89ed5769-0b66-11e9-97bc-3c970ea599ca'),
+	('f2fb4d19-077c-11e9-97bc-3c970ea599ca', 'fa fa-home', '企业信息', 'mgn-info-sys_member_edit', 1, 'sys_member_edit', 'mgn/ent/sys_member_edit.html', 'B_01', 'ab3a9f73-077c-11e9-97bc-3c970ea599ca');
 /*!40000 ALTER TABLE `dict_system_function` ENABLE KEYS */;
-
--- 导出  表 sourcetracerdb.sys_member 结构
-CREATE TABLE IF NOT EXISTS `sys_member` (
-  `ID` int(4) unsigned zerofill NOT NULL,
-  `Region_ID` int(11) NOT NULL COMMENT '区域',
-  `Name` varchar(256) NOT NULL COMMENT '企业名称',
-  `Name_En` varchar(256) DEFAULT NULL COMMENT '英文名',
-  `ShortName` varchar(256) DEFAULT NULL COMMENT '简称',
-  `SocialCreditCode` varchar(256) NOT NULL COMMENT '社会信用代码',
-  `LegalPerson` varchar(256) NOT NULL COMMENT '法人',
-  `Industry_ID` int(11) NOT NULL COMMENT '行业',
-  `CompanyType_ID` int(11) NOT NULL COMMENT '企业类型',
-  `MemberTypeId` int(10) NOT NULL,
-  `Website` varchar(256) DEFAULT NULL COMMENT '企业网站',
-  `Requirement` int(11) NOT NULL COMMENT '需求码量',
-  `RegAddress` varchar(500) NOT NULL COMMENT '注册地址',
-  `ExpressAddress` varchar(500) NOT NULL COMMENT '收货地址',
-  `Postcode` varchar(45) NOT NULL,
-  `Linkman` varchar(45) NOT NULL,
-  `Tel` varchar(45) NOT NULL,
-  `Mobile` varchar(45) NOT NULL,
-  `Fax` varchar(45) DEFAULT NULL,
-  `Email` varchar(256) NOT NULL,
-  `QQ` varchar(45) DEFAULT NULL,
-  `WebChat` varchar(45) DEFAULT NULL,
-  `FromDate` datetime DEFAULT NULL COMMENT '有效期',
-  `EndDate` datetime DEFAULT NULL,
-  `Status` int(11) NOT NULL DEFAULT '0' COMMENT '0申请中/1已拒绝/2/已通过/3已停用',
-  `Comment` varchar(1000) DEFAULT NULL,
-  `BarcodeQty` bigint(20) unsigned NOT NULL COMMENT '剩余生码数量',
-  `Version` bigint(20) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`ID`),
-  KEY `FKsys_member_region_idx` (`Region_ID`),
-  KEY `FK_sys_member_industry_id_idx` (`Industry_ID`),
-  KEY `FK_sys_member_company_type_id_idx` (`CompanyType_ID`),
-  KEY `FK_sys_member2dict_member_type_idx` (`MemberTypeId`),
-  CONSTRAINT `FK_sys_member2dict_member_type` FOREIGN KEY (`MemberTypeId`) REFERENCES `dict_member_type` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `FK_sys_member_company_type_id` FOREIGN KEY (`CompanyType_ID`) REFERENCES `dict_common` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `FK_sys_member_industry_id` FOREIGN KEY (`Industry_ID`) REFERENCES `dict_common` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `FK_sys_member_region` FOREIGN KEY (`Region_ID`) REFERENCES `dict_region` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='企业会员';
 
 -- 正在导出表  sourcetracerdb.sys_member 的数据：~1 rows (大约)
 DELETE FROM `sys_member`;
@@ -317,14 +207,6 @@ DELETE FROM `sys_member`;
 INSERT INTO `sys_member` (`ID`, `Region_ID`, `Name`, `Name_En`, `ShortName`, `SocialCreditCode`, `LegalPerson`, `Industry_ID`, `CompanyType_ID`, `MemberTypeId`, `Website`, `Requirement`, `RegAddress`, `ExpressAddress`, `Postcode`, `Linkman`, `Tel`, `Mobile`, `Fax`, `Email`, `QQ`, `WebChat`, `FromDate`, `EndDate`, `Status`, `Comment`, `BarcodeQty`, `Version`) VALUES
 	(0001, 838, '沈阳郝运德网络科技有限公司', NULL, '沈阳郝运德', '12345678901234', '陈钢', 9, 76, 1, NULL, 10, '沈阳市沈河区奉天街346号(1-3-18室)', '沈阳市和平区文萃路4-3号', '110000', '白光', '024-23901855', '13002494007', '024-23901855', 'HLM_BG@126.com', NULL, NULL, '2018-01-01 00:00:00', '2118-01-01 00:00:00', 2, NULL, 1000, 0);
 /*!40000 ALTER TABLE `sys_member` ENABLE KEYS */;
-
--- 导出  表 sourcetracerdb.sys_role 结构
-CREATE TABLE IF NOT EXISTS `sys_role` (
-  `Id` varchar(64) NOT NULL,
-  `Comment` varchar(256) DEFAULT NULL,
-  `Name` varchar(256) NOT NULL,
-  PRIMARY KEY (`Id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- 正在导出表  sourcetracerdb.sys_role 的数据：~3 rows (大约)
 DELETE FROM `sys_role`;
@@ -334,17 +216,6 @@ INSERT INTO `sys_role` (`Id`, `Comment`, `Name`) VALUES
 	('a7fa0929-077b-11e9-97bc-3c970ea599ca', NULL, '企业会员'),
 	('ccbe0d7b-077b-11e9-97bc-3c970ea599ca', NULL, '后台员工');
 /*!40000 ALTER TABLE `sys_role` ENABLE KEYS */;
-
--- 导出  表 sourcetracerdb.sys_role_permission 结构
-CREATE TABLE IF NOT EXISTS `sys_role_permission` (
-  `Role_ID` varchar(64) NOT NULL,
-  `Function_ID` varchar(64) NOT NULL,
-  PRIMARY KEY (`Role_ID`,`Function_ID`),
-  KEY `FK_RolePermission_Role_idx` (`Role_ID`),
-  KEY `FK_RolePermission_SystemFunction_idx` (`Function_ID`),
-  CONSTRAINT `FK_RolePermission_Role` FOREIGN KEY (`Role_ID`) REFERENCES `sys_role` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `FK_RolePermission_SystemFunction` FOREIGN KEY (`Function_ID`) REFERENCES `dict_system_function` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- 正在导出表  sourcetracerdb.sys_role_permission 的数据：~4 rows (大约)
 DELETE FROM `sys_role_permission`;
@@ -356,40 +227,7 @@ INSERT INTO `sys_role_permission` (`Role_ID`, `Function_ID`) VALUES
 	('a7fa0929-077b-11e9-97bc-3c970ea599ca', 'f2fb4d19-077c-11e9-97bc-3c970ea599ca');
 /*!40000 ALTER TABLE `sys_role_permission` ENABLE KEYS */;
 
--- 导出  表 sourcetracerdb.sys_user 结构
-CREATE TABLE IF NOT EXISTS `sys_user` (
-  `UserId` varchar(64) NOT NULL,
-  `Comment` varchar(255) DEFAULT NULL,
-  `CreateDate` datetime NOT NULL,
-  `Email` varchar(256) DEFAULT NULL,
-  `FailedPasswordAnswerAttemptCount` int(11) NOT NULL,
-  `FailedPasswordAnswerAttemptWindowStart` datetime NOT NULL,
-  `FailedPasswordAttemptCount` int(11) NOT NULL,
-  `FailedPasswordAttemptWindowStart` datetime NOT NULL,
-  `IsAnonymous` bit(1) NOT NULL,
-  `IsApproved` bit(1) NOT NULL,
-  `IsLockedOut` bit(1) NOT NULL,
-  `LastLockoutDate` datetime NOT NULL,
-  `LastLoginDate` datetime NOT NULL,
-  `LastPasswordChangedDate` datetime NOT NULL,
-  `Password` varchar(128) NOT NULL,
-  `PasswordAnswer` varchar(128) DEFAULT NULL,
-  `PasswordFormat` int(11) DEFAULT NULL,
-  `PasswordQuestion` varchar(256) DEFAULT NULL,
-  `PasswordSalt` varchar(128) DEFAULT NULL,
-  `QQ` varchar(256) DEFAULT NULL,
-  `Tel` varchar(256) DEFAULT NULL,
-  `UserName` varchar(256) NOT NULL,
-  `UserNameCN` varchar(256) NOT NULL,
-  `WebChat` varchar(256) DEFAULT NULL,
-  `Member_ID` int(4) unsigned zerofill DEFAULT NULL,
-  `IsMemberAdmin` bit(1) DEFAULT NULL COMMENT '是否为企业会员的管理员账户',
-  PRIMARY KEY (`UserId`),
-  KEY `FK_sys_user_Member_ID_idx_idx` (`Member_ID`),
-  CONSTRAINT `FK_sys_user_Member_ID_idx` FOREIGN KEY (`Member_ID`) REFERENCES `sys_member` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- 正在导出表  sourcetracerdb.sys_user 的数据：~1 rows (大约)
+-- 正在导出表  sourcetracerdb.sys_user 的数据：~0 rows (大约)
 DELETE FROM `sys_user`;
 /*!40000 ALTER TABLE `sys_user` DISABLE KEYS */;
 INSERT INTO `sys_user` (`UserId`, `Comment`, `CreateDate`, `Email`, `FailedPasswordAnswerAttemptCount`, `FailedPasswordAnswerAttemptWindowStart`, `FailedPasswordAttemptCount`, `FailedPasswordAttemptWindowStart`, `IsAnonymous`, `IsApproved`, `IsLockedOut`, `LastLockoutDate`, `LastLoginDate`, `LastPasswordChangedDate`, `Password`, `PasswordAnswer`, `PasswordFormat`, `PasswordQuestion`, `PasswordSalt`, `QQ`, `Tel`, `UserName`, `UserNameCN`, `WebChat`, `Member_ID`, `IsMemberAdmin`) VALUES
@@ -397,17 +235,7 @@ INSERT INTO `sys_user` (`UserId`, `Comment`, `CreateDate`, `Email`, `FailedPassw
 	('628b54d4-077b-11e9-97bc-3c970ea599ca', NULL, '2018-12-04 23:06:21', NULL, 0, '2018-12-04 23:06:36', 0, '2018-12-04 23:06:42', b'0', b'1', b'0', '2018-12-04 23:06:59', '2018-12-04 23:07:07', '2018-12-04 23:07:09', '{bcrypt}$2a$10$YuYJObX97FQMuT0.PW0PSe1kDBzzqex4WKVre4IT21bsJXR8TaG7y', '', NULL, NULL, NULL, NULL, NULL, 'syhyd', '沈阳郝运德', NULL, 0001, b'1');
 /*!40000 ALTER TABLE `sys_user` ENABLE KEYS */;
 
--- 导出  表 sourcetracerdb.sys_user_in_role 结构
-CREATE TABLE IF NOT EXISTS `sys_user_in_role` (
-  `user_id` varchar(64) NOT NULL,
-  `role_id` varchar(64) NOT NULL,
-  PRIMARY KEY (`user_id`,`role_id`),
-  KEY `FK3b46wathry8163aibfsrx4288` (`role_id`),
-  CONSTRAINT `FK3b46wathry8163aibfsrx4288` FOREIGN KEY (`role_id`) REFERENCES `sys_role` (`Id`),
-  CONSTRAINT `FKesm0uump9k5h3nerwi4dq2hmg` FOREIGN KEY (`user_id`) REFERENCES `sys_user` (`UserId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- 正在导出表  sourcetracerdb.sys_user_in_role 的数据：~1 rows (大约)
+-- 正在导出表  sourcetracerdb.sys_user_in_role 的数据：~0 rows (大约)
 DELETE FROM `sys_user_in_role`;
 /*!40000 ALTER TABLE `sys_user_in_role` DISABLE KEYS */;
 INSERT INTO `sys_user_in_role` (`user_id`, `role_id`) VALUES
@@ -415,38 +243,12 @@ INSERT INTO `sys_user_in_role` (`user_id`, `role_id`) VALUES
 	('628b54d4-077b-11e9-97bc-3c970ea599ca', 'a7fa0929-077b-11e9-97bc-3c970ea599ca');
 /*!40000 ALTER TABLE `sys_user_in_role` ENABLE KEYS */;
 
--- 导出  表 sourcetracerdb.test_order 结构
-CREATE TABLE IF NOT EXISTS `test_order` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `order_number` varchar(255) DEFAULT NULL,
-  `version` int(11) DEFAULT NULL,
-  `created_at` datetime DEFAULT NULL,
-  `updated_at` datetime DEFAULT NULL,
-  `createdAt` datetime DEFAULT NULL,
-  `updatedAt` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
-
 -- 正在导出表  sourcetracerdb.test_order 的数据：~0 rows (大约)
 DELETE FROM `test_order`;
 /*!40000 ALTER TABLE `test_order` DISABLE KEYS */;
 INSERT INTO `test_order` (`id`, `order_number`, `version`, `created_at`, `updated_at`, `createdAt`, `updatedAt`) VALUES
 	(3, '2018-001', 0, '2018-11-22 12:36:57', '2018-11-22 12:36:57', NULL, NULL);
 /*!40000 ALTER TABLE `test_order` ENABLE KEYS */;
-
--- 导出  表 sourcetracerdb.test_order_item 结构
-CREATE TABLE IF NOT EXISTS `test_order_item` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `quantity` int(11) DEFAULT NULL,
-  `version` int(11) DEFAULT NULL,
-  `order_id` bigint(20) DEFAULT NULL,
-  `product_id` bigint(20) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FK3cvq7bmdwj8n1a0qt2qtir20h` (`order_id`),
-  KEY `FK7vs5efifrlmjv7fwic986eyi5` (`product_id`),
-  CONSTRAINT `FK3cvq7bmdwj8n1a0qt2qtir20h` FOREIGN KEY (`order_id`) REFERENCES `test_order` (`id`),
-  CONSTRAINT `FK7vs5efifrlmjv7fwic986eyi5` FOREIGN KEY (`product_id`) REFERENCES `test_product` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 -- 正在导出表  sourcetracerdb.test_order_item 的数据：~2 rows (大约)
 DELETE FROM `test_order_item`;
@@ -456,14 +258,6 @@ INSERT INTO `test_order_item` (`id`, `quantity`, `version`, `order_id`, `product
 	(6, 5, 0, 3, 6);
 /*!40000 ALTER TABLE `test_order_item` ENABLE KEYS */;
 
--- 导出  表 sourcetracerdb.test_product 结构
-CREATE TABLE IF NOT EXISTS `test_product` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) DEFAULT NULL,
-  `version` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
-
 -- 正在导出表  sourcetracerdb.test_product 的数据：~2 rows (大约)
 DELETE FROM `test_product`;
 /*!40000 ALTER TABLE `test_product` DISABLE KEYS */;
@@ -471,14 +265,6 @@ INSERT INTO `test_product` (`id`, `name`, `version`) VALUES
 	(5, '电脑', 0),
 	(6, '办公桌', 0);
 /*!40000 ALTER TABLE `test_product` ENABLE KEYS */;
-
--- 导出  表 sourcetracerdb.test_user 结构
-CREATE TABLE IF NOT EXISTS `test_user` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `age` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- 正在导出表  sourcetracerdb.test_user 的数据：~2 rows (大约)
 DELETE FROM `test_user`;

@@ -6,6 +6,8 @@ import java.util.Set;
 
 import javax.transaction.Transactional;
 
+import org.apache.commons.lang3.NotImplementedException;
+import org.apache.ibatis.javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.invocation.ReactiveReturnValueHandler;
 import org.springframework.stereotype.Service;
@@ -54,18 +56,17 @@ public class UserService
 		userRepository.save(u);
 	}
 
-	//此方法应该试图只读到菜单一级
-	public List<DictSystemFunction> GetSystemMenu(String userName)
+	public List<DictSystemFunction> getSystemMenu(String userName)
 	{
 		return dictSystemFunctionRepository.getMenuByUserName(userName);
 	}
 	
-	public List<DictSystemFunction> GetAllFunction(String userName)
+	public List<DictSystemFunction> getAllFunction(String userName)
 	{
 		return dictSystemFunctionRepository.getAllByUserName(userName);
 	}	
 	
-	public List<String> GetAllUrlFunction(String userName)
+	public List<String> getAllUrlFunction(String userName)
 	{
 		return dictSystemFunctionRepository.getAllUrlByUserName(userName);
 	}		
@@ -92,5 +93,81 @@ public class UserService
 		}
 
 		return m;
+	}
+	
+	/**
+	 * 注册企业会员
+	 * @param item
+	 * @return
+	 */
+	public SysMember registryMember(SysMember item)
+	{
+		throw new NotImplementedException("注册企业会员");
+	}
+	
+	/**
+	 * 企业用户自行编辑企业信息
+	 * @param item
+	 * @return
+	 * @throws NotFoundException 
+	 */
+	public SysMember editMember(SysMember item)
+	{
+		return editSysMemberInfo(item,false);
+	}
+
+	protected SysMember editSysMemberInfo(SysMember item,boolean forApprove)
+	{
+		Optional<SysMember> or = sysMemberRepository.findById(item.getId());
+		if(!or.isPresent())
+		{
+			throw new ResourceNotFoundException(String.format("未找到ID为%d的企业会员信息", item.getId()));
+		}
+		SysMember result=or.get();
+		
+		item.getDictCompanyType().setVersion(0L);
+		item.getDictIndustry().setVersion(0L);
+		item.getDictMemberType().setVersion(0L);
+		item.getDictRegion().setVersion(0L);
+		
+		result.setDictRegion(item.getDictRegion());
+		result.setName(item.getName());
+		result.setNameEn(item.getNameEn());
+		result.setShortName(item.getShortName());
+		result.setSocialCreditCode(item.getSocialCreditCode());
+		result.setLegalPerson(item.getLegalPerson());
+		result.setRequirement(item.getRequirement());
+		result.setDictIndustry(item.getDictIndustry());
+		result.setDictCompanyType(item.getDictCompanyType());
+		result.setWebsite(item.getWebsite());
+		result.setRegAddress(item.getRegAddress());
+		result.setExpressAddress(item.getExpressAddress());
+		result.setPostcode(item.getPostcode());
+		result.setLinkman(item.getLinkman());
+		result.setTel(item.getTel());
+		result.setMobile(item.getMobile());
+		result.setFax(item.getFax());
+		result.setEmail(item.getEmail());
+		result.setQq(item.getQq());
+		result.setWebChat(item.getWebChat());
+		
+		if (forApprove)
+		{
+			result.setStatus(item.getStatus());
+			result.setComment(item.getComment());
+		}
+		result = sysMemberRepository.save(result);
+		return result;
+	}
+	
+	/**
+	 * 管理端审核会员
+	 * @param item
+	 * @return
+	 * @throws NotFoundException 
+	 */
+	public SysMember ApproveMember(SysMember item)
+	{
+		return editSysMemberInfo(item,true);
 	}
 }

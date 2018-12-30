@@ -160,14 +160,14 @@
 					}, {
 						field: 'freeCodeQty',
 						title: '免费码量',
-						halign:'center',
+						halign: 'center',
 						align: 'right',
 						class: 'col-xs-1',
 						sortable: true
 					}, {
 						field: 'holdTime',
 						title: '保存期限(月)',
-						halign:'center',
+						halign: 'center',
 						align: 'right',
 						class: 'col-xs-1',
 						sortable: true
@@ -257,17 +257,15 @@
 				},
 				'click .remove': function (e, value, row, index) {
 					$.showConfirm("确定要删除'" + row.name + "'吗?", function () {
-						$.get(ctx + "mgn/system/dictMemberType/Delete/" + row.id)
-							.done(function (d) {
-								$.showSuccessTimeout('删除操作成功！');
-								$('#tbl').bootstrapTable('remove', {
-									field: 'id',
-									values: [row.id]
-								});
-							})
-							.fail(function (e) {
-								$.showErr("执行操作失败!");
+						$.get(ctx + "mgn/system/dictMemberType/Delete/" + row.id).done(function (d) {
+							$.showSuccessTimeout('删除操作成功！');
+							$('#tbl').bootstrapTable('remove', {
+								field: 'id',
+								values: [row.id]
 							});
+						}).fail(function (e) {
+							$.showErr("执行操作失败!");
+						});
 					});
 				}
 			};
@@ -325,14 +323,12 @@
 								data: JSON.stringify(vm.$data),
 								dataTye: 'json',
 								contentType: 'application/json; charset=UTF-8'
-							})
-								.done(function (r) {
-									refresh();
-									dialog.close();
-								})
-								.fail(function (e) {
-									$.showErr(e.responseText);
-								});
+							}).done(function (r) {
+								refresh();
+								dialog.close();
+							}).fail(function (e) {
+								$.showErr(e.responseText);
+							});
 						}
 					}, {
 						icon: 'glyphicon glyphicon-ban-circle',
