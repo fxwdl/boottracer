@@ -12,7 +12,7 @@
         <div class="box box-primary">
             <div class="box-body">
                 <form data-toggle="validator" method="POST" id="editForm" class="form-horizontal" th:object="${m}"
-                    th:action="@{/mgn/ent/SysMember/save}">
+                    th:action="@{${saveAction}}">
                     <input type="hidden" th:field="*{id}" />
                     <input type="hidden" th:field="*{dictMemberType.id}" />
                     <input type="hidden" th:field="*{dictRegion.id}" /> 

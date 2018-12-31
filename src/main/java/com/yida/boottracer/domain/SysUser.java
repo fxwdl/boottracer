@@ -441,7 +441,7 @@ public class SysUser implements java.io.Serializable, UserDetails
 	@Transient
 	public boolean isEnabled()
 	{
-		return !this.isLockedOut;
+		return this.isApproved;
 	}
 
 }

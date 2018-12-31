@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -18,6 +19,7 @@ import com.cosium.spring.data.jpa.entity.graph.repository.support.EntityGraphJpa
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 import com.yida.boottracer.properties.SecurityProperties;
+import com.yida.boottracer.service.auth.AuditorAwareImpl;
 import com.yida.boottracer.service.auth.ImageCodeGenerator;
 import com.yida.boottracer.service.auth.SysUserDetailsService;
 import com.yida.boottracer.service.auth.ValidateCodeGenerator;
@@ -31,6 +33,11 @@ public class BeanConfig
 	    return new SpringSecurityDialect();
 	}*/
 	
+    @Bean
+    public AuditorAware<String> auditorProvider() {
+		return new AuditorAwareImpl();
+    }
+    
 	//@Bean 
 	public OpenEntityManagerInViewFilter openEntityManagerInViewFilter() 
 	 { 

@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS `dict_common` (
   `version` bigint(19) NOT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `DictCommonUnique` (`DictType`,`Code`)
-) ENGINE=InnoDB AUTO_INCREMENT=91 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=79 DEFAULT CHARSET=utf8;
 
 -- 数据导出被取消选择。
 -- 导出  表 sourcetracerdb.dict_member_price 结构
@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS `dict_member_price` (
   PRIMARY KEY (`ID`),
   KEY `FK_dict_member_price2dict_member_type_idx` (`MemberTypeId`),
   CONSTRAINT `FK_dict_member_price2dict_member_type` FOREIGN KEY (`MemberTypeId`) REFERENCES `dict_member_type` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8 COMMENT='会员价格明细表';
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='会员价格明细表';
 
 -- 数据导出被取消选择。
 -- 导出  表 sourcetracerdb.dict_member_type 结构
@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS `dict_member_type` (
   `Comment` varchar(256) DEFAULT NULL COMMENT '备注',
   `version` bigint(19) NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8 COMMENT='会员类型';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='会员类型';
 
 -- 数据导出被取消选择。
 -- 导出  表 sourcetracerdb.dict_region 结构
@@ -69,6 +69,7 @@ CREATE TABLE IF NOT EXISTS `dict_region` (
   `Order` int(11) NOT NULL,
   `Name_En` varchar(100) NOT NULL,
   `ShortName_En` varchar(10) NOT NULL,
+  `Version` bigint(19) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   KEY `dict_region_p_idx` (`Parent_ID`),
   CONSTRAINT `dict_region_pppp` FOREIGN KEY (`Parent_ID`) REFERENCES `dict_region` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -123,7 +124,11 @@ CREATE TABLE IF NOT EXISTS `sys_member` (
   `Status` int(11) NOT NULL DEFAULT '0' COMMENT '0申请中/1已拒绝/2/已通过/3已停用',
   `Comment` varchar(1000) DEFAULT NULL,
   `BarcodeQty` bigint(20) unsigned NOT NULL COMMENT '剩余生码数量',
-  `Version` bigint(20) NOT NULL DEFAULT '0',
+  `Version` bigint(20) NOT NULL,
+  `CreatedAt` datetime DEFAULT NULL,
+  `UpdatedAt` datetime DEFAULT NULL,
+  `CreatedBy` varchar(128) DEFAULT NULL,
+  `ModifiedBy` varchar(128) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   KEY `FKsys_member_region_idx` (`Region_ID`),
   KEY `FK_sys_member_industry_id_idx` (`Industry_ID`),

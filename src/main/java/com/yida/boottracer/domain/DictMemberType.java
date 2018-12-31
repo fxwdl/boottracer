@@ -135,7 +135,7 @@ public class DictMemberType implements java.io.Serializable
 		this.comment = comment;
 	}
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "dictMemberType",cascade= {CascadeType.PERSIST,CascadeType.REFRESH,CascadeType.REMOVE,CascadeType.DETACH,CascadeType.MERGE}, orphanRemoval=true /*jpa 2 新增，允许删除子对象*/)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "dictMemberType",cascade= {CascadeType.PERSIST,CascadeType.REFRESH,CascadeType.REMOVE,CascadeType.DETACH,CascadeType.MERGE}, orphanRemoval=true /*jpa 2 新增，允许删除子对象*/)
 	@JsonManagedReference
 	public Set<DictMemberPrice> getDictMemberPrices()
 	{

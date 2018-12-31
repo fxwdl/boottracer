@@ -20,6 +20,9 @@ import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.springframework.data.domain.AuditorAware;
+import org.springframework.security.core.Authentication;
+
 import com.yida.boottracer.domain.AuditModel;
 
 /**
@@ -40,6 +43,7 @@ public class Order extends AuditModel implements java.io.Serializable
 
 	public Order()
 	{
+
 	}
 
 	public Order(long id)

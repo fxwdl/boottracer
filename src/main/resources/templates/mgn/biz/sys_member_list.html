@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{_layout/main}"
+ th:with="module='业务管理',functionName='企业会员管理',smallTitle='企业会员管理'">
+
+<head>
+	<title>企业会员管理</title>
+	<link rel="stylesheet" th:href="@{/bower_components/bootstrap-table/dist/bootstrap-table.css}">
+	<link rel="stylesheet" th:href="@{/bower_components/bootstrap-dialog/dist/css/bootstrap-dialog.css}">
+</head>
+
+<body>
+	<div class="container-fluid" layout:fragment="doBody">
+
+		<div class="form-inline" role="form">
+			<div class="form-group">
+				<label for="ds_type">会员状态：</label>
+				<select id="ds_type" name="ds_type" class="form-control">
+					<option value="">请选择</option>
+					<option th:each="t:${dictType}" th:value="${t.value}" th:text="${t.name}"></option>
+				</select>
+			</div>
+			<button id="btnSearch" class="btn btn-default"><i class="glyphicon glyphicon-search" style="padding-right: 3px;"></i><span>搜索</span></button>
+		</div>
+
+		<div id="toolbar" class="btn-group">
+			<button type="button" id="approve" class="btn btn-default">
+				<i class="glyphicon glyphicon-plus" style="padding-right: 3px;"></i><span>审批</span>
+			</button>
+		</div>
+		<table id="tbl" data-toggle="table" data-toolbar="#toolbar" data-show-export="true" data-cache="false" data-search="true"
+		 data-search-on-enter-key="false" data-show-refresh="true" data-id-field="id" data-click-to-select="true"
+		 data-single-select="false" data-striped="true" data-sort-name="createdAt" data-sort-order="desc" data-show-columns="true"
+		 data-select-item-name="chkItem" data-side-pagination="server" data-pagination="true" data-page-list="[10, 25, 50, 100, ALL]"
+		 th:data-url="@{/mgn/biz/SysMemberBiz/GetData}" data-query-params="queryParams">
+			<thead>
+				<tr>
+					<th data-field="state" data-checkbox="true"></th>
+					<th data-field="id" data-halign="center" data-align="left" data-sortable="true">编号</th>
+					<th data-field="name" data-halign="center" data-align="left" data-sortable="true" data-formatter="nameFormatter">企业名称</th>
+					<th data-field="legalPerson" data-halign="center" data-align="left" data-sortable="true">法人</th>
+					<th data-field="dictIndustry.name" data-halign="center" data-align="left" data-sortable="true">行业</th>
+					<th data-field="regAddress" data-halign="center" data-align="left" data-sortable="true">注册地址</th>
+					<th data-field="linkman" data-halign="center" data-align="left" data-sortable="true">联系人</th>
+					<th data-field="tel" data-halign="center" data-align="left" data-sortable="true">办公电话</th>
+					<th data-field="mobile" data-halign="center" data-align="left" data-sortable="true">手机号码</th>
+					<th data-field="createdAt" data-halign="center" data-align="left" data-sortable="true">申请时间</th>
+					<th data-field="status" data-halign="center" data-align="left" data-formatter="memberStatusFormatter"
+					 data-sortable="true">状态</th>
+					<th data-field="operate" data-halign="center" data-align="center" data-formatter="operateOnlyDeleteFormatter"
+					 data-events="operateEvents">操作</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+	<th:block layout:fragment="script">
+		<script th:src="@{/bower_components/bootstrap-table/dist/bootstrap-table.js}"></script>
+		<script th:src="@{/bower_components/bootstrap-table/dist/extensions/export/bootstrap-table-export.js}"></script>
+		<!--/* https://github.com/hhurz/tableExport.jquery.plugin */-->
+		<script th:src="@{/bower_components/tableExport.jquery.plugin/tableExport.js}"></script>
+		<script th:src="@{/bower_components/bootstrap-table/dist/locale/bootstrap-table-zh-CN.js}"></script>
+		<script th:src="@{/bower_components/bootstrap-dialog/dist/js/bootstrap-dialog.js}"></script>
+		<script th:src="@{/js/bootstrap-dialog-zh-CN.js}"></script>
+		<script th:src="@{/js/bootstrap-dialog-Ext.js}"></script>
+		<script th:src="@{/js/common.js}"></script>
+		<script type="text/javascript">
+			$(function () {
+				$('#btnSearch').click(function () {
+					refresh();
+				});
+				$('#approve').click(function () {
+					$('#tbl').bootstrapTable('getSelections').forEach(function(value,index){
+						
+					});
+				});
+			});
+
+			function nameFormatter(value, row, index, type) {
+				return [
+					'<a class="remove" href="' + ctx + 'mgn/biz/sys_member_edit.html?id=' + row.id + '" title="' + row.name + '">',
+					row.name,
+					'</a>'
+				].join('');
+			}
+
+			function queryParams(params) {
+				var status = $('select[name=ds_type]').val();
+				if (status != "") {
+					params = $.extend(params, { status: status });
+				}
+				return params;
+			}
+
+			window.operateEvents = {
+				'click .remove': function (e, value, row, index) {
+					$.showConfirm("确定要删除'" + row.name + "'吗?", function () {
+						$.get(ctx + "mgn/system/dictCommon/Delete/" + row.id)
+							.done(function (d) {
+								$.showSuccessTimeout('删除操作成功！');
+								$('#tbl').bootstrapTable('remove', {
+									field: 'id',
+									values: [row.id]
+								});
+							})
+							.fail(function (e) {
+								$.showErr("执行操作失败!");
+							});
+					});
+				}
+			};
+			function refresh() {
+				$('#tbl').bootstrapTable('refresh');
+			}
+		</script>
+	</th:block>
+</body>
+
+</html>

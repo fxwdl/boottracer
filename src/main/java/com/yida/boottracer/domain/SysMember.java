@@ -14,6 +14,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
+import javax.persistence.NamedEntityGraphs;
+import javax.persistence.NamedSubgraph;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -33,8 +37,12 @@ import net.minidev.json.annotate.JsonIgnore;
  */
 @Entity
 @Table(name = "sys_member")
-//@JsonIgnoreProperties({"hibernateLazyInitializer", "handler","sysUsers"})
-public class SysMember implements java.io.Serializable
+@NamedEntityGraphs(value = {
+	    @NamedEntityGraph(name = "SysMember.dictCompanyType-dictIndustry-dictRegion-dictMemberType", attributeNodes = {
+	        @NamedAttributeNode("dictCompanyType"),@NamedAttributeNode("dictIndustry"),@NamedAttributeNode("dictRegion"),@NamedAttributeNode("dictMemberType")
+	    })
+	})
+public class SysMember extends AuditModel implements java.io.Serializable
 {
 
 	private int id;
@@ -365,7 +373,7 @@ public class SysMember implements java.io.Serializable
 		this.comment = comment;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "sysMember")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "sysMember",cascade= {CascadeType.ALL})
 	@JsonManagedReference
 	public Set<SysUser> getSysUsers()
 	{

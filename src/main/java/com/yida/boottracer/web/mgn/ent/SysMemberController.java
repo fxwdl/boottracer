@@ -1,6 +1,5 @@
 package com.yida.boottracer.web.mgn.ent;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -8,15 +7,13 @@ import javax.validation.Valid;
 
 import org.apache.ibatis.javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,22 +27,46 @@ import com.yida.boottracer.enums.SysMemberStatus;
 import com.yida.boottracer.service.DictService;
 import com.yida.boottracer.service.UserService;
 import com.yida.boottracer.web.mgn.BaseController;
-import com.yida.web.exception.ResourceNotFoundException;
 
 @Controller
 @RequestMapping(value = "/mgn/ent")
+//scope指定prototype，每次都new新对象，默认是单例的。目的是在SysMemberBizController可以调用这个类的方法
+@Scope("prototype")
 public class SysMemberController extends BaseController
 {
-	@Autowired
+	
 	private DictService dictService;
-
-	@Autowired
 	private UserService userService;
-
+	
+	@Autowired
+	public void setDictService(DictService dictService)
+	{
+		this.dictService=dictService;
+	}
+	
+	@Autowired
+	public void setUserService(UserService userService)
+	{
+		this.userService=userService;
+	}
+	
+	private String saveAction="/mgn/ent/SysMember/save";
+	
+	public void setSaveAction(String saveAction)
+	{
+		this.saveAction=saveAction;
+	}
+	public String getSaveAction()
+	{
+		return saveAction;
+	}
+	
 	@GetMapping(value = { "sys_member_edit.html" })
 	public ModelAndView showEditPage(@RequestParam(name = "id", required = false) Integer id)
 	{
 		ModelAndView mv = new ModelAndView();
+		
+		mv.addObject("saveAction",saveAction);
 
 		mv.addObject("ds_Industry", dictService.getCommonListByType(DictCommomType.Industry))
 				.addObject("ds_CompanyType", dictService.getCommonListByType(DictCommomType.CompanyType))
@@ -85,7 +106,7 @@ public class SysMemberController extends BaseController
 
 	@PostMapping(value = { "SysMember/save" })
 	@ResponseBody
-	public ResponseEntity<?> save(@Valid @ModelAttribute SysMember item, Errors errors) throws NotFoundException
+	public ResponseEntity<?> save(@Valid @ModelAttribute SysMember item, Errors errors)
 	{	
 		if (errors.hasErrors())
 		{

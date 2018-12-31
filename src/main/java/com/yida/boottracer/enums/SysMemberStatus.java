@@ -16,30 +16,50 @@ public enum SysMemberStatus
 	/**
 	 * 申请中
 	 */
-	Applying,
+	Applying(0),
 
 	/**
 	 * 已拒绝
 	 */
-    Refused,
-    
-    /**
+	Refused(1),
+
+	/**
 	 * 已通过
 	 */
-    Approved,
-    
-    /**
+	Approved(2),
+
+	/**
 	 * 已停用
 	 */
-	Disabled;
+	Disabled(3);
+
+	private int id; // Could be other data type besides int
+
+	private SysMemberStatus(int id)
+	{
+		this.id = id;
+	}
+
+	public static SysMemberStatus fromId(int id)
+	{
+		for (SysMemberStatus type : values())
+		{
+			if (type.id == id)
+			{
+				return type;
+			}
+		}
+		return null;
+	}
 
 	public static List<EnumObject> getList()
 	{
 		ArrayList<EnumObject> result = new ArrayList<>();
 		result.add(new EnumObject(SysMemberStatus.Applying.ordinal(), "申请中"));
 		result.add(new EnumObject(SysMemberStatus.Refused.ordinal(), "已拒绝"));
-        result.add(new EnumObject(SysMemberStatus.Approved.ordinal(), "已通过"));
-        result.add(new EnumObject(SysMemberStatus.Disabled.ordinal(), "已停用"));
+		result.add(new EnumObject(SysMemberStatus.Approved.ordinal(), "已通过"));
+		result.add(new EnumObject(SysMemberStatus.Disabled.ordinal(), "已停用"));
 		return result;
 	}
+
 }

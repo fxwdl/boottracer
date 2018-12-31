@@ -35,8 +35,8 @@ import com.yida.boottracer.repo.SysUserRepository;
 // 用来集成mybatis
 // @MapperScan("")
 
-// 开始审计
-@EnableJpaAuditing
+// 开始审计,auditorProvider申请在自定义的BeanCofnig中
+@EnableJpaAuditing(modifyOnCreate=true,auditorAwareRef="auditorProvider")
 // 修改默认的JpaRepositoryFactoryBean，实现JPa默认方法增加指定的EntityGraph能力
 @EnableJpaRepositories(repositoryFactoryBeanClass = EntityGraphJpaRepositoryFactoryBean.class, basePackages = {"com.yida.boottracer.repo", "com.yida.boottracer.domain.test" })
 public class BoottracerApplication
