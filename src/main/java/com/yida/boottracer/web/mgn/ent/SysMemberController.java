@@ -62,7 +62,7 @@ public class SysMemberController extends BaseController
 	}
 	
 	@GetMapping(value = { "sys_member_edit.html" })
-	public ModelAndView showEditPage(@RequestParam(name = "id", required = false) Integer id)
+	public ModelAndView showEditPage(@RequestParam(name = "id", required = false) Long id)
 	{
 		ModelAndView mv = new ModelAndView();
 		

@@ -1,6 +1,7 @@
 package com.yida.boottracer.service;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -92,7 +93,7 @@ public class UserService
 		return dictSystemFunctionRepository.getAllUrlByUserName(userName);
 	}
 
-	public SysMember getSysMemberByUser(Integer id)
+	public SysMember getSysMemberByUser(Long id)
 	{
 		SysMember m = null;
 
@@ -221,9 +222,14 @@ public class UserService
 	{
 		return editSysMemberInfo(item, true);
 	}
+	
+	public void delete(long id)
+	{
+		sysMemberRepository.deleteById(id);
+	}
 
 	public PagingModel<SysMember> getListWithPagination(int limit, int offset, String search, String sort, String order,
-			Integer status, Date begin, Date end)
+			Integer status, Date start, Date end)
 	{
 		List<String> whereCause = new ArrayList<String>();
 		Map<String, Object> paramaterMap = new HashMap<String, Object>();
@@ -233,6 +239,16 @@ public class UserService
 			whereCause.add(
 					"(d.name LIKE CONCAT('%',:search,'%') OR d.legalPerson LIKE CONCAT('%',:search,'%') OR d.linkman LIKE CONCAT('%',:search,'%'))");
 			paramaterMap.put("search", search);
+		}
+		if(start!=null && end !=null)
+		{
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(end);
+			cal.add(Calendar.DATE, 1);
+			end=cal.getTime();
+			whereCause.add("(d.createdAt BETWEEN :start AND :end)");
+			paramaterMap.put("start", start);
+			paramaterMap.put("end", end);
 		}
 		if (status != null)
 		{
