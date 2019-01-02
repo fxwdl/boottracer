@@ -201,12 +201,11 @@ INSERT INTO `dict_system_function` (`Id`, `CssClass`, `DisplayName`, `FullName`,
 	('f2fb4d19-077c-11e9-97bc-3c970ea599ca', 'fa fa-home', '企业信息', 'mgn-info-sys_member_edit', 1, 'sys_member_edit', 'mgn/ent/sys_member_edit.html', 'B_01', 'ab3a9f73-077c-11e9-97bc-3c970ea599ca');
 /*!40000 ALTER TABLE `dict_system_function` ENABLE KEYS */;
 
--- 正在导出表  sourcetracerdb.sys_member 的数据：~1 rows (大约)
+-- 正在导出表  sourcetracerdb.sys_member 的数据：~2 rows (大约)
 DELETE FROM `sys_member`;
 /*!40000 ALTER TABLE `sys_member` DISABLE KEYS */;
 INSERT INTO `sys_member` (`ID`, `Region_ID`, `Name`, `Name_En`, `ShortName`, `SocialCreditCode`, `LegalPerson`, `Industry_ID`, `CompanyType_ID`, `MemberTypeId`, `Website`, `Requirement`, `RegAddress`, `ExpressAddress`, `Postcode`, `Linkman`, `Tel`, `Mobile`, `Fax`, `Email`, `QQ`, `WebChat`, `FromDate`, `EndDate`, `Status`, `Comment`, `BarcodeQty`, `Version`, `CreatedAt`, `UpdatedAt`, `CreatedBy`, `ModifiedBy`) VALUES
-	(0001, 837, '沈阳郝运德网络科技有限公司', '', '沈阳郝运德', '12345678901234', '陈钢', 9, 76, 1, '', 10, '沈阳市沈河区奉天街346号(1-3-18室)', '沈阳市和平区文萃路4-3号', '110000', '白光', '024-23901855', '13002494007', '024-23901855', 'HLM_BG@126.com', '', '', '2018-01-01 00:00:00', '2118-01-01 00:00:00', 2, '', 1000, 12, '2018-12-26 11:51:58', '2018-12-31 23:12:17', 'syhyd', 'admin'),
-	(0002, 837, '测试公司1', '', '沈阳郝运德', '12345678901234', '陈钢', 9, 76, 1, '', 10, '沈阳市沈河区奉天街346号(1-3-18室)', '沈阳市和平区文萃路4-3号', '110000', '白光', '024-23901855', '13002494007', '024-23901855', 'HLM_BG@126.com', '', '', '2018-01-01 00:00:00', '2118-01-01 00:00:00', 2, NULL, 1000, 8, '2018-12-30 11:51:58', '2018-12-31 12:48:31', 'syhyd', 'syhyd');
+	(0001, 837, '沈阳郝运德网络科技有限公司', '', '沈阳郝运德', '12345678901234', '陈钢', 9, 76, 1, '', 10, '沈阳市沈河区奉天街346号(1-3-18室)', '沈阳市和平区文萃路4-3号', '110000', '白光', '024-23901855', '13002494007', '024-23901855', 'HLM_BG@126.com', '', '', '2018-01-01 00:00:00', '2118-01-01 00:00:00', 2, '', 1000, 14, '2018-12-26 11:51:58', '2019-01-01 13:19:23', 'syhyd', 'admin');
 /*!40000 ALTER TABLE `sys_member` ENABLE KEYS */;
 
 -- 正在导出表  sourcetracerdb.sys_role 的数据：~3 rows (大约)
@@ -218,7 +217,7 @@ INSERT INTO `sys_role` (`Id`, `Comment`, `Name`) VALUES
 	('ccbe0d7b-077b-11e9-97bc-3c970ea599ca', NULL, '后台员工');
 /*!40000 ALTER TABLE `sys_role` ENABLE KEYS */;
 
--- 正在导出表  sourcetracerdb.sys_role_permission 的数据：~4 rows (大约)
+-- 正在导出表  sourcetracerdb.sys_role_permission 的数据：~7 rows (大约)
 DELETE FROM `sys_role_permission`;
 /*!40000 ALTER TABLE `sys_role_permission` DISABLE KEYS */;
 INSERT INTO `sys_role_permission` (`Role_ID`, `Function_ID`) VALUES

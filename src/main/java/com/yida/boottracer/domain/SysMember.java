@@ -24,6 +24,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.persistence.Version;
+import javax.validation.constraints.NotBlank;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -74,6 +75,7 @@ public class SysMember extends AuditModel implements java.io.Serializable
 	private long barcodeQty;
 	private Long version;
 	private Set<SysUser> sysUsers = new HashSet<>();
+	private Set<EntDictCategory> entDictCategories = new HashSet<EntDictCategory>();
 
 	public SysMember()
 	{
@@ -140,6 +142,7 @@ public class SysMember extends AuditModel implements java.io.Serializable
 		this.dictRegion = dictRegion;
 	}
 
+	@NotBlank(message = "名称不能为空")
 	@Column(name = "Name", nullable = false, length = 256)
 	public String getName()
 	{
@@ -173,6 +176,7 @@ public class SysMember extends AuditModel implements java.io.Serializable
 		this.shortName = shortName;
 	}
 
+	@NotBlank(message = "社会信用代码不能为空")
 	@Column(name = "SocialCreditCode", nullable = false, length = 256)
 	public String getSocialCreditCode()
 	{
@@ -184,6 +188,7 @@ public class SysMember extends AuditModel implements java.io.Serializable
 		this.socialCreditCode = socialCreditCode;
 	}
 
+	@NotBlank(message = "法人不能为空")
 	@Column(name = "LegalPerson", nullable = false, length = 256)
 	public String getLegalPerson()
 	{
@@ -195,6 +200,7 @@ public class SysMember extends AuditModel implements java.io.Serializable
 		this.legalPerson = legalPerson;
 	}
 
+	
 	@Column(name = "Website", length = 256)
 	public String getWebsite()
 	{
@@ -217,6 +223,7 @@ public class SysMember extends AuditModel implements java.io.Serializable
 		this.requirement = requirement;
 	}
 
+	@NotBlank(message = "注册地址不能为空")
 	@Column(name = "RegAddress", nullable = false, length = 500)
 	public String getRegAddress()
 	{
@@ -228,6 +235,7 @@ public class SysMember extends AuditModel implements java.io.Serializable
 		this.regAddress = regAddress;
 	}
 
+	@NotBlank(message = "通信地址不能为空")
 	@Column(name = "ExpressAddress", nullable = false, length = 500)
 	public String getExpressAddress()
 	{
@@ -239,6 +247,7 @@ public class SysMember extends AuditModel implements java.io.Serializable
 		this.expressAddress = expressAddress;
 	}
 
+	@NotBlank(message = "邮编不能为空")
 	@Column(name = "Postcode", nullable = false, length = 45)
 	public String getPostcode()
 	{
@@ -250,6 +259,7 @@ public class SysMember extends AuditModel implements java.io.Serializable
 		this.postcode = postcode;
 	}
 
+	@NotBlank(message = "联系人不能为空")
 	@Column(name = "Linkman", nullable = false, length = 45)
 	public String getLinkman()
 	{
@@ -261,6 +271,7 @@ public class SysMember extends AuditModel implements java.io.Serializable
 		this.linkman = linkman;
 	}
 
+	@NotBlank(message = "办公电话不能为空")
 	@Column(name = "Tel", nullable = false, length = 45)
 	public String getTel()
 	{
@@ -272,6 +283,7 @@ public class SysMember extends AuditModel implements java.io.Serializable
 		this.tel = tel;
 	}
 
+	@NotBlank(message = "手机不能为空")
 	@Column(name = "Mobile", nullable = false, length = 45)
 	public String getMobile()
 	{
@@ -294,6 +306,7 @@ public class SysMember extends AuditModel implements java.io.Serializable
 		this.fax = fax;
 	}
 
+	@NotBlank(message = "电子邮件不能为空")
 	@Column(name = "Email", nullable = false, length = 256)
 	public String getEmail()
 	{
@@ -406,6 +419,18 @@ public class SysMember extends AuditModel implements java.io.Serializable
 	public void setVersion(Long version)
 	{
 		this.version = version;
+	}
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "sysMember")
+	@JsonManagedReference
+	public Set<EntDictCategory> getEntDictCategories()
+	{
+		return this.entDictCategories;
+	}
+
+	public void setEntDictCategories(Set<EntDictCategory> entDictCategories)
+	{
+		this.entDictCategories = entDictCategories;
 	}
 	
 	@Transient

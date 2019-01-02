@@ -36,6 +36,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.yida.boottracer.domain.DictSystemFunction;
 import com.yida.boottracer.domain.SysUser;
+import com.yida.boottracer.dto.DictSystemFunctionDTO;
 import com.yida.boottracer.dto.SimpleResponse;
 import com.yida.boottracer.enums.SystemFunctionType;
 import com.yida.boottracer.service.UserService;
@@ -50,17 +51,8 @@ public abstract class BaseController
 	@ModelAttribute
 	public void initSystemMenu(Model model)
 	{
-		List<DictSystemFunction> all = userService.getSystemMenu(getUser().getUsername());
-		List<DictSystemFunction> menu = new ArrayList<DictSystemFunction>();
-		all.forEach(item ->
-		{
-			if (item.getFunType() == SystemFunctionType.Module.ordinal())
-			{
-				menu.add(item);
-			}
-		});
-		
-		model.addAttribute("menu", menu);
+		List<DictSystemFunctionDTO> all = userService.getSystemMenu(getUser().getUsername());
+		model.addAttribute("menu", all);
 	}
 
 	@ModelAttribute

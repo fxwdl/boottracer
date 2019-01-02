@@ -30,7 +30,9 @@ import com.yida.boottracer.domain.SysMember;
 import com.yida.boottracer.domain.SysUser;
 import com.yida.boottracer.domain.test.User;
 import com.yida.boottracer.domain.test.UserRepository;
+import com.yida.boottracer.dto.DictSystemFunctionDTO;
 import com.yida.boottracer.enums.SysMemberStatus;
+import com.yida.boottracer.enums.SystemFunctionType;
 import com.yida.boottracer.repo.DictSystemFunctionRepository;
 import com.yida.boottracer.repo.SysMemberRepository;
 import com.yida.web.exception.ResourceNotFoundException;
@@ -78,9 +80,42 @@ public class UserService
 		userRepository.save(u);
 	}
 
-	public List<DictSystemFunction> getSystemMenu(String userName)
+	private DictSystemFunctionDTO mapDictSystemFunction(DictSystemFunction item)
 	{
-		return dictSystemFunctionRepository.getMenuByUserName(userName);
+		DictSystemFunctionDTO dto=new DictSystemFunctionDTO();
+		dto.setCssClass(item.getCssClass());
+		dto.setDisplayName(item.getDisplayName());
+		dto.setFullName(item.getFullName());
+		dto.setFunType(item.getFunType());
+		dto.setId(item.getId());
+		dto.setName(item.getName());
+		dto.setPage(item.getPage());
+		dto.setSeq(item.getSeq());
+		return dto;
+	}
+	
+	public List<DictSystemFunctionDTO> getSystemMenu(String userName)
+	{
+		List<DictSystemFunctionDTO> lstResult=new ArrayList<DictSystemFunctionDTO>();
+		List<DictSystemFunction> lst = dictSystemFunctionRepository.getMenuByUserName(userName);
+
+		for (DictSystemFunction item : lst)
+		{
+			if (item.getFunType() == SystemFunctionType.Module.ordinal())
+			{
+				lstResult.add(mapDictSystemFunction(item));
+			}
+			else if (item.getFunType()==SystemFunctionType.Page.ordinal())
+			{
+				Optional<DictSystemFunctionDTO> pa=lstResult.stream().filter(p->p.getId().equals(item.getParent().getId())).findFirst();
+				if(pa.isPresent())
+				{
+					pa.get().getChildren().add(mapDictSystemFunction(item));
+				}
+			}
+		}
+		
+		return lstResult;
 	}
 
 	public List<DictSystemFunction> getAllFunction(String userName)

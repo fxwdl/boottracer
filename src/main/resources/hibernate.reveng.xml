@@ -54,4 +54,7 @@
 	<table-filter match-name="dict_member_price"
 		match-catalog="sourcetracerdb">
 	</table-filter>
+	<table-filter match-name="ent_dict_category"
+		match-catalog="sourcetracerdb">
+	</table-filter>
 </hibernate-reverse-engineering>
