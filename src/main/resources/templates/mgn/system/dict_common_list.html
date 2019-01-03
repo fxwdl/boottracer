@@ -173,7 +173,8 @@
                         	})
                         	.done(function(r){
                         		refresh();
-                        		dialog.close();
+								dialog.close();
+								$.showSuccessTimeout('操作成功！');
                         	})
                         	.fail(function(e){
                         		$.showErr(e.responseText);

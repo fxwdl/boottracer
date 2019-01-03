@@ -187,12 +187,13 @@ INSERT INTO `dict_region` (`ID`, `Code`, `Name`, `Parent_ID`, `Level`, `Order`, 
 	(977, '220382', '双辽市', 87, 3, 0, 'Shuangliao Shi', 'SLS', 0);
 /*!40000 ALTER TABLE `dict_region` ENABLE KEYS */;
 
--- 正在导出表  sourcetracerdb.dict_system_function 的数据：~8 rows (大约)
+-- 正在导出表  sourcetracerdb.dict_system_function 的数据：~9 rows (大约)
 DELETE FROM `dict_system_function`;
 /*!40000 ALTER TABLE `dict_system_function` DISABLE KEYS */;
 INSERT INTO `dict_system_function` (`Id`, `CssClass`, `DisplayName`, `FullName`, `FunType`, `Name`, `Page`, `Seq`, `ParentId`) VALUES
 	('2a5c67c2-f888-11e8-8fb3-3c970ea599ca', 'fa fa-book', '通用字典', 'mgn-system-dict_common_list', 1, 'dict_common_list', 'mgn/system/dict_common_list.html', 'Z_01', 'e589bb14-f887-11e8-8fb3-3c970ea599ca'),
 	('2f1be29a-0b66-11e9-97bc-3c970ea599ca', 'fa  fa-laptop', '业务管理', 'mgn-biz', 0, 'biz', 'mgn', 'D', NULL),
+	('7cdeee12-0ed9-11e9-882f-3c970ea599ca', 'fa  fa-database', '产品类别管理', 'mgn-info-dict_category_list', 1, 'dict_category_list', 'mgn/ent/dict_category_list.html', 'B_02', 'ab3a9f73-077c-11e9-97bc-3c970ea599ca'),
 	('89ed5769-0b66-11e9-97bc-3c970ea599ca', 'fa fa-home', '企业管理', 'mgn-biz-sys_member_list', 1, 'sys_member_list', 'mgn/biz/sys_member_list.html', 'D_01', '2f1be29a-0b66-11e9-97bc-3c970ea599ca'),
 	('ab3a9f73-077c-11e9-97bc-3c970ea599ca', 'fa fa-info', '资料管理', 'mgn-info', 0, 'info', 'mgn', 'B', NULL),
 	('ab5d51b9-01ff-11e9-97bc-3c970ea599ca', 'fa fa-building', '企业会员类型', 'mgn-system-dict_member_type', 1, 'dict_member_type', 'mgn/system/dict_member_type_list.html', 'Z_02', 'e589bb14-f887-11e8-8fb3-3c970ea599ca'),
@@ -201,7 +202,14 @@ INSERT INTO `dict_system_function` (`Id`, `CssClass`, `DisplayName`, `FullName`,
 	('f2fb4d19-077c-11e9-97bc-3c970ea599ca', 'fa fa-home', '企业信息', 'mgn-info-sys_member_edit', 1, 'sys_member_edit', 'mgn/ent/sys_member_edit.html', 'B_01', 'ab3a9f73-077c-11e9-97bc-3c970ea599ca');
 /*!40000 ALTER TABLE `dict_system_function` ENABLE KEYS */;
 
--- 正在导出表  sourcetracerdb.sys_member 的数据：~2 rows (大约)
+-- 正在导出表  sourcetracerdb.ent_dict_category 的数据：~0 rows (大约)
+DELETE FROM `ent_dict_category`;
+/*!40000 ALTER TABLE `ent_dict_category` DISABLE KEYS */;
+INSERT INTO `ent_dict_category` (`ID`, `SysMemberID`, `Code`, `Name`, `ParentID`, `IsDeleted`, `Version`, `Comment`, `CreatedAt`, `UpdatedAt`, `CreatedBy`, `ModifiedBy`) VALUES
+	(4, 1, '01', '噶宁持明州', NULL, b'0', 0, '', '2019-01-03 21:35:01', '2019-01-03 21:35:01', 'syhyd', 'syhyd');
+/*!40000 ALTER TABLE `ent_dict_category` ENABLE KEYS */;
+
+-- 正在导出表  sourcetracerdb.sys_member 的数据：~1 rows (大约)
 DELETE FROM `sys_member`;
 /*!40000 ALTER TABLE `sys_member` DISABLE KEYS */;
 INSERT INTO `sys_member` (`ID`, `Region_ID`, `Name`, `Name_En`, `ShortName`, `SocialCreditCode`, `LegalPerson`, `Industry_ID`, `CompanyType_ID`, `MemberTypeId`, `Website`, `Requirement`, `RegAddress`, `ExpressAddress`, `Postcode`, `Linkman`, `Tel`, `Mobile`, `Fax`, `Email`, `QQ`, `WebChat`, `FromDate`, `EndDate`, `Status`, `Comment`, `BarcodeQty`, `Version`, `CreatedAt`, `UpdatedAt`, `CreatedBy`, `ModifiedBy`) VALUES
@@ -217,7 +225,7 @@ INSERT INTO `sys_role` (`Id`, `Comment`, `Name`) VALUES
 	('ccbe0d7b-077b-11e9-97bc-3c970ea599ca', NULL, '后台员工');
 /*!40000 ALTER TABLE `sys_role` ENABLE KEYS */;
 
--- 正在导出表  sourcetracerdb.sys_role_permission 的数据：~7 rows (大约)
+-- 正在导出表  sourcetracerdb.sys_role_permission 的数据：~8 rows (大约)
 DELETE FROM `sys_role_permission`;
 /*!40000 ALTER TABLE `sys_role_permission` DISABLE KEYS */;
 INSERT INTO `sys_role_permission` (`Role_ID`, `Function_ID`) VALUES
@@ -226,6 +234,7 @@ INSERT INTO `sys_role_permission` (`Role_ID`, `Function_ID`) VALUES
 	('841edad4-f7d7-11e8-a03b-3c970ea599ca', '89ed5769-0b66-11e9-97bc-3c970ea599ca'),
 	('841edad4-f7d7-11e8-a03b-3c970ea599ca', 'e589bb14-f887-11e8-8fb3-3c970ea599ca'),
 	('841edad4-f7d7-11e8-a03b-3c970ea599ca', 'e93d3dee-0b66-11e9-97bc-3c970ea599ca'),
+	('a7fa0929-077b-11e9-97bc-3c970ea599ca', '7cdeee12-0ed9-11e9-882f-3c970ea599ca'),
 	('a7fa0929-077b-11e9-97bc-3c970ea599ca', 'ab3a9f73-077c-11e9-97bc-3c970ea599ca'),
 	('a7fa0929-077b-11e9-97bc-3c970ea599ca', 'f2fb4d19-077c-11e9-97bc-3c970ea599ca');
 /*!40000 ALTER TABLE `sys_role_permission` ENABLE KEYS */;

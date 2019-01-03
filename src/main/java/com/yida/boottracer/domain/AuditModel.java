@@ -25,25 +25,20 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 //https://www.baeldung.com/database-auditing-jpa
 public abstract class AuditModel implements Serializable
 {
-	@JsonFormat(shape = JsonFormat.Shape.STRING,pattern="yyyy-MM-dd hh:ss:mm",timezone="GMT+8")
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "CreatedAt", nullable = true, updatable = false)
-	@CreatedDate
+
 	private Date createdAt;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "UpdatedAt", nullable = true)
-	@LastModifiedDate
+
 	private Date updatedAt;
 
-	@Column(name = "CreatedBy", nullable = true, updatable = false)
-	@CreatedBy
+
 	private String createdBy;
 
-	@Column(name = "LastModifiedBy", nullable = true)
-	@LastModifiedBy
+
 	private String modifiedBy;
 
+	@Column(name = "CreatedBy", nullable = false, updatable = false)
+	@CreatedBy
 	public String getCreatedBy()
 	{
 		return this.createdBy;
@@ -54,6 +49,8 @@ public abstract class AuditModel implements Serializable
 		this.createdBy = createdBy;
 	}
 
+	@Column(name = "ModifiedBy", nullable = false)
+	@LastModifiedBy
 	public String getModifiedBy()
 	{
 		return this.modifiedBy;
@@ -64,6 +61,10 @@ public abstract class AuditModel implements Serializable
 		this.modifiedBy = modifiedBy;
 	}
 
+	@JsonFormat(shape = JsonFormat.Shape.STRING,pattern="yyyy-MM-dd hh:ss:mm",timezone="GMT+8")
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "CreatedAt", nullable = false, updatable = false)
+	@CreatedDate
 	public Date getCreatedAt()
 	{
 		return createdAt;
@@ -74,6 +75,9 @@ public abstract class AuditModel implements Serializable
 		this.createdAt = createdAt;
 	}
 
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "UpdatedAt", nullable = false)
+	@LastModifiedDate
 	public Date getUpdatedAt()
 	{
 		return updatedAt;

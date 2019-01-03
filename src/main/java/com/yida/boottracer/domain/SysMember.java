@@ -422,7 +422,7 @@ public class SysMember extends AuditModel implements java.io.Serializable
 	}
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "sysMember")
-	@JsonManagedReference
+	@JsonManagedReference(value="EntDictCategory-SysMember")
 	public Set<EntDictCategory> getEntDictCategories()
 	{
 		return this.entDictCategories;

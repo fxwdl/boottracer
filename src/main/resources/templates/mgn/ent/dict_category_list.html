@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{_layout/main}"
-	th:with="module='资料管理',functionName='产品类别管理',smallTitle='产品类别管理'">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{_layout/main}"
+ th:with="module='资料管理',functionName='产品类别管理',smallTitle='产品类别管理'">
+
 <head>
-<title>产品类别管理</title>
+	<title>产品类别管理</title>
 	<link rel="stylesheet" th:href="@{/bower_components/bootstrap-table/dist/bootstrap-table.css}">
 	<link rel="stylesheet" th:href="@{/bower_components/bootstrap-dialog/dist/css/bootstrap-dialog.css}">
 </head>
+
 <body>
 	<div class="container-fluid" layout:fragment="doBody">
 		<div id="toolbar" class="btn-group">
@@ -15,140 +15,154 @@
 				<i class="glyphicon glyphicon-plus" style="padding-right: 3px;"></i><span>新增</span>
 			</button>
 		</div>
-		<table data-toggle="table" id="tbl" 
-			data-toolbar="#toolbar" 					
-			data-show-export="true"
-			data-cache="false" 					
-			data-search="true"
-			data-search-on-enter-key="false" 
-			data-show-refresh="true"
-			data-id-field="id"
-			data-click-to-select="true" 
-			data-single-select="true"
-			data-striped="true" 
-			data-sort-name="code" 
-			data-sort-order="asc"
-			data-show-columns="true" 
-			data-select-item-name="myRadioName"
-			data-side-pagination="server" 
-			data-pagination="true"
-			data-page-list="[10, 25, 50, 100, ALL]"		           			           						
-			th:data-url="@{/mgn/ent/dictCategory/GetData}">
+		<table data-toggle="table" id="tbl" data-toolbar="#toolbar" data-show-export="true" data-cache="false" data-search="true"
+		 data-search-on-enter-key="false" data-show-refresh="true" data-id-field="id" data-click-to-select="true"
+		 data-single-select="true" data-striped="true" data-sort-name="code" data-sort-order="asc" data-show-columns="true"
+		 data-select-item-name="myRadioName" data-side-pagination="server" data-pagination="true" data-page-list="[10, 25, 50, 100, ALL]"
+		 th:data-url="@{/mgn/ent/dictCategory/GetData}">
 			<thead>
 				<tr>
 					<th data-field="code" data-halign="center" data-align="left" data-sortable="true">编号</th>
-					<th data-field="name" data-halign="center" data-align="left" data-sortable="true">企业名称</th>
-					<th data-field="comment" data-halign="center" data-align="left" data-sortable="true">备注名称</th>
-					<th data-field="operate" data-halign="center" data-align="center" data-formatter="operateOnlyDeleteFormatter" data-events="operateEvents">操作</th>
+					<th data-field="name" data-halign="center" data-align="left" data-sortable="true">名称</th>
+					<th data-field="comment" data-halign="center" data-align="left" data-sortable="true">备注</th>
+					<th data-field="operate" data-halign="center" data-align="center" data-formatter="operateFormatter"
+					 data-events="operateEvents">操作</th>
 				</tr>
-			</thead>			
-		</table>			
+			</thead>
+		</table>
+
+		<div id="app" class="container" style="display: none;">
+			<form id="dlgEdit" class="form-horizontal">
+				<div class="form-group">
+					<label for="editForm_code" class="col-sm-2 control-label">代码</label>
+					<div class="col-sm-9">
+						<input required type="text" class="form-control" id="editForm_code" name="code" th:value="${m?.code}">
+						<div class="help-block with-errors"></div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="editForm_name" class="col-sm-2 control-label">名称</label>
+					<div class="col-sm-9">
+						<input required type="text" class="form-control" id="editForm_name" name="name" th:value="${m?.name}">
+						<div class="help-block with-errors"></div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="editForm_comment" class="col-sm-2 control-label">备注</label>
+					<div class="col-sm-9">
+						<textarea class="form-control" rows="3" id="editForm_comment" name="comment" th:text="${m?.comment}"></textarea>
+						<div class="help-block with-errors"></div>
+					</div>
+				</div>
+			</form>
+		</div>
 	</div>
-	<th:block layout:fragment="script">	
-		<script th:src="@{/bower_components/bootstrap-table/dist/bootstrap-table.js}"></script>		
+	<th:block layout:fragment="script">
+		<script th:src="@{/bower_components/bootstrap-table/dist/bootstrap-table.js}"></script>
 		<script th:src="@{/bower_components/bootstrap-table/dist/extensions/export/bootstrap-table-export.js}"></script>
 		<!--/* https://github.com/hhurz/tableExport.jquery.plugin */-->
-		<script th:src="@{/bower_components/tableExport.jquery.plugin/tableExport.js}"></script>	
+		<script th:src="@{/bower_components/tableExport.jquery.plugin/tableExport.js}"></script>
 		<script th:src="@{/bower_components/bootstrap-table/dist/locale/bootstrap-table-zh-CN.js}"></script>
 		<script th:src="@{/bower_components/bootstrap-dialog/dist/js/bootstrap-dialog.js}"></script>
 		<script th:src="@{/js/bootstrap-dialog-zh-CN.js}"></script>
-		<script th:src="@{/js/bootstrap-dialog-Ext.js}"></script>        			
+		<script th:src="@{/js/bootstrap-dialog-Ext.js}"></script>
+		<script th:src="@{/bower_components/bootstrap-validator/dist/validator.custom.js}"></script>
 		<script type="text/javascript">
-		$(function(){			
-			$('#addNew').click(function(){
-				edit();
+			$(function () {
+				$('#addNew').click(function () {
+					edit();
+				});
 			});
-		});
-		
-	    window.operateEvents = {
-	            'click .edit': function (e, value, row, index) {
+
+			window.operateEvents = {
+				'click .edit': function (e, value, row, index) {
 					edit(row);
-	            },
-	            'click .remove': function (e, value, row, index) {
-	            	$.showConfirm("确定要删除'"+row.name+"'吗?",function(){
-		            	$.get(ctx+"mgn/system/dictCommon/Delete/"+row.id)
-		            	.done(function(d){
-	            			$.showSuccessTimeout('删除操作成功！');
-	    	            	$('#tbl').bootstrapTable('remove', {
-	    	                    field: 'id',
-	    	                    values: [row.id]
-	    	                });	
-		            	})
-		            	.fail(function(e){
-		            		$.showErr("执行操作失败!");
-		            	});	
-	            	});
-	            }
-	        };
-	    
-		function edit(row){
-        	var showOpt = {
-                    buttons: [{
-                        icon: 'glyphicon glyphicon-saved',
-                        label: '确定',
-                        cssClass: 'btn-primary',
-                        action: function (dialog) {
-                        	var form=$('#editForm');
-                        	form.validator('validate');
-                        	if(form.data('bs.validator').validate().hasErrors()){
-                        		return;
-                        	}
-                        	var d={id:0};
-                        	if(row){
-                        		d.id=row.id;
-                        		d.version=row.version;
-                        	}
-                        	d.code=$('#editForm_code').val();
-                        	d.name=$('#editForm_name').val();
-                        	d.comment=$('#editForm_comment').val();
-                        	d.dictType=$('select[name=ds_type]').val();
-                        	d.isDeleted=false;
-                        	
-                        	$.ajax({
-                        		type:'POST',
-                        		url:ctx+'mgn/system/dictCommon/Save',
-                        		data:JSON.stringify(d),
-                        		dataTye:'json',
-                        		contentType:'application/json; charset=UTF-8'
-                        	})
-                        	.done(function(r){
-                        		refresh();
-                        		dialog.close();
-                        	})
-                        	.fail(function(e){
-                        		$.showErr(e.responseText);
-                        	});
-                        }                    	
-                    }, {
-                        icon: 'glyphicon glyphicon-ban-circle',
-                        label: '取消',
-                        action: function (dialog) {
-                            dialog.close();
-                        }
-                    }],
-                    message: function (dialog) {
-                        var $d = $('<div></div>');
-                        var page = ctx+'mgn/system/dict_common_form.html';
-                        if(row){
-                        	page+='?id='+ row.id;
-                        }
-                        $d.load(page,function(response, status, xhr){
-                        	/*console.log(response);
-                        	console.log(status);
-                        	console.log(xhr);*/
-                        });
-                        return $d;
-                    },
-                    title: row?'修改':'新增',
-                    draggable: true,
-                    closeByBackdrop: false
-                };
-            BootstrapDialog.show(showOpt);			
-		}
-		function refresh(){
-			$('#tbl').bootstrapTable('refresh');
-		}
+				},
+				'click .remove': function (e, value, row, index) {
+					$.showConfirm("确定要删除'" + row.name + "'吗?", function () {
+						$.get(ctx + "mgn/ent/dictCategory/Delete/" + row.id)
+							.done(function (d) {
+								$.showSuccessTimeout('删除操作成功！');
+								$('#tbl').bootstrapTable('remove', {
+									field: 'id',
+									values: [row.id]
+								});
+							})
+							.fail(function (e) {
+								$.showErr("执行操作失败!");
+							});
+					});
+				}
+			};
+
+			function edit(row) {
+				$('#editForm_code').val('');
+				$('#editForm_name').val('');
+				$('#editForm_comment').val('');			
+				if(row){
+					$('#editForm_code').val(row.code);
+					$('#editForm_name').val(row.name);
+					$('#editForm_comment').val(row.comment);
+				}
+				var form = $('#dlgEdit');
+				form.validator('destroy');
+				form.validator('update');
+				var showOpt = {
+					buttons: [{
+						icon: 'glyphicon glyphicon-saved',
+						label: '确定',
+						cssClass: 'btn-primary',
+						action: function (dialog) {
+							form.validator('validate');
+							if (form.data('bs.validator').validate().hasErrors()) {
+								return;
+							}
+							var d = { id: 0 };
+							if (row) {
+								d.id = row.id;
+								d.version = row.version;								
+							}
+							d.code = $('#editForm_code').val();
+							d.name = $('#editForm_name').val();
+							d.comment = $('#editForm_comment').val();
+							d.isDeleted = false;
+							$.ajax({
+								type: 'POST',
+								url: ctx + 'mgn/ent/dictCategory/Save',
+								data: JSON.stringify(d),
+								dataTye: 'json',
+								contentType: 'application/json; charset=UTF-8'
+							}).done(function (r) {
+								refresh();
+								dialog.close();
+								$.showSuccessTimeout('操作成功！');
+							}).fail(function (e) {
+								$.showErr(e.responseText);
+							});
+						}
+					}, {
+						icon: 'glyphicon glyphicon-ban-circle',
+						label: '取消',
+						action: function (dialog) {
+							dialog.close();
+						}
+					}],
+					message: function (dialog) {
+						var $d = $('#dlgEdit');
+						return $d;
+					},
+					title: row ? '修改' : '新增',
+					draggable: true,
+					closeByBackdrop: false,
+					autodestroy: false
+				};
+				BootstrapDialog.show(showOpt);
+			}
+			function refresh() {
+				$('#tbl').bootstrapTable('refresh');
+			}
 		</script>
 	</th:block>
 </body>
+
 </html>

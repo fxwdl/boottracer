@@ -52,7 +52,7 @@ public class EntDictCategory extends AuditModel implements java.io.Serializable
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "ParentID")
-	@JsonBackReference
+	@JsonBackReference(value="self")
 	public EntDictCategory getParent()
 	{
 		return this.parent;
@@ -65,7 +65,7 @@ public class EntDictCategory extends AuditModel implements java.io.Serializable
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "SysMemberID", nullable = false)
-	@JsonBackReference
+	@JsonBackReference(value="EntDictCategory-SysMember")
 	public SysMember getSysMember()
 	{
 		return this.sysMember;
@@ -112,7 +112,7 @@ public class EntDictCategory extends AuditModel implements java.io.Serializable
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "parent")
-	@JsonManagedReference
+	@JsonManagedReference(value="self")
 	public Set<EntDictCategory> getChildren()
 	{
 		return this.children;

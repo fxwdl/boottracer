@@ -29,18 +29,23 @@ import com.yida.boottracer.domain.DictCommon;
 import com.yida.boottracer.domain.DictMemberPrice;
 import com.yida.boottracer.domain.DictMemberType;
 import com.yida.boottracer.domain.DictRegion;
+import com.yida.boottracer.domain.EntDictCategory;
 import com.yida.boottracer.domain.PagingModel;
+import com.yida.boottracer.domain.SysMember;
 import com.yida.boottracer.enums.DictCommomType;
 import com.yida.boottracer.repo.DictCommonRepository;
 import com.yida.boottracer.repo.DictMemberTypeRepository;
 import com.yida.boottracer.repo.DictRegionRepository;
+import com.yida.boottracer.repo.EntDictCategoryRepository;
 import com.yida.boottracer.repo.SysMemberRepository;
 import com.yida.infrastructure.MyUtils;
+import com.yida.web.exception.ResourceNotFoundException;
 
 @Service
 public class DictService
 {
 	private final EntityManager dictCommon_em;
+	private final EntityManager entDictCategory_em;
 
 	@Autowired
 	private DictCommonRepository dictCommonRepository;
@@ -50,32 +55,36 @@ public class DictService
 	private SysMemberRepository sysMemberRepository;
 	@Autowired
 	private DictRegionRepository dictRegionRepository;
+	@Autowired
+	private EntDictCategoryRepository entDictCategoryRepository;
 
 	@Autowired
 	public DictService(JpaContext context)
 	{
 		this.dictCommon_em = context.getEntityManagerByManagedType(DictCommon.class);
+		entDictCategory_em=context.getEntityManagerByManagedType(EntDictCategory.class);
 	}
 
 	public List<DictCommon> getCommonListByType(DictCommomType type)
 	{
-		return dictCommonRepository.findByDictTypeAndIsDeleted(type.ordinal(),false,Sort.by("code"));
+		return dictCommonRepository.findByDictTypeAndIsDeleted(type.ordinal(), false, Sort.by("code"));
 	}
-	
+
 	public List<DictRegion> getRegionListByParentId(int id)
 	{
-		Optional<DictRegion> p=dictRegionRepository.findById(id);
+		Optional<DictRegion> p = dictRegionRepository.findById(id);
 		if (p.isPresent())
 		{
-			return p.get().getChildren().stream().sorted(Comparator.comparing(DictRegion::getCode)).collect(Collectors.toList());
+			return p.get().getChildren().stream().sorted(Comparator.comparing(DictRegion::getCode))
+					.collect(Collectors.toList());
 		}
-		else 
+		else
 		{
-			return dictRegionRepository.findByParent(null,Sort.by("code"));
+			return dictRegionRepository.findByParent(null, Sort.by("code"));
 		}
-		
-	}	
-	
+
+	}
+
 	public PagingModel<DictCommon> getCommonListWithPagination(int limit, int offset, String search, String sort,
 			String order, int type)
 	{
@@ -208,7 +217,6 @@ public class DictService
 				fItem.get().setIsDeleted(true);
 			}
 		}
-
 	}
 
 	public DictMemberType saveMemberTypeItem(DictMemberType item)
@@ -216,21 +224,94 @@ public class DictService
 
 		item.getDictMemberPrices().removeIf(p -> p.isIsDeleted());
 
-		List<DictMemberPrice> list  = item.getDictMemberPrices().stream().filter(p -> p.getType() == DictMemberPrice.PLATFORM).collect(Collectors.toList());
-		
+		List<DictMemberPrice> list = item.getDictMemberPrices().stream()
+				.filter(p -> p.getType() == DictMemberPrice.PLATFORM).collect(Collectors.toList());
+
 		if (list.size() > list.stream().filter(MyUtils.distinctByKey(p -> p.getQty())).count())
 		{
 			throw new RuntimeException("平台价格中月数有重复");
 		}
-		
-		list  = item.getDictMemberPrices().stream().filter(p -> p.getType() == DictMemberPrice.BARCODE).collect(Collectors.toList());
+
+		list = item.getDictMemberPrices().stream().filter(p -> p.getType() == DictMemberPrice.BARCODE)
+				.collect(Collectors.toList());
 		if (list.size() > list.stream().filter(MyUtils.distinctByKey(p -> p.getQty())).count())
 		{
 			throw new RuntimeException("码量价格中数量有重复");
 		}
-		
+
 		DictMemberType newItem = dictMemberTypeRepository.save(item);
 
 		return newItem;
+	}
+
+	public PagingModel<EntDictCategory> getEntDictCategoryWithPagination(int limit, int offset, String search,
+			String sort, String order)
+	{
+		List<String> whereCause = new ArrayList<String>();
+		Map<String, Object> paramaterMap = new HashMap<String, Object>();
+		StringBuilder sb = new StringBuilder("FROM EntDictCategory d WHERE d.isDeleted=false");
+		if (StringUtils.isNotEmpty(search))
+		{
+			whereCause.add("(d.code LIKE CONCAT('%',:search,'%') OR d.name LIKE CONCAT('%',:search,'%'))");
+			paramaterMap.put("search", search);
+		}
+
+		if (whereCause.size() > 0)
+		{
+			sb.append(" AND " + StringUtils.join(whereCause, " and "));
+		}
+
+		if (StringUtils.isNotEmpty(sort))
+		{
+			sb.append(" ORDER BY d." + sort + " " + order);
+		}
+
+		TypedQuery<EntDictCategory> query = entDictCategory_em.createQuery("SELECT d " + sb.toString(), EntDictCategory.class);
+		Query query_c = dictCommon_em.createQuery("SELECT COUNT(d) " + sb.toString());
+		for (String key : paramaterMap.keySet())
+		{
+			query.setParameter(key, paramaterMap.get(key));
+			query_c.setParameter(key, paramaterMap.get(key));
+		}
+		PagingModel<EntDictCategory> paged = new PagingModel<>();
+		paged.setRows(query.setFirstResult(offset).setMaxResults(limit).getResultList());
+		paged.setTotal((long) query_c.getSingleResult());
+
+		return paged;
+	}
+	
+	public void deleteEntCategoryItem(SysMember ent, int id)
+	{
+		Optional<EntDictCategory> item = entDictCategoryRepository.findBySysMemberAndId(ent, id);
+		if (!item.isPresent())
+		{
+			throw new ResourceNotFoundException("未找到指定的数据");
+		}
+		else
+		{
+			entDictCategoryRepository.delete(item.get());
+		}
+	}
+
+	public EntDictCategory saveEntCategoryItem(SysMember ent, EntDictCategory item)
+	{
+		item.setSysMember(ent);
+		List<EntDictCategory> lst;
+		
+		if (item.getId() == 0)
+		{
+			lst= entDictCategoryRepository.findBySysMemberAndCodeAndIsDeleted(ent, item.getCode(), false);
+		}
+		else 
+		{
+			lst= entDictCategoryRepository.findBySysMemberAndCodeAndIsDeletedAndIdNot(ent, item.getCode(), false,item.getId());
+		}
+		
+		if (lst.size()>0)
+		{
+			throw new RuntimeException("编号重复");
+		}
+		
+		return entDictCategoryRepository.save(item);
 	}
 }
