@@ -1,5 +1,6 @@
 package com.yida.boottracer.service;
 
+import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -9,6 +10,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
@@ -37,6 +39,7 @@ import com.yida.boottracer.repo.DictCommonRepository;
 import com.yida.boottracer.repo.DictMemberTypeRepository;
 import com.yida.boottracer.repo.DictRegionRepository;
 import com.yida.boottracer.repo.EntDictCategoryRepository;
+import com.yida.boottracer.repo.EntDictSupplierRepository;
 import com.yida.boottracer.repo.SysMemberRepository;
 import com.yida.infrastructure.MyUtils;
 import com.yida.web.exception.ResourceNotFoundException;
@@ -44,9 +47,9 @@ import com.yida.web.exception.ResourceNotFoundException;
 @Service
 public class DictService
 {
-	private final EntityManager dictCommon_em;
-	private final EntityManager entDictCategory_em;
-
+    @PersistenceContext
+    protected EntityManager em;
+    
 	@Autowired
 	private DictCommonRepository dictCommonRepository;
 	@Autowired
@@ -55,16 +58,51 @@ public class DictService
 	private SysMemberRepository sysMemberRepository;
 	@Autowired
 	private DictRegionRepository dictRegionRepository;
-	@Autowired
-	private EntDictCategoryRepository entDictCategoryRepository;
 
+
+	private JpaContext jpaContext;
 	@Autowired
-	public DictService(JpaContext context)
+	public DictService(JpaContext jpaContext)
 	{
-		this.dictCommon_em = context.getEntityManagerByManagedType(DictCommon.class);
-		entDictCategory_em=context.getEntityManagerByManagedType(EntDictCategory.class);
+		this.jpaContext=jpaContext;
 	}
 
+	public <T> PagingModel<T> getDataPagination(Class<T> persistentClass,int limit, int offset, String search,
+			String sort, String order)
+	{		
+		List<String> whereCause = new ArrayList<String>();
+		Map<String, Object> paramaterMap = new HashMap<String, Object>();
+		StringBuilder sb = new StringBuilder("FROM "+persistentClass.getName()+" d WHERE d.isDeleted=false");
+		if (StringUtils.isNotEmpty(search))
+		{
+			whereCause.add("(d.code LIKE CONCAT('%',:search,'%') OR d.name LIKE CONCAT('%',:search,'%'))");
+			paramaterMap.put("search", search);
+		}
+
+		if (whereCause.size() > 0)
+		{
+			sb.append(" AND " + StringUtils.join(whereCause, " and "));
+		}
+
+		if (StringUtils.isNotEmpty(sort))
+		{
+			sb.append(" ORDER BY d." + sort + " " + order);
+		}
+		
+		TypedQuery<T> query = em.createQuery("SELECT d " + sb.toString(), persistentClass);
+		Query query_c = em.createQuery("SELECT COUNT(d) " + sb.toString());
+		for (String key : paramaterMap.keySet())
+		{
+			query.setParameter(key, paramaterMap.get(key));
+			query_c.setParameter(key, paramaterMap.get(key));
+		}
+		PagingModel<T> paged = new PagingModel<>();
+		paged.setRows(query.setFirstResult(offset).setMaxResults(limit).getResultList());
+		paged.setTotal((long) query_c.getSingleResult());
+
+		return paged;
+	}
+	
 	public List<DictCommon> getCommonListByType(DictCommomType type)
 	{
 		return dictCommonRepository.findByDictTypeAndIsDeleted(type.ordinal(), false, Sort.by("code"));
@@ -112,8 +150,9 @@ public class DictService
 			sb.append(" ORDER BY d." + sort + " " + order);
 		}
 
-		TypedQuery<DictCommon> query = dictCommon_em.createQuery("SELECT d " + sb.toString(), DictCommon.class);
-		Query query_c = dictCommon_em.createQuery("SELECT COUNT(d) " + sb.toString());
+		EntityManager em = this.jpaContext.getEntityManagerByManagedType(DictCommon.class);
+		TypedQuery<DictCommon> query =  em.createQuery("SELECT d " + sb.toString(), DictCommon.class);
+		Query query_c = em.createQuery("SELECT COUNT(d) " + sb.toString());
 		for (String key : paramaterMap.keySet())
 		{
 			query.setParameter(key, paramaterMap.get(key));
@@ -244,74 +283,4 @@ public class DictService
 		return newItem;
 	}
 
-	public PagingModel<EntDictCategory> getEntDictCategoryWithPagination(int limit, int offset, String search,
-			String sort, String order)
-	{
-		List<String> whereCause = new ArrayList<String>();
-		Map<String, Object> paramaterMap = new HashMap<String, Object>();
-		StringBuilder sb = new StringBuilder("FROM EntDictCategory d WHERE d.isDeleted=false");
-		if (StringUtils.isNotEmpty(search))
-		{
-			whereCause.add("(d.code LIKE CONCAT('%',:search,'%') OR d.name LIKE CONCAT('%',:search,'%'))");
-			paramaterMap.put("search", search);
-		}
-
-		if (whereCause.size() > 0)
-		{
-			sb.append(" AND " + StringUtils.join(whereCause, " and "));
-		}
-
-		if (StringUtils.isNotEmpty(sort))
-		{
-			sb.append(" ORDER BY d." + sort + " " + order);
-		}
-
-		TypedQuery<EntDictCategory> query = entDictCategory_em.createQuery("SELECT d " + sb.toString(), EntDictCategory.class);
-		Query query_c = dictCommon_em.createQuery("SELECT COUNT(d) " + sb.toString());
-		for (String key : paramaterMap.keySet())
-		{
-			query.setParameter(key, paramaterMap.get(key));
-			query_c.setParameter(key, paramaterMap.get(key));
-		}
-		PagingModel<EntDictCategory> paged = new PagingModel<>();
-		paged.setRows(query.setFirstResult(offset).setMaxResults(limit).getResultList());
-		paged.setTotal((long) query_c.getSingleResult());
-
-		return paged;
-	}
-	
-	public void deleteEntCategoryItem(SysMember ent, int id)
-	{
-		Optional<EntDictCategory> item = entDictCategoryRepository.findBySysMemberAndId(ent, id);
-		if (!item.isPresent())
-		{
-			throw new ResourceNotFoundException("未找到指定的数据");
-		}
-		else
-		{
-			entDictCategoryRepository.delete(item.get());
-		}
-	}
-
-	public EntDictCategory saveEntCategoryItem(SysMember ent, EntDictCategory item)
-	{
-		item.setSysMember(ent);
-		List<EntDictCategory> lst;
-		
-		if (item.getId() == 0)
-		{
-			lst= entDictCategoryRepository.findBySysMemberAndCodeAndIsDeleted(ent, item.getCode(), false);
-		}
-		else 
-		{
-			lst= entDictCategoryRepository.findBySysMemberAndCodeAndIsDeletedAndIdNot(ent, item.getCode(), false,item.getId());
-		}
-		
-		if (lst.size()>0)
-		{
-			throw new RuntimeException("编号重复");
-		}
-		
-		return entDictCategoryRepository.save(item);
-	}
 }

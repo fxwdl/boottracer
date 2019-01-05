@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yida.boottracer.domain.EntDictCategory;
+import com.yida.boottracer.domain.EntDictSupplier;
 import com.yida.boottracer.domain.PagingModel;
 import com.yida.boottracer.service.DictService;
 import com.yida.boottracer.service.EntDictService;
@@ -26,42 +27,42 @@ import com.yida.boottracer.web.mgn.BaseController;
 
 @Controller
 @RequestMapping(value = "/mgn/ent")
-public class DictCategoryController extends BaseController
+public class DictSupplierController extends BaseController
 {
 	@Autowired
 	private EntDictService dictService;
 	
-	@GetMapping(value = { "dict_category_list.html" })
+	@GetMapping(value = { "dict_supplier_list.html" })
 	public String showList(Model model)
 	{		
-		return "mgn/ent/dict_category_list.html";
+		return "mgn/ent/dict_supplier_list.html";
 	}
 	
-	@GetMapping(value = { "dictCategory/GetData" })
+	@GetMapping(value = { "dictSupplier/GetData" })
 	@ResponseBody
-	public PagingModel<EntDictCategory> getData(@RequestParam("limit") int limit, @RequestParam("offset") int offset,
+	public PagingModel<EntDictSupplier> getData(@RequestParam("limit") int limit, @RequestParam("offset") int offset,
 			@RequestParam("search") String search, @RequestParam("sort") String sort,
 			@RequestParam("order") String order)
 	{
-		return dictService.getDataPagination(EntDictCategory.class,limit, offset, search, sort, order);	
+		return dictService.getDataPagination(EntDictSupplier.class,limit, offset, search, sort, order);	
 	}
 	
-	@GetMapping(value = { "dictCategory/Delete/{id}" })
+	@GetMapping(value = { "dictSupplier/Delete/{id}" })
 	@ResponseBody
 	public ResponseEntity<?> delete(@PathVariable("id") int id)
 	{
-		dictService.deleteEntCategoryItem(this.getUser().getSysMember(), id);
+		dictService.deleteEntSupplierItem(this.getUser().getSysMember(), id);
 		return new ResponseEntity<>("删除数据成功！", HttpStatus.OK);		
 	}
 
-	@PostMapping(value = { "dictCategory/Save" }/* ,consumes=MediaType.APPLICATION_JSON_VALUE */)
+	@PostMapping(value = { "dictSupplier/Save" }/* ,consumes=MediaType.APPLICATION_JSON_VALUE */)
 	@ResponseBody
-	public ResponseEntity<?> save(@Valid @RequestBody EntDictCategory item, Errors errors)
+	public ResponseEntity<?> save(@Valid @RequestBody EntDictSupplier item, Errors errors)
 	{
 		if (errors.hasErrors())
 		{
 			return ResponseEntity.badRequest().body(errors.getAllErrors().stream().map(x -> x.getDefaultMessage()).collect(Collectors.joining(",")));
 		}
-		return new ResponseEntity<>(dictService.saveEntCategoryItem(this.getUser().getSysMember(), item), HttpStatus.OK);
+		return new ResponseEntity<>(dictService.saveEntSupplierItem(this.getUser().getSysMember(), item), HttpStatus.OK);
 	}
 }

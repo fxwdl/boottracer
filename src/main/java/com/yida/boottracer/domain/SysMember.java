@@ -76,6 +76,7 @@ public class SysMember extends AuditModel implements java.io.Serializable
 	private Long version;
 	private Set<SysUser> sysUsers = new HashSet<>();
 	private Set<EntDictCategory> entDictCategories = new HashSet<EntDictCategory>();
+	private Set<EntDictSupplier> entDictSuppliers = new HashSet<>();
 
 	public SysMember()
 	{
@@ -431,6 +432,18 @@ public class SysMember extends AuditModel implements java.io.Serializable
 	public void setEntDictCategories(Set<EntDictCategory> entDictCategories)
 	{
 		this.entDictCategories = entDictCategories;
+	}
+	
+	@JsonManagedReference(value="EntDictSupplier-SysMember")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "sysMember")
+	public Set<EntDictSupplier> getEntDictSuppliers()
+	{
+		return this.entDictSuppliers;
+	}
+
+	public void setEntDictSuppliers(Set<EntDictSupplier> entDictSuppliers)
+	{
+		this.entDictSuppliers = entDictSuppliers;
 	}
 	
 	@Transient
