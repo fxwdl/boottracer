@@ -37,6 +37,7 @@ public class DictRegion implements java.io.Serializable
 	private String shortNameEn;
 	private Set<DictRegion> children = new HashSet<>();
 	private Long version;
+	private String fullName;
 
 	public DictRegion()
 	{
@@ -132,6 +133,17 @@ public class DictRegion implements java.io.Serializable
 	public void setShortNameEn(String shortNameEn)
 	{
 		this.shortNameEn = shortNameEn;
+	}
+	
+	@Column(name = "FullName", nullable = false, length = 512)
+	public String getFullName()
+	{
+		return this.fullName;
+	}
+
+	public void setFullName(String fullName)
+	{
+		this.fullName = fullName;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "parent")

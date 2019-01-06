@@ -253,7 +253,7 @@
                         $('#dictRegion\\.id').val('');
                         return;
                     }
-                    $.getJSON(ctx + 'mgn/system/dictRegion/GetChildren/' + id, function (data) {
+                    $.getJSON(ctx + 'dictRegion/GetChildren/' + id, function (data) {
                         $.each(data, function (idx, item) {
                             $('#ds_city').append($('<option></option>').attr('value', item.id).text(item.name));
                         })
@@ -268,7 +268,7 @@
                     if (id == null) {
                         $('#ds_county').trigger("change");
                     }
-                    $.getJSON(ctx + 'mgn/system/dictRegion/GetChildren/' + id, function (data) {
+                    $.getJSON(ctx + 'dictRegion/GetChildren/' + id, function (data) {
                         $.each(data, function (idx, item) {
                             $('#ds_county').append($('<option></option>').attr('value', item.id).text(item.name));
                         })

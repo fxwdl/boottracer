@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -21,10 +22,12 @@ import org.springframework.stereotype.Service;
 
 import com.yida.boottracer.domain.AuditModel;
 import com.yida.boottracer.domain.EntDictCategory;
+import com.yida.boottracer.domain.EntDictDealer;
 import com.yida.boottracer.domain.EntDictSupplier;
 import com.yida.boottracer.domain.PagingModel;
 import com.yida.boottracer.domain.SysMember;
 import com.yida.boottracer.repo.EntDictCategoryRepository;
+import com.yida.boottracer.repo.EntDictDealerRepository;
 import com.yida.boottracer.repo.EntDictSupplierRepository;
 import com.yida.web.exception.ResourceNotFoundException;
 
@@ -41,6 +44,8 @@ public class EntDictService
 	private EntDictCategoryRepository entDictCategoryRepository;
 	@Autowired
 	private EntDictSupplierRepository entDictSupplierRepository;
+	@Autowired
+	private EntDictDealerRepository entDictDealerRepository;
 	
 	@Autowired
 	public EntDictService(JpaContext jpaContext)
@@ -48,9 +53,9 @@ public class EntDictService
 		this.jpaContext=jpaContext;
 	}
 	
-	public <T> PagingModel<T> getDataPagination(Class<T> persistentClass,int limit, int offset, String search,
+	public <T> PagingModel<T> getDataPagination(Class<T> persistentClass,String entityGraph,int limit, int offset, String search,
 			String sort, String order)
-	{		
+	{
 		List<String> whereCause = new ArrayList<String>();
 		Map<String, Object> paramaterMap = new HashMap<String, Object>();
 		StringBuilder sb = new StringBuilder("FROM "+persistentClass.getName()+" d WHERE d.isDeleted=false");
@@ -70,6 +75,13 @@ public class EntDictService
 			sb.append(" ORDER BY d." + sort + " " + order);
 		}
 		
+		EntityGraph<?> graph=null;
+		
+		if(!StringUtils.isBlank(entityGraph))
+		{
+			graph = this.em.getEntityGraph(entityGraph);
+			//hints.put("javax.persistence.fetchgraph", graph);
+		}
 		TypedQuery<T> query = em.createQuery("SELECT d " + sb.toString(), persistentClass);
 		Query query_c = em.createQuery("SELECT COUNT(d) " + sb.toString());
 		for (String key : paramaterMap.keySet())
@@ -78,10 +90,20 @@ public class EntDictService
 			query_c.setParameter(key, paramaterMap.get(key));
 		}
 		PagingModel<T> paged = new PagingModel<>();
+		if(graph!=null)
+		{
+			query=query.setHint("javax.persistence.loadgraph", graph);
+		}
 		paged.setRows(query.setFirstResult(offset).setMaxResults(limit).getResultList());
 		paged.setTotal((long) query_c.getSingleResult());
 
 		return paged;
+	}
+	
+	public <T> PagingModel<T> getDataPagination(Class<T> persistentClass,int limit, int offset, String search,
+			String sort, String order)
+	{		
+		return getDataPagination(persistentClass,null,limit,offset,search,sort,order);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -98,7 +120,7 @@ public class EntDictService
 		else 
 		{
 			em.remove(lst.get(0));
-		}		
+		}
 	}
 
 	public void deleteEntCategoryItem(SysMember ent, int id)
@@ -150,5 +172,31 @@ public class EntDictService
 		}
 		
 		return entDictSupplierRepository.save(item);
+	}
+	
+	public void deleteEntDealerItem(SysMember ent, int id)
+	{
+		Optional<EntDictDealer> item = entDictDealerRepository.findBySysMemberAndId(ent, id);
+		if (!item.isPresent())
+		{
+			throw new ResourceNotFoundException("未找到指定的数据");
+		}
+		else
+		{
+			entDictDealerRepository.delete(item.get());
+		}
+	}
+
+	public EntDictDealer saveEntDealerItem(SysMember ent, EntDictDealer item)
+	{
+		item.setSysMember(ent);
+		List<?> lst = entDictDealerRepository.findBySysMemberAndCodeAndIsDeletedAndIdNot(ent, item.getCode(), false,item.getId());
+		
+		if (lst.size()>0)
+		{
+			throw new RuntimeException("编号重复");
+		}
+		
+		return entDictDealerRepository.save(item);
 	}
 }

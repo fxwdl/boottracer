@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{_layout/main}"
+ th:with="module='资料管理',functionName='经销商管理',smallTitle='经销商管理'">
+
+<head>
+	<title>产品类别管理</title>
+	<link rel="stylesheet" th:href="@{/bower_components/bootstrap-table/dist/bootstrap-table.css}">
+	<link rel="stylesheet" th:href="@{/bower_components/bootstrap-dialog/dist/css/bootstrap-dialog.css}">
+</head>
+
+<body>
+	<div class="container-fluid" layout:fragment="doBody">
+		<div id="toolbar" class="btn-group">
+			<button type="button" id="addNew" class="btn btn-default">
+				<i class="glyphicon glyphicon-plus" style="padding-right: 3px;"></i><span>新增</span>
+			</button>
+		</div>
+		<table data-toggle="table" id="tbl" data-toolbar="#toolbar" data-show-export="true" data-cache="false" data-search="true"
+		 data-search-on-enter-key="false" data-show-refresh="true" data-id-field="id" data-click-to-select="true"
+		 data-single-select="true" data-striped="true" data-sort-name="code" data-sort-order="asc" data-show-columns="true"
+		 data-select-item-name="myRadioName" data-side-pagination="server" data-pagination="true" data-page-list="[10, 25, 50, 100, ALL]"
+		 th:data-url="@{/mgn/ent/dictDealer/GetData}">
+			<thead>
+				<tr>
+					<th data-field="code" data-halign="center" data-align="left" data-sortable="true">编号</th>
+					<th data-field="name" data-halign="center" data-align="left" data-sortable="true">名称</th>
+					<th data-field="linkman" data-halign="center" data-align="left" data-sortable="true">联系人</th>
+					<th data-field="mobile" data-halign="center" data-align="left" data-sortable="true">手机</th>
+					<th data-field="dictRegion.fullName" data-halign="center" data-align="left" data-sortable="true">区域</th>
+					<th data-field="comment" data-halign="center" data-align="left" data-sortable="true">备注</th>
+					<th data-field="operate" data-halign="center" data-align="center" data-formatter="operateFormatter" data-events="operateEvents">操作</th>
+				</tr>
+			</thead>
+		</table>
+
+		<div id="app" class="container" style="display: none;">
+			<form id="dlgEdit" class="form-horizontal">
+				<div class="form-group">
+					<label for="editForm_code" class="col-sm-2 control-label">代码</label>
+					<div class="col-sm-9">
+						<input required type="text" class="form-control" id="editForm_code" name="code">
+						<div class="help-block with-errors"></div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="editForm_name" class="col-sm-2 control-label">名称</label>
+					<div class="col-sm-9">
+						<input required type="text" class="form-control" id="editForm_name" name="name">
+						<div class="help-block with-errors"></div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="editForm_linkman" class="col-sm-2 control-label">联系人</label>
+					<div class="col-sm-9">
+						<input type="text" class="form-control" id="editForm_linkman" name="linkman">
+						<div class="help-block with-errors"></div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="editForm_tel" class="col-sm-2 control-label">办公电话</label>
+					<div class="col-sm-9">
+						<input type="text" class="form-control" id="editForm_tel" name="tel">
+						<div class="help-block with-errors"></div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="editForm_mobile" class="col-sm-2 control-label">手机</label>
+					<div class="col-sm-9">
+						<input type="text" class="form-control" id="editForm_mobile" name="mobile">
+						<div class="help-block with-errors"></div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="editForm_fax" class="col-sm-2 control-label">传真</label>
+					<div class="col-sm-9">
+						<input type="text" class="form-control" id="editForm_fax" name="fax">
+						<div class="help-block with-errors"></div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="editForm_email" class="col-sm-2 control-label">电子邮箱</label>
+					<div class="col-sm-9">
+						<input type="email" class="form-control" id="editForm_email" name="email">
+						<div class="help-block with-errors"></div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="editForm_address" class="col-sm-2 control-label">地址</label>
+					<div class="col-sm-9">
+						<input type="text" class="form-control" id="editForm_address" name="address">
+						<div class="help-block with-errors"></div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">销售区域</label>
+					<div class="col-sm-9 show-error">
+						<div class="row">
+							<div class="col-sm-4">
+								<select id="ds_province" name="ds_province" class="form-control">
+									<option value=""> -- 请选择 -- </option>
+									<option th:each="t:${ds_province}" th:value="${t.id}" th:text="${t.name}"></option>
+								</select>
+								<div class="help-block with-errors"></div>
+							</div>
+							<div class="col-sm-4">
+								<select id="ds_city" name="ds_city" class="form-control">
+									<option value=""> -- 请选择 -- </option>
+								</select>
+							</div>
+							<div class="col-sm-4">
+								<select id="ds_county" name="ds_county" class="form-control">
+									<option value=""> -- 请选择 -- </option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="editForm_comment" class="col-sm-2 control-label">备注</label>
+					<div class="col-sm-9">
+						<textarea class="form-control" rows="3" id="editForm_comment" name="comment" th:text="${m?.comment}"></textarea>
+						<div class="help-block with-errors"></div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	<th:block layout:fragment="script">
+		<script th:src="@{/bower_components/bootstrap-table/dist/bootstrap-table.js}"></script>
+		<script th:src="@{/bower_components/bootstrap-table/dist/extensions/export/bootstrap-table-export.js}"></script>
+		<!--/* https://github.com/hhurz/tableExport.jquery.plugin */-->
+		<script th:src="@{/bower_components/tableExport.jquery.plugin/tableExport.js}"></script>
+		<script th:src="@{/bower_components/bootstrap-table/dist/locale/bootstrap-table-zh-CN.js}"></script>
+		<script th:src="@{/bower_components/bootstrap-dialog/dist/js/bootstrap-dialog.js}"></script>
+		<script th:src="@{/js/bootstrap-dialog-zh-CN.js}"></script>
+		<script th:src="@{/js/bootstrap-dialog-Ext.js}"></script>
+		<script th:src="@{/bower_components/bootstrap-validator/dist/validator.custom.js}"></script>
+		<script type="text/javascript">
+			$(function () {
+				$('#addNew').click(function () {
+					edit();
+				});
+
+				$('#ds_province').change(function () {
+					$('#ds_city').empty();
+					$('#ds_county').empty();
+					$('#ds_city').append($('<option></option>').attr('value', '').text('-- 请选择 --'));
+					$('#ds_county').append($('<option></option>').attr('value', '').text('-- 请选择 --'));
+					var id = $(this).val();
+					if (id != '') {
+						$.getJSON(ctx + 'dictRegion/GetChildren/' + id, function (data) {
+							$.each(data, function (idx, item) {
+								$('#ds_city').append($('<option></option>').attr('value', item.id).text(item.name));
+							})
+						});
+					}
+				});
+
+				$('#ds_city').change(function () {
+					$('#ds_county').empty();
+					$('#ds_county').append($('<option></option>').attr('value', '').text('-- 请选择 --'));
+					var id = $(this).val();
+					if (id != '') {
+						$.getJSON(ctx + 'dictRegion/GetChildren/' + id, function (data) {
+							$.each(data, function (idx, item) {
+								$('#ds_county').append($('<option></option>').attr('value', item.id).text(item.name));
+							})
+						});
+					}
+				});
+
+				$('#ds_county').change(function () {
+
+				});
+			});
+
+			window.operateEvents = {
+				'click .edit': function (e, value, row, index) {
+					edit(row);
+				},
+				'click .remove': function (e, value, row, index) {
+					$.showConfirm("确定要删除'" + row.name + "'吗?", function () {
+						$.get(ctx + "mgn/ent/dictDealer/Delete/" + row.id)
+							.done(function (d) {
+								$.showSuccessTimeout('删除操作成功！');
+								$('#tbl').bootstrapTable('remove', {
+									field: 'id',
+									values: [row.id]
+								});
+							})
+							.fail(function (e) {
+								$.showErr("执行操作失败!");
+							});
+					});
+				}
+			};
+
+			function edit(row) {
+				$('#editForm_code').val('');
+				$('#editForm_name').val('');
+				$('#editForm_linkman').val('');
+				$('#editForm_tel').val('');
+				$('#editForm_mobile').val('');
+				$('#editForm_email').val('');
+				$('#editForm_address').val('');
+				$('#editForm_fax').val('');
+				$('#editForm_comment').val('');
+
+				$('#ds_province').val("");
+
+				var ds_province = $('#ds_province');
+				var ds_city = $('#ds_city');
+				var ds_county = $('#ds_county');
+				ds_province.val("");
+
+				ds_city.empty();
+				ds_county.empty();
+				ds_city.append($('<option></option>').attr('value', '').text('-- 请选择 --'));
+				ds_county.append($('<option></option>').attr('value', '').text('-- 请选择 --'));
+
+				if (row) {
+					$('#editForm_code').val(row.code);
+					$('#editForm_name').val(row.name);
+					$('#editForm_linkman').val(row.linkman);
+					$('#editForm_tel').val(row.tel);
+					$('#editForm_mobile').val(row.mobile);
+					$('#editForm_email').val(row.email);
+					$('#editForm_address').val(row.address);
+					$('#editForm_fax').val(row.fax);
+					$('#editForm_comment').val(row.comment);
+					if (row.dictRegion != null) {
+						$.getJSON(ctx + 'dictRegion/GetRegionInfo/' + row.dictRegion.id, function (data) {
+							ds_province.val(data.curProvince.id);
+							$.each(data.cityList, function (idx, item) {
+								ds_city.append($('<option></option>').attr('value', item.id).text(item.name));
+							});
+							$.each(data.countyList, function (idx, item) {
+								ds_county.append($('<option></option>').attr('value', item.id).text(item.name));
+							});
+							if (data.curCity != null) {
+								ds_city.val(data.curCity.id);
+							}
+							if (data.curCounty != null) {
+								ds_county.val(data.curCounty.id);
+							}
+						});
+					}
+				}
+
+				var form = $('#dlgEdit');
+				form.validator('destroy');
+				form.validator('update');
+				var showOpt = {
+					buttons: [{
+						icon: 'glyphicon glyphicon-saved',
+						label: '确定',
+						cssClass: 'btn-primary',
+						action: function (dialog) {
+							form.validator('validate');
+							if (form.data('bs.validator').validate().hasErrors()) {
+								return;
+							}
+							var d = { id: 0 };
+							if (row) {
+								d.id = row.id;
+								d.version = row.version;
+							}
+							d.code = $('#editForm_code').val();
+							d.name = $('#editForm_name').val();
+							d.linkman = $('#editForm_linkman').val();
+							d.tel = $('#editForm_tel').val();
+							d.mobile = $('#editForm_mobile').val();
+							d.email = $('#editForm_email').val();
+							d.address = $('#editForm_address').val();
+							d.fax = $('#editForm_fax').val();
+							d.comment = $('#editForm_comment').val();
+							var regionId = ds_county.val();
+							if (regionId == "" || regionId == null) {
+								regionId = ds_city.val();
+								if (regionId == "" || regionId == null) {
+									regionId = ds_province.val();
+								}
+							}
+							if (regionId != "" && regionId != null) {
+								d.dictRegion = { id: regionId, version: 0 };
+							}
+							d.isDeleted = false;
+							$.ajax({
+								type: 'POST',
+								url: ctx + 'mgn/ent/dictDealer/Save',
+								data: JSON.stringify(d),
+								dataTye: 'json',
+								contentType: 'application/json; charset=UTF-8'
+							}).done(function (r) {
+								refresh();
+								dialog.close();
+								$.showSuccessTimeout('操作成功！');
+							}).fail(function (e) {
+								$.showErr(e.responseText);
+							});
+						}
+					}, {
+						icon: 'glyphicon glyphicon-ban-circle',
+						label: '取消',
+						action: function (dialog) {
+							dialog.close();
+						}
+					}],
+					message: function (dialog) {
+						var $d = $('#dlgEdit');
+						return $d;
+					},
+					title: row ? '修改' : '新增',
+					draggable: true,
+					closeByBackdrop: false,
+					autodestroy: false
+				};
+				BootstrapDialog.show(showOpt);
+			}
+			function refresh() {
+				$('#tbl').bootstrapTable('refresh');
+			}
+		</script>
+	</th:block>
+</body>
+
+</html>

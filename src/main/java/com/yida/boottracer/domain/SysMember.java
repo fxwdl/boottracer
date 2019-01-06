@@ -77,6 +77,7 @@ public class SysMember extends AuditModel implements java.io.Serializable
 	private Set<SysUser> sysUsers = new HashSet<>();
 	private Set<EntDictCategory> entDictCategories = new HashSet<EntDictCategory>();
 	private Set<EntDictSupplier> entDictSuppliers = new HashSet<>();
+	private Set<EntDictDealer> entDictDealers = new HashSet<>();
 
 	public SysMember()
 	{
@@ -125,7 +126,11 @@ public class SysMember extends AuditModel implements java.io.Serializable
 	{
 		return this.dictRegion;
 	}
-
+	public void setDictRegion(DictRegion dictRegion)
+	{
+		this.dictRegion = dictRegion;
+	}
+	
 	@ManyToOne(fetch = FetchType.LAZY,cascade= {CascadeType.REFRESH})
 	@JoinColumn(name = "MemberTypeId", nullable = false)
 	public DictMemberType getDictMemberType()
@@ -138,10 +143,7 @@ public class SysMember extends AuditModel implements java.io.Serializable
 		this.dictMemberType = dictMemberType;
 	}
 	
-	public void setDictRegion(DictRegion dictRegion)
-	{
-		this.dictRegion = dictRegion;
-	}
+
 
 	@NotBlank(message = "名称不能为空")
 	@Column(name = "Name", nullable = false, length = 256)
@@ -444,6 +446,18 @@ public class SysMember extends AuditModel implements java.io.Serializable
 	public void setEntDictSuppliers(Set<EntDictSupplier> entDictSuppliers)
 	{
 		this.entDictSuppliers = entDictSuppliers;
+	}
+	
+	@JsonManagedReference(value="EntDictDealer-SysMember")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "sysMember")
+	public Set<EntDictDealer> getEntDictDealers()
+	{
+		return this.entDictDealers;
+	}
+
+	public void setEntDictDealers(Set<EntDictDealer> entDictDealers)
+	{
+		this.entDictDealers = entDictDealers;
 	}
 	
 	@Transient

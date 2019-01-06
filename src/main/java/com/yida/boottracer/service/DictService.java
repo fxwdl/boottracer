@@ -27,6 +27,7 @@ import org.springframework.data.jpa.repository.JpaContext;
 import org.springframework.stereotype.Service;
 
 import com.cosium.spring.data.jpa.entity.graph.domain.EntityGraphs;
+import com.jayway.jsonpath.Option;
 import com.yida.boottracer.domain.DictCommon;
 import com.yida.boottracer.domain.DictMemberPrice;
 import com.yida.boottracer.domain.DictMemberType;
@@ -34,7 +35,9 @@ import com.yida.boottracer.domain.DictRegion;
 import com.yida.boottracer.domain.EntDictCategory;
 import com.yida.boottracer.domain.PagingModel;
 import com.yida.boottracer.domain.SysMember;
+import com.yida.boottracer.dto.RegionInfoDTO;
 import com.yida.boottracer.enums.DictCommomType;
+import com.yida.boottracer.enums.RegionLevel;
 import com.yida.boottracer.repo.DictCommonRepository;
 import com.yida.boottracer.repo.DictMemberTypeRepository;
 import com.yida.boottracer.repo.DictRegionRepository;
@@ -120,7 +123,47 @@ public class DictService
 		{
 			return dictRegionRepository.findByParent(null, Sort.by("code"));
 		}
+	}
+	
+	public RegionInfoDTO getRegionInfoById(int id)
+	{
+		RegionInfoDTO r = new RegionInfoDTO();
+		
+		Optional<DictRegion> curItem = dictRegionRepository.findById(id);
+		if (curItem.isPresent())
+		{
+			DictRegion cur=curItem.get();
 
+			if (cur.getLevel()==RegionLevel.Province.getValue())
+			{
+				r.setCurProvince(cur);
+				r.setCityList(this.getRegionListByParentId(cur.getId()));
+			}
+			else if (cur.getLevel()==RegionLevel.City.getValue())
+			{
+				cur.getParent().getName();
+				r.setCurProvince(cur.getParent());
+				r.setCurCity(cur);
+				
+				r.setCityList(this.getRegionListByParentId(r.getCurProvince().getId()));
+				r.setCountyList(this.getRegionListByParentId(r.getCurCity().getId()));
+			}
+			else if (cur.getLevel()==RegionLevel.County.getValue())
+			{
+				cur.getParent().getName();
+				cur.getParent().getParent().getName();
+				
+				r.setCurProvince(cur.getParent().getParent());
+				r.setCurCity(cur.getParent());
+				r.setCurCounty(cur);
+								
+				r.setCityList(this.getRegionListByParentId(r.getCurProvince().getId()));
+				r.setCountyList(this.getRegionListByParentId(r.getCurCity().getId()));
+			}			
+		}
+		
+		return r;
+		
 	}
 
 	public PagingModel<DictCommon> getCommonListWithPagination(int limit, int offset, String search, String sort,
