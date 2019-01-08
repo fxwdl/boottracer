@@ -38,6 +38,37 @@ public class SysMemberController extends BaseController
 	private DictService dictService;
 	private UserService userService;
 	
+	
+	private String module="资料管理";
+	public void setModule(String module)
+	{
+		this.module=module;
+	}
+	public String getModule()
+	{
+		return module;
+	}
+	
+	private String functionName="企业信息";
+	public void setFunctionName(String functionName)
+	{
+		this.functionName=functionName;
+	}
+	public String getFunctionName()
+	{
+		return functionName;
+	}
+	
+	private String smallTitle="";
+	public void setSmallTitle(String smallTitle)
+	{
+		this.smallTitle=smallTitle;
+	}
+	public String getSmallTitle()
+	{
+		return smallTitle;
+	}
+	
 	@Autowired
 	public void setDictService(DictService dictService)
 	{
@@ -65,6 +96,9 @@ public class SysMemberController extends BaseController
 	public ModelAndView showEditPage(@RequestParam(name = "id", required = false) Long id)
 	{
 		ModelAndView mv = new ModelAndView();
+		mv.addObject("module",getModule());
+		mv.addObject("functionName",getFunctionName());
+		mv.addObject("smallTitle",getSmallTitle());
 		
 		mv.addObject("saveAction",saveAction);
 

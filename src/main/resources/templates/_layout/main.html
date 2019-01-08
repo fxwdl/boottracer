@@ -145,11 +145,10 @@
             <!--/* Content Header (Page header) */-->
             <section class="content-header">
                 <th:block th:if="${module!='首页'}">
-	                <h1 th:text="${functionName }"> 功能               	                   
+	                <h1> [[${functionName}]]               	                   
 	                    <small th:text="${smallTitle }">小标题</small>
 	                </h1>
-                </th:block>            
-
+                </th:block>
                 <ol class="breadcrumb">
                     <li><a th:href="@{/mgn}"><i class="fa fa-dashboard"></i> 主页</a></li>
                     <th:block th:if="${module!='首页'}">

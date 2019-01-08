@@ -81,6 +81,11 @@ public class SysMemberBizController extends BaseController
 	{
 		SysMemberController c = SpringContextUtil.getBeanByName(com.yida.boottracer.web.mgn.ent.SysMemberController.class);
 		c.setSaveAction("/mgn/biz/SysMemberBiz/save");
+		
+		c.setModule("业务管理");
+		c.setFunctionName("企业管理");
+		c.setSmallTitle("编辑");
+		
 		return c.showEditPage(id);
 	}
 }

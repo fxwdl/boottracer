@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{_layout/main}"
- th:with="module='业务管理',functionName='企业会员管理',smallTitle='企业会员管理'">
+ th:with="module='业务管理',functionName='企业管理',smallTitle=''">
 
 <head>
 	<title>企业会员管理</title>
@@ -112,7 +112,7 @@
 
 			function nameFormatter(value, row, index, type) {
 				return [
-					'<a target="_blank" href="' + ctx + 'mgn/biz/sys_member_edit.html?id=' + row.id + '" title="' + row.name + '">',
+					'<a target="_self" href="' + ctx + 'mgn/biz/sys_member_edit.html?id=' + row.id + '" title="' + row.name + '">',
 					row.name,
 					'</a>'
 				].join('');
