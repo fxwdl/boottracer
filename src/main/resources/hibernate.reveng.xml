@@ -60,4 +60,10 @@
 	<table-filter match-name="ent_dict_supplier"
 		match-catalog="sourcetracerdb">
 	</table-filter>
+	<table-filter match-name="ent_dict_coder"
+		match-catalog="sourcetracerdb">
+	</table-filter>
+	<table-filter match-name="ent_dict_coder_detail"
+		match-catalog="sourcetracerdb">
+	</table-filter>
 </hibernate-reverse-engineering>

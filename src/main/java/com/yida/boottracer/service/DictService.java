@@ -322,7 +322,7 @@ public class DictService
 		}
 
 		DictMemberType newItem = dictMemberTypeRepository.save(item);
-
+		
 		return newItem;
 	}
 

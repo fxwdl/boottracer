@@ -12,6 +12,7 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
 -- 导出  表 sourcetracerdb.dict_common 结构
+DROP TABLE IF EXISTS `dict_common`;
 CREATE TABLE IF NOT EXISTS `dict_common` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `DictType` int(11) NOT NULL,
@@ -26,6 +27,7 @@ CREATE TABLE IF NOT EXISTS `dict_common` (
 
 -- 数据导出被取消选择。
 -- 导出  表 sourcetracerdb.dict_member_price 结构
+DROP TABLE IF EXISTS `dict_member_price`;
 CREATE TABLE IF NOT EXISTS `dict_member_price` (
   `ID` int(10) NOT NULL AUTO_INCREMENT,
   `MemberTypeId` int(10) NOT NULL COMMENT '会员类型iD',
@@ -42,6 +44,7 @@ CREATE TABLE IF NOT EXISTS `dict_member_price` (
 
 -- 数据导出被取消选择。
 -- 导出  表 sourcetracerdb.dict_member_type 结构
+DROP TABLE IF EXISTS `dict_member_type`;
 CREATE TABLE IF NOT EXISTS `dict_member_type` (
   `ID` int(10) NOT NULL AUTO_INCREMENT,
   `Name` varchar(256) NOT NULL COMMENT '名称',
@@ -56,11 +59,13 @@ CREATE TABLE IF NOT EXISTS `dict_member_type` (
 
 -- 数据导出被取消选择。
 -- 导出  表 sourcetracerdb.dict_region 结构
+DROP TABLE IF EXISTS `dict_region`;
 CREATE TABLE IF NOT EXISTS `dict_region` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Code` varchar(100) NOT NULL,
   `Name` varchar(100) NOT NULL,
   `Parent_ID` int(11) DEFAULT NULL,
+  `FullName` varchar(512) DEFAULT NULL,
   `Level` int(11) NOT NULL,
   `Order` int(11) NOT NULL,
   `Name_En` varchar(100) NOT NULL,
@@ -69,10 +74,11 @@ CREATE TABLE IF NOT EXISTS `dict_region` (
   PRIMARY KEY (`ID`),
   KEY `dict_region_p_idx` (`Parent_ID`),
   CONSTRAINT `dict_region_pppp` FOREIGN KEY (`Parent_ID`) REFERENCES `dict_region` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=978 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5001 DEFAULT CHARSET=utf8;
 
 -- 数据导出被取消选择。
 -- 导出  表 sourcetracerdb.dict_system_function 结构
+DROP TABLE IF EXISTS `dict_system_function`;
 CREATE TABLE IF NOT EXISTS `dict_system_function` (
   `Id` varchar(64) NOT NULL,
   `CssClass` varchar(256) DEFAULT NULL,
@@ -90,15 +96,16 @@ CREATE TABLE IF NOT EXISTS `dict_system_function` (
 
 -- 数据导出被取消选择。
 -- 导出  表 sourcetracerdb.ent_dict_category 结构
+DROP TABLE IF EXISTS `ent_dict_category`;
 CREATE TABLE IF NOT EXISTS `ent_dict_category` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `SysMemberID` int(10) unsigned NOT NULL,
   `Code` varchar(45) NOT NULL,
   `Name` varchar(45) NOT NULL,
   `ParentID` int(11) DEFAULT NULL,
+  `Comment` varchar(256) DEFAULT NULL,
   `IsDeleted` bit(1) NOT NULL,
   `Version` bigint(19) NOT NULL,
-  `Comment` varchar(256) DEFAULT NULL,
   `CreatedAt` datetime DEFAULT NULL,
   `UpdatedAt` datetime DEFAULT NULL,
   `CreatedBy` varchar(128) DEFAULT NULL,
@@ -108,10 +115,109 @@ CREATE TABLE IF NOT EXISTS `ent_dict_category` (
   KEY `FK_EntDictCategory_To_EntDictCategory_idx` (`ParentID`),
   CONSTRAINT `FK_EntDictCategory_To_EntDictCategory` FOREIGN KEY (`ParentID`) REFERENCES `ent_dict_category` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_EntDictCategory_To_SysMember` FOREIGN KEY (`SysMemberID`) REFERENCES `sys_member` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='企业产品分类字典';
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COMMENT='企业产品分类字典';
+
+-- 数据导出被取消选择。
+-- 导出  表 sourcetracerdb.ent_dict_coder 结构
+DROP TABLE IF EXISTS `ent_dict_coder`;
+CREATE TABLE IF NOT EXISTS `ent_dict_coder` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Code` varchar(45) NOT NULL,
+  `Name` varchar(256) NOT NULL,
+  `SysMemberID` int(11) unsigned NOT NULL,
+  `Approved` bit(1) NOT NULL COMMENT '已核准',
+  `Description` varchar(256) NOT NULL COMMENT '组成部分描述',
+  `Comment` varchar(256) DEFAULT NULL,
+  `IsDeleted` bit(1) NOT NULL,
+  `Version` bigint(19) NOT NULL,
+  `CreatedAt` datetime DEFAULT NULL,
+  `UpdatedAt` datetime DEFAULT NULL,
+  `CreatedBy` varchar(128) DEFAULT NULL,
+  `ModifiedBy` varchar(128) DEFAULT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `FK_EntDictCoder_To_SysMember` (`SysMemberID`),
+  CONSTRAINT `FK_EntDictCoder_To_SysMember` FOREIGN KEY (`SysMemberID`) REFERENCES `sys_member` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='编码规则表';
+
+-- 数据导出被取消选择。
+-- 导出  表 sourcetracerdb.ent_dict_coder_detail 结构
+DROP TABLE IF EXISTS `ent_dict_coder_detail`;
+CREATE TABLE IF NOT EXISTS `ent_dict_coder_detail` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `CoderID` int(11) NOT NULL,
+  `Seq` int(11) NOT NULL COMMENT '序号',
+  `Type` int(11) NOT NULL COMMENT '类别',
+  `FieldValue` varchar(50) DEFAULT NULL COMMENT '码值',
+  `FieldSize` int(11) NOT NULL COMMENT '长度',
+  `Comment` varchar(256) DEFAULT NULL,
+  `Version` bigint(19) NOT NULL,
+  `CreatedAt` datetime DEFAULT NULL,
+  `UpdatedAt` datetime DEFAULT NULL,
+  `CreatedBy` varchar(128) DEFAULT NULL,
+  `ModifiedBy` varchar(128) DEFAULT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `FK_EntDictCoderDetails_To_EntDictCoder` (`CoderID`),
+  CONSTRAINT `FK_EntDictCoderDetails_To_EntDictCoder` FOREIGN KEY (`CoderID`) REFERENCES `ent_dict_coder` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='编码规则明细表';
+
+-- 数据导出被取消选择。
+-- 导出  表 sourcetracerdb.ent_dict_dealer 结构
+DROP TABLE IF EXISTS `ent_dict_dealer`;
+CREATE TABLE IF NOT EXISTS `ent_dict_dealer` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Name` varchar(256) NOT NULL,
+  `Code` varchar(45) NOT NULL,
+  `Linkman` varchar(45) DEFAULT NULL,
+  `Tel` varchar(45) DEFAULT NULL,
+  `Mobile` varchar(45) DEFAULT NULL,
+  `Email` varchar(45) DEFAULT NULL,
+  `Address` varchar(45) DEFAULT NULL,
+  `Fax` varchar(45) DEFAULT NULL,
+  `SysMemberID` int(11) unsigned NOT NULL,
+  `Region_ID` int(11) DEFAULT NULL COMMENT '区域',
+  `Comment` varchar(45) DEFAULT NULL,
+  `IsDeleted` bit(1) NOT NULL,
+  `Version` bigint(19) NOT NULL,
+  `CreatedAt` datetime DEFAULT NULL,
+  `UpdatedAt` datetime DEFAULT NULL,
+  `CreatedBy` varchar(128) DEFAULT NULL,
+  `ModifiedBy` varchar(128) DEFAULT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `FK_EntDictDealer_To_DictRegion_idx` (`Region_ID`),
+  KEY `FK_EntDictDealer_To_Sysmember_idx` (`SysMemberID`),
+  CONSTRAINT `FK_EntDictDealer_To_DictRegion` FOREIGN KEY (`Region_ID`) REFERENCES `dict_region` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `FK_EntDictDealer_To_Sysmember` FOREIGN KEY (`SysMemberID`) REFERENCES `sys_member` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+-- 数据导出被取消选择。
+-- 导出  表 sourcetracerdb.ent_dict_supplier 结构
+DROP TABLE IF EXISTS `ent_dict_supplier`;
+CREATE TABLE IF NOT EXISTS `ent_dict_supplier` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Name` varchar(256) NOT NULL,
+  `Code` varchar(45) NOT NULL,
+  `Linkman` varchar(45) DEFAULT NULL,
+  `Tel` varchar(45) DEFAULT NULL,
+  `Mobile` varchar(45) DEFAULT NULL,
+  `Email` varchar(45) DEFAULT NULL,
+  `Address` varchar(45) DEFAULT NULL,
+  `Fax` varchar(45) DEFAULT NULL,
+  `SysMemberID` int(11) unsigned NOT NULL,
+  `Comment` varchar(45) DEFAULT NULL,
+  `IsDeleted` bit(1) NOT NULL,
+  `Version` bigint(19) NOT NULL,
+  `CreatedAt` datetime DEFAULT NULL,
+  `UpdatedAt` datetime DEFAULT NULL,
+  `CreatedBy` varchar(128) DEFAULT NULL,
+  `ModifiedBy` varchar(128) DEFAULT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `FK_EntDictSupplier_To_Sysmember_idx` (`SysMemberID`),
+  CONSTRAINT `FK_EntDictSupplier_To_Sysmember` FOREIGN KEY (`SysMemberID`) REFERENCES `sys_member` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- 数据导出被取消选择。
 -- 导出  表 sourcetracerdb.sys_member 结构
+DROP TABLE IF EXISTS `sys_member`;
 CREATE TABLE IF NOT EXISTS `sys_member` (
   `ID` int(4) unsigned zerofill NOT NULL,
   `Region_ID` int(11) NOT NULL COMMENT '区域',
@@ -158,6 +264,7 @@ CREATE TABLE IF NOT EXISTS `sys_member` (
 
 -- 数据导出被取消选择。
 -- 导出  表 sourcetracerdb.sys_role 结构
+DROP TABLE IF EXISTS `sys_role`;
 CREATE TABLE IF NOT EXISTS `sys_role` (
   `Id` varchar(64) NOT NULL,
   `Comment` varchar(256) DEFAULT NULL,
@@ -167,6 +274,7 @@ CREATE TABLE IF NOT EXISTS `sys_role` (
 
 -- 数据导出被取消选择。
 -- 导出  表 sourcetracerdb.sys_role_permission 结构
+DROP TABLE IF EXISTS `sys_role_permission`;
 CREATE TABLE IF NOT EXISTS `sys_role_permission` (
   `Role_ID` varchar(64) NOT NULL,
   `Function_ID` varchar(64) NOT NULL,
@@ -179,6 +287,7 @@ CREATE TABLE IF NOT EXISTS `sys_role_permission` (
 
 -- 数据导出被取消选择。
 -- 导出  表 sourcetracerdb.sys_user 结构
+DROP TABLE IF EXISTS `sys_user`;
 CREATE TABLE IF NOT EXISTS `sys_user` (
   `UserId` varchar(64) NOT NULL,
   `Comment` varchar(255) DEFAULT NULL,
@@ -213,6 +322,7 @@ CREATE TABLE IF NOT EXISTS `sys_user` (
 
 -- 数据导出被取消选择。
 -- 导出  表 sourcetracerdb.sys_user_in_role 结构
+DROP TABLE IF EXISTS `sys_user_in_role`;
 CREATE TABLE IF NOT EXISTS `sys_user_in_role` (
   `user_id` varchar(64) NOT NULL,
   `role_id` varchar(64) NOT NULL,
@@ -224,6 +334,7 @@ CREATE TABLE IF NOT EXISTS `sys_user_in_role` (
 
 -- 数据导出被取消选择。
 -- 导出  表 sourcetracerdb.test_order 结构
+DROP TABLE IF EXISTS `test_order`;
 CREATE TABLE IF NOT EXISTS `test_order` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `order_number` varchar(255) DEFAULT NULL,
@@ -237,6 +348,7 @@ CREATE TABLE IF NOT EXISTS `test_order` (
 
 -- 数据导出被取消选择。
 -- 导出  表 sourcetracerdb.test_order_item 结构
+DROP TABLE IF EXISTS `test_order_item`;
 CREATE TABLE IF NOT EXISTS `test_order_item` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `quantity` int(11) DEFAULT NULL,
@@ -252,6 +364,7 @@ CREATE TABLE IF NOT EXISTS `test_order_item` (
 
 -- 数据导出被取消选择。
 -- 导出  表 sourcetracerdb.test_product 结构
+DROP TABLE IF EXISTS `test_product`;
 CREATE TABLE IF NOT EXISTS `test_product` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
@@ -261,6 +374,7 @@ CREATE TABLE IF NOT EXISTS `test_product` (
 
 -- 数据导出被取消选择。
 -- 导出  表 sourcetracerdb.test_user 结构
+DROP TABLE IF EXISTS `test_user`;
 CREATE TABLE IF NOT EXISTS `test_user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `age` int(11) NOT NULL,
