@@ -22,11 +22,15 @@ import org.springframework.stereotype.Service;
 
 import com.yida.boottracer.domain.AuditModel;
 import com.yida.boottracer.domain.EntDictCategory;
+import com.yida.boottracer.domain.EntDictCoder;
+import com.yida.boottracer.domain.EntDictCoderDetail;
 import com.yida.boottracer.domain.EntDictDealer;
 import com.yida.boottracer.domain.EntDictSupplier;
 import com.yida.boottracer.domain.PagingModel;
 import com.yida.boottracer.domain.SysMember;
+import com.yida.boottracer.enums.CoderType;
 import com.yida.boottracer.repo.EntDictCategoryRepository;
+import com.yida.boottracer.repo.EntDictCoderRepository;
 import com.yida.boottracer.repo.EntDictDealerRepository;
 import com.yida.boottracer.repo.EntDictSupplierRepository;
 import com.yida.web.exception.ResourceNotFoundException;
@@ -35,6 +39,11 @@ import com.yida.web.exception.ResourceNotFoundException;
 //@Transactional
 public class EntDictService
 {
+	/**
+	 * 默认编码规则的编号
+	 */
+	public static final String DEFAULT_CODER_CODE="01";
+	
 	private JpaContext jpaContext;
 	
     @PersistenceContext
@@ -46,6 +55,9 @@ public class EntDictService
 	private EntDictSupplierRepository entDictSupplierRepository;
 	@Autowired
 	private EntDictDealerRepository entDictDealerRepository;
+	@Autowired
+	private EntDictCoderRepository entDictCoderRepository;
+	
 	
 	@Autowired
 	public EntDictService(JpaContext jpaContext)
@@ -198,5 +210,93 @@ public class EntDictService
 		}
 		
 		return entDictDealerRepository.save(item);
+	}
+
+	/**
+	 * 创建默认的编码规则数据
+	 * @param ent
+	 * @return
+	 */
+	public EntDictCoder createDefaultCoder(SysMember ent)
+	{
+		Optional<EntDictCoder> r = entDictCoderRepository.findBySysMemberAndCode(ent, DEFAULT_CODER_CODE);
+		if(r.isPresent())
+		{
+			return r.get();
+		}
+		else 
+		{
+			EntDictCoder newItem = new EntDictCoder();
+			newItem.setApproved(true);
+			
+			newItem.setCode(DEFAULT_CODER_CODE);
+			newItem.setComment("本规则为系统默认生成规则");
+			newItem.setIsDeleted(false);
+			newItem.setName("默认规则");
+			newItem.setSysMember(ent);
+			
+			EntDictCoderDetail detail=new EntDictCoderDetail();
+			detail.setSeq(1);
+			detail.setName(CoderType.EntCode.getName());
+			detail.setEntDictCoder(newItem);
+			detail.setFieldSize(ent.getDisplayId().length());
+			detail.setFieldValue(ent.getDisplayId());			
+			detail.setType(CoderType.EntCode.getId());
+			
+			newItem.getDetails().add(detail);
+			
+			
+			detail=new EntDictCoderDetail();
+			detail.setSeq(2);
+			detail.setName(CoderType.ProductCode.getName());
+			detail.setEntDictCoder(newItem);
+			detail.setFieldSize(2);
+			detail.setFieldValue("自动识别");			
+			detail.setType(CoderType.ProductCode.getId());
+			
+			newItem.getDetails().add(detail);
+			
+			detail=new EntDictCoderDetail();
+			detail.setSeq(3);
+			detail.setName(CoderType.SeqCode.getName());
+			detail.setEntDictCoder(newItem);
+			detail.setFieldSize(7);
+			detail.setFieldValue("自动生成");			
+			detail.setType(CoderType.SeqCode.getId());
+			
+			newItem.getDetails().add(detail);
+			
+			detail=new EntDictCoderDetail();
+			detail.setSeq(4);
+			detail.setName(CoderType.CheckCode.getName());
+			detail.setEntDictCoder(newItem);
+			detail.setFieldSize(5);
+			detail.setFieldValue("自动生成");			
+			detail.setType(CoderType.CheckCode.getId());
+			
+			newItem.getDetails().add(detail);
+			
+			detail=new EntDictCoderDetail();
+			detail.setSeq(5);
+			detail.setName(CoderType.DateCode.getName());
+			detail.setEntDictCoder(newItem);
+			detail.setFieldSize(8);
+			detail.setFieldValue("YYYYMMDD");
+			detail.setType(CoderType.DateCode.getId());
+			
+			newItem.getDetails().add(detail);
+			
+			newItem.setDescription(String.format("%s+%s+%s+%s+%s", 
+					CoderType.EntCode.getName(),
+					CoderType.ProductCode.getName(),
+					CoderType.SeqCode.getName(),
+					CoderType.CheckCode.getName(),
+					CoderType.DateCode.getName()
+					));
+			
+			newItem = entDictCoderRepository.saveAndFlush(newItem);
+			
+			return newItem;
+		}
 	}
 }

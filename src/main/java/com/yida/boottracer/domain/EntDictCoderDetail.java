@@ -33,7 +33,8 @@ public class EntDictCoderDetail extends AuditModel implements java.io.Serializab
 	private String fieldValue;
 	private int fieldSize;
 	private String comment;
-
+	private String name;
+	
 	public EntDictCoderDetail()
 	{
 	}
@@ -87,6 +88,17 @@ public class EntDictCoderDetail extends AuditModel implements java.io.Serializab
 		this.seq = seq;
 	}
 
+	@Column(name = "Name", nullable = false, length = 256)
+	public String getName()
+	{
+		return this.name;
+	}
+
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+	
 	@Column(name = "Type", nullable = false)
 	public int getType()
 	{

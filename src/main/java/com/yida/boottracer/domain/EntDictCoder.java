@@ -44,6 +44,8 @@ public class EntDictCoder extends AuditModel implements java.io.Serializable
 	private String comment;
 	private boolean isDeleted;
 	private Set<EntDictCoderDetail> details = new HashSet<>();
+	
+	private String description;
 
 	public EntDictCoder()
 	{
@@ -118,7 +120,18 @@ public class EntDictCoder extends AuditModel implements java.io.Serializable
 	{
 		this.approved = approved;
 	}
+	
+	@Column(name = "Description", length = 256)
+	public String getDescription()
+	{
+		return this.description;
+	}
 
+	public void setDescription(String description)
+	{
+		this.description = description;
+	}	
+	
 	@Column(name = "Comment", length = 45)
 	public String getComment()
 	{

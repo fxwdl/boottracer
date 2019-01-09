@@ -37,7 +37,7 @@ public class EntDictCategory extends AuditModel implements java.io.Serializable
 	private Long version;
 	private boolean isDeleted;
 
-	private String description;
+	
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -102,17 +102,7 @@ public class EntDictCategory extends AuditModel implements java.io.Serializable
 		this.name = name;
 	}
 	
-	@Column(name = "Description", length = 256)
-	public String getDescription()
-	{
-		return this.description;
-	}
 
-	public void setDescription(String description)
-	{
-		this.description = description;
-	}
-	
 	@Column(name = "Comment", length = 256)
 	public String getComment()
 	{
