@@ -37,8 +37,6 @@ public class EntDictCategory extends AuditModel implements java.io.Serializable
 	private Long version;
 	private boolean isDeleted;
 
-	
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID", unique = true, nullable = false)
@@ -148,4 +146,5 @@ public class EntDictCategory extends AuditModel implements java.io.Serializable
 	{
 		this.version = version;
 	}
+
 }

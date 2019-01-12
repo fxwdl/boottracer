@@ -66,4 +66,7 @@
 	<table-filter match-name="ent_dict_coder_detail"
 		match-catalog="sourcetracerdb">
 	</table-filter>
+	<table-filter match-name="ent_dict_product"
+		match-catalog="sourcetracerdb">
+	</table-filter>
 </hibernate-reverse-engineering>

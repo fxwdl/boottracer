@@ -43,7 +43,7 @@ public class EntDictCoder extends AuditModel implements java.io.Serializable
 	private boolean approved;
 	private String comment;
 	private boolean isDeleted;
-	private Set<EntDictCoderDetail> details = new HashSet<>();
+	private Set<EntDictCoderDetail> details = new HashSet<>();	
 	
 	private String description;
 
@@ -165,5 +165,4 @@ public class EntDictCoder extends AuditModel implements java.io.Serializable
 	{
 		this.details = details;
 	}
-
 }
