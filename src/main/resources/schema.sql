@@ -137,7 +137,7 @@ CREATE TABLE IF NOT EXISTS `ent_dict_coder` (
   PRIMARY KEY (`ID`),
   KEY `FK_EntDictCoder_To_SysMember` (`SysMemberID`),
   CONSTRAINT `FK_EntDictCoder_To_SysMember` FOREIGN KEY (`SysMemberID`) REFERENCES `sys_member` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='编码规则表';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='编码规则表';
 
 -- 数据导出被取消选择。
 -- 导出  表 sourcetracerdb.ent_dict_coder_detail 结构
@@ -146,6 +146,7 @@ CREATE TABLE IF NOT EXISTS `ent_dict_coder_detail` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `CoderID` int(11) NOT NULL,
   `Seq` int(11) NOT NULL COMMENT '序号',
+  `Name` varchar(256) NOT NULL,
   `Type` int(11) NOT NULL COMMENT '类别',
   `FieldValue` varchar(50) DEFAULT NULL COMMENT '码值',
   `FieldSize` int(11) NOT NULL COMMENT '长度',
@@ -158,7 +159,7 @@ CREATE TABLE IF NOT EXISTS `ent_dict_coder_detail` (
   PRIMARY KEY (`ID`),
   KEY `FK_EntDictCoderDetails_To_EntDictCoder` (`CoderID`),
   CONSTRAINT `FK_EntDictCoderDetails_To_EntDictCoder` FOREIGN KEY (`CoderID`) REFERENCES `ent_dict_coder` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='编码规则明细表';
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='编码规则明细表';
 
 -- 数据导出被取消选择。
 -- 导出  表 sourcetracerdb.ent_dict_dealer 结构
@@ -188,6 +189,49 @@ CREATE TABLE IF NOT EXISTS `ent_dict_dealer` (
   CONSTRAINT `FK_EntDictDealer_To_DictRegion` FOREIGN KEY (`Region_ID`) REFERENCES `dict_region` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_EntDictDealer_To_Sysmember` FOREIGN KEY (`SysMemberID`) REFERENCES `sys_member` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+-- 数据导出被取消选择。
+-- 导出  表 sourcetracerdb.ent_dict_product 结构
+DROP TABLE IF EXISTS `ent_dict_product`;
+CREATE TABLE IF NOT EXISTS `ent_dict_product` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `SysMemberID` int(11) unsigned NOT NULL,
+  `CoderID` int(11) NOT NULL,
+  `Code` varchar(45) NOT NULL,
+  `CategoryID` int(11) NOT NULL,
+  `Name` varchar(256) NOT NULL,
+  `Spec` varchar(256) DEFAULT NULL COMMENT '规格',
+  `Period` varchar(256) DEFAULT NULL COMMENT '保质期',
+  `Gift` int(11) DEFAULT '0' COMMENT '查询积分',
+  `Pic` varchar(512) DEFAULT NULL COMMENT '产品图片',
+  `DescVideo` varchar(512) DEFAULT NULL COMMENT '产品介绍视频',
+  `OperVideo` varchar(512) DEFAULT NULL COMMENT '产品操作视频',
+  `OnlineVideo` varchar(2048) DEFAULT NULL COMMENT '在线视频地址',
+  `RichDescription` mediumtext COMMENT '富文本产品描述',
+  `Comment` varchar(256) DEFAULT NULL,
+  `UserCustom1` varchar(256) DEFAULT NULL,
+  `UserCustom2` varchar(256) DEFAULT NULL,
+  `UserCustom3` varchar(256) DEFAULT NULL,
+  `UserCustom4` varchar(256) DEFAULT NULL,
+  `UserCustom5` varchar(256) DEFAULT NULL,
+  `UserCustom6` varchar(256) DEFAULT NULL,
+  `UserCustom7` varchar(256) DEFAULT NULL,
+  `UserCustom8` varchar(256) DEFAULT NULL,
+  `UserCustom9` varchar(256) DEFAULT NULL,
+  `UserCustom10` varchar(256) DEFAULT NULL,
+  `Version` bigint(19) NOT NULL,
+  `CreatedAt` datetime DEFAULT NULL,
+  `UpdatedAt` datetime DEFAULT NULL,
+  `CreatedBy` varchar(128) DEFAULT NULL,
+  `ModifiedBy` varchar(128) DEFAULT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `FK_EntDictProduct_To_EntDictCoder` (`CoderID`),
+  KEY `FK_EntDictProduct_To_EntDicCategory` (`CategoryID`),
+  KEY `FK_EntDictProduct_To_SysMember` (`SysMemberID`),
+  CONSTRAINT `FK_EntDictProduct_To_EntDicCategory` FOREIGN KEY (`CategoryID`) REFERENCES `ent_dict_category` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `FK_EntDictProduct_To_EntDictCoder` FOREIGN KEY (`CoderID`) REFERENCES `ent_dict_coder` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `FK_EntDictProduct_To_SysMember` FOREIGN KEY (`SysMemberID`) REFERENCES `sys_member` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- 数据导出被取消选择。
 -- 导出  表 sourcetracerdb.ent_dict_supplier 结构

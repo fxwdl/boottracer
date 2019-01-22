@@ -58,7 +58,7 @@ public class EntDictProduct extends AuditModel implements java.io.Serializable
 	private String userCustom8;
 	private String userCustom9;
 	private String userCustom10;
-	
+	private boolean isDeleted;	
 	private SysMember sysMember;
 
 	public EntDictProduct()
@@ -169,7 +169,7 @@ public class EntDictProduct extends AuditModel implements java.io.Serializable
 		this.gift = gift;
 	}
 
-	@Column(name = "Pic", length = 512)
+	@Column(name = "Pic", length = 2048)
 	public String getPic()
 	{
 		return this.pic;
@@ -180,7 +180,7 @@ public class EntDictProduct extends AuditModel implements java.io.Serializable
 		this.pic = pic;
 	}
 
-	@Column(name = "DescVideo", length = 512)
+	@Column(name = "DescVideo", length = 2048)
 	public String getDescVideo()
 	{
 		return this.descVideo;
@@ -191,7 +191,7 @@ public class EntDictProduct extends AuditModel implements java.io.Serializable
 		this.descVideo = descVideo;
 	}
 
-	@Column(name = "OperVideo", length = 512)
+	@Column(name = "OperVideo", length = 2048)
 	public String getOperVideo()
 	{
 		return this.operVideo;
@@ -356,5 +356,16 @@ public class EntDictProduct extends AuditModel implements java.io.Serializable
 	public void setSysMember(SysMember sysMember)
 	{
 		this.sysMember = sysMember;
+	}
+	
+	@Column(name = "IsDeleted", nullable = false)
+	public boolean isIsDeleted()
+	{
+		return this.isDeleted;
+	}
+
+	public void setIsDeleted(boolean isDeleted)
+	{
+		this.isDeleted = isDeleted;
 	}
 }

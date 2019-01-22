@@ -27,6 +27,10 @@
     "bootstrap-dialog":"",
     "q":"",
     "vuelidate":"",
-    "bootstrap-validator":""
+    "bootstrap-validator":"",
+    "wangEditor":"",
+    "bootstrap-fileinput":"",
+    "jasny-bootstrap":"",
+    "jQuery-File-Upload":""
 	}
 }

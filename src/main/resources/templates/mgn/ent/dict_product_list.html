@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{_layout/main}"
+ th:with="module='资料管理',functionName='产品管理',smallTitle=''">
+
+<head>
+	<title>产品管理</title>
+	<link rel="stylesheet" th:href="@{/bower_components/bootstrap-dialog/dist/css/bootstrap-dialog.css}">
+	<link rel="stylesheet" th:href="@{/bower_components/bootstrap-table/dist/bootstrap-table.css}">
+</head>
+
+<body>
+	<div class="container-fluid" layout:fragment="doBody">
+		<div class="form-inline" role="form">
+			<div class="form-group">
+				<label for="ds_category">产品类型：</label>
+				<select id="ds_category" name="ds_category" class="form-control">
+					<option value=""> -- 请选择 -- </option>
+					<option th:each="t:${ds_category}" th:value="${t.id}" th:text="${t.name}"></option>
+				</select>
+			</div>
+			<button id="btnSearch" class="btn btn-default"><i class="glyphicon glyphicon-search" style="padding-right: 3px;"></i><span>搜索</span></button>
+		</div>
+
+		<div id="toolbar" class="btn-group">
+			<button type="button" id="addNew" class="btn btn-default">
+				<i class="glyphicon glyphicon-plus" style="padding-right: 3px;"></i><span>新增</span>
+			</button>
+		</div>
+		<table data-toggle="table" id="tbl" data-toolbar="#toolbar" data-show-export="true" data-cache="false" data-search="true"
+		 data-search-on-enter-key="false" data-show-refresh="true" data-id-field="id" data-click-to-select="true"
+		 data-single-select="true" data-striped="true" data-sort-name="code" data-sort-order="asc" data-show-columns="true"
+		 data-select-item-name="myRadioName" data-side-pagination="server" data-pagination="true" data-page-list="[10, 25, 50, 100, ALL]"
+		 th:data-url="@{/mgn/ent/dictProduct/GetData}" data-query-params="queryParams">
+			<thead>
+				<tr>
+					<th data-field="entDictCategory.name" data-halign="center" data-align="left" data-sortable="true">产品类别</th>
+					<th data-field="code" data-halign="center" data-align="left" data-sortable="true">编号</th>
+					<th data-field="name" data-halign="center" data-align="left" data-sortable="true">名称</th>
+					<th data-field="spec" data-halign="center" data-align="left" data-sortable="true">规格</th>
+					<th data-field="period" data-halign="center" data-align="left" data-sortable="true">保质期</th>
+					<th data-field="comment" data-halign="center" data-align="left" data-sortable="true">备注</th>
+					<th data-field="operate" data-halign="center" data-align="center" data-formatter="operateFormatter" data-events="operateEvents">操作</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+	<th:block layout:fragment="script">
+		<script th:src="@{/bower_components/bootstrap-dialog/dist/js/bootstrap-dialog.js}"></script>
+		<script th:src="@{/js/bootstrap-dialog-zh-CN.js}"></script>
+		<script th:src="@{/js/bootstrap-dialog-Ext.js}"></script>
+		<script th:src="@{/bower_components/bootstrap-table/dist/bootstrap-table.js}"></script>
+		<script th:src="@{/bower_components/bootstrap-table/dist/extensions/export/bootstrap-table-export.js}"></script>
+		<!--/* https://github.com/hhurz/tableExport.jquery.plugin */-->
+		<script th:src="@{/bower_components/tableExport.jquery.plugin/tableExport.js}"></script>
+		<script th:src="@{/bower_components/bootstrap-table/dist/locale/bootstrap-table-zh-CN.js}"></script>
+		<script th:src="@{/js/common.js}"></script>
+		<script type="text/javascript">
+			$(function () {
+				$('#btnSearch').click(function () {
+					refresh();
+				});
+				$('#addNew').click(function () {
+					window.location.href = ctx + "mgn/ent/dict_product_edit.html";
+				});
+			});
+
+			function queryParams(params) {
+				var c = $('select[name=ds_category]').val();
+				var o = $.extend(params, { category: c });
+				return o;
+			}
+			window.operateEvents = {
+				'click .edit': function (e, value, row, index) {
+					window.location.href = ctx + "mgn/ent/dict_product_edit.html?id=" + row.id;
+				},
+				'click .remove': function (e, value, row, index) {
+					$.showConfirm("确定要删除'" + row.name + "'吗?", function () {
+						$.get(ctx + "mgn/ent/dictProduct/Delete/" + row.id)
+							.done(function (d) {
+								$.showSuccessTimeout('删除操作成功！');
+								$('#tbl').bootstrapTable('remove', {
+									field: 'id',
+									values: [row.id]
+								});
+							})
+							.fail(function (e) {
+								$.showErr("执行操作失败!");
+							});
+					});
+				}
+			};
+
+
+			function refresh() {
+				$('#tbl').bootstrapTable('refresh');
+			}
+		</script>
+	</th:block>
+</body>
+
+</html>
