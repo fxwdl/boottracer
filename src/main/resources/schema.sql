@@ -11,6 +11,39 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
+-- 导出  表 sourcetracerdb.biz_payment 结构
+DROP TABLE IF EXISTS `biz_payment`;
+CREATE TABLE IF NOT EXISTS `biz_payment` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `PayCode` varchar(50) NOT NULL COMMENT '汇款编号',
+  `SysMemberID` int(11) unsigned NOT NULL,
+  `PayType` int(11) NOT NULL COMMENT '支付类型：0生码；1账户有效期',
+  `PayQty` int(11) NOT NULL COMMENT '购买数量',
+  `PayMoney` decimal(10,2) NOT NULL COMMENT '金额',
+  `PayMethodName` varchar(256) NOT NULL COMMENT '付款方式名称',
+  `Remitter` varchar(50) NOT NULL COMMENT '汇款人',
+  `Tel` varchar(256) NOT NULL COMMENT '联系电话',
+  `PayDate` date NOT NULL COMMENT '汇款日期',
+  `Comment` varchar(500) NOT NULL COMMENT '备注',
+  `Pic1` varchar(2048) NOT NULL COMMENT '凭证图片1',
+  `Pic2` varchar(2048) NOT NULL COMMENT '凭证图片2',
+  `Pic3` varchar(2048) NOT NULL COMMENT '凭证图片3',
+  `Pic4` varchar(2048) NOT NULL COMMENT '凭证图片4',
+  `Pic5` varchar(2048) NOT NULL COMMENT '凭证图片5',
+  `Approved` bit(1) NOT NULL COMMENT '是否审批',
+  `ApproveUser` varchar(64) NOT NULL COMMENT '审批人',
+  `AppproveTime` datetime NOT NULL COMMENT '审批日期',
+  `Version` bigint(19) NOT NULL,
+  `CreatedAt` datetime DEFAULT NULL,
+  `UpdatedAt` datetime DEFAULT NULL,
+  `CreatedBy` varchar(128) DEFAULT NULL,
+  `ModifiedBy` varchar(128) DEFAULT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `FK_Payment_To_SysMember` (`SysMemberID`),
+  CONSTRAINT `FK_Payment_To_SysMember` FOREIGN KEY (`SysMemberID`) REFERENCES `sys_member` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='续费单';
+
+-- 数据导出被取消选择。
 -- 导出  表 sourcetracerdb.dict_common 结构
 DROP TABLE IF EXISTS `dict_common`;
 CREATE TABLE IF NOT EXISTS `dict_common` (
@@ -115,7 +148,7 @@ CREATE TABLE IF NOT EXISTS `ent_dict_category` (
   KEY `FK_EntDictCategory_To_EntDictCategory_idx` (`ParentID`),
   CONSTRAINT `FK_EntDictCategory_To_EntDictCategory` FOREIGN KEY (`ParentID`) REFERENCES `ent_dict_category` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_EntDictCategory_To_SysMember` FOREIGN KEY (`SysMemberID`) REFERENCES `sys_member` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COMMENT='企业产品分类字典';
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='企业产品分类字典';
 
 -- 数据导出被取消选择。
 -- 导出  表 sourcetracerdb.ent_dict_coder 结构
@@ -188,7 +221,7 @@ CREATE TABLE IF NOT EXISTS `ent_dict_dealer` (
   KEY `FK_EntDictDealer_To_Sysmember_idx` (`SysMemberID`),
   CONSTRAINT `FK_EntDictDealer_To_DictRegion` FOREIGN KEY (`Region_ID`) REFERENCES `dict_region` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_EntDictDealer_To_Sysmember` FOREIGN KEY (`SysMemberID`) REFERENCES `sys_member` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- 数据导出被取消选择。
 -- 导出  表 sourcetracerdb.ent_dict_product 结构
@@ -203,11 +236,12 @@ CREATE TABLE IF NOT EXISTS `ent_dict_product` (
   `Spec` varchar(256) DEFAULT NULL COMMENT '规格',
   `Period` varchar(256) DEFAULT NULL COMMENT '保质期',
   `Gift` int(11) DEFAULT '0' COMMENT '查询积分',
-  `Pic` varchar(512) DEFAULT NULL COMMENT '产品图片',
-  `DescVideo` varchar(512) DEFAULT NULL COMMENT '产品介绍视频',
-  `OperVideo` varchar(512) DEFAULT NULL COMMENT '产品操作视频',
+  `Pic` varchar(2048) DEFAULT NULL COMMENT '产品图片',
+  `DescVideo` varchar(2048) DEFAULT NULL COMMENT '产品介绍视频',
+  `OperVideo` varchar(2048) DEFAULT NULL COMMENT '产品操作视频',
   `OnlineVideo` varchar(2048) DEFAULT NULL COMMENT '在线视频地址',
   `RichDescription` mediumtext COMMENT '富文本产品描述',
+  `IsDeleted` bit(1) NOT NULL,
   `Comment` varchar(256) DEFAULT NULL,
   `UserCustom1` varchar(256) DEFAULT NULL,
   `UserCustom2` varchar(256) DEFAULT NULL,
@@ -231,7 +265,7 @@ CREATE TABLE IF NOT EXISTS `ent_dict_product` (
   CONSTRAINT `FK_EntDictProduct_To_EntDicCategory` FOREIGN KEY (`CategoryID`) REFERENCES `ent_dict_category` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_EntDictProduct_To_EntDictCoder` FOREIGN KEY (`CoderID`) REFERENCES `ent_dict_coder` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_EntDictProduct_To_SysMember` FOREIGN KEY (`SysMemberID`) REFERENCES `sys_member` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 -- 数据导出被取消选择。
 -- 导出  表 sourcetracerdb.ent_dict_supplier 结构
@@ -257,7 +291,7 @@ CREATE TABLE IF NOT EXISTS `ent_dict_supplier` (
   PRIMARY KEY (`ID`),
   KEY `FK_EntDictSupplier_To_Sysmember_idx` (`SysMemberID`),
   CONSTRAINT `FK_EntDictSupplier_To_Sysmember` FOREIGN KEY (`SysMemberID`) REFERENCES `sys_member` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- 数据导出被取消选择。
 -- 导出  表 sourcetracerdb.sys_member 结构

@@ -11,6 +11,11 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
+-- 正在导出表  sourcetracerdb.biz_payment 的数据：~0 rows (大约)
+DELETE FROM `biz_payment`;
+/*!40000 ALTER TABLE `biz_payment` DISABLE KEYS */;
+/*!40000 ALTER TABLE `biz_payment` ENABLE KEYS */;
+
 -- 正在导出表  sourcetracerdb.dict_common 的数据：~78 rows (大约)
 DELETE FROM `dict_common`;
 /*!40000 ALTER TABLE `dict_common` DISABLE KEYS */;
@@ -3637,17 +3642,19 @@ INSERT INTO `dict_region` (`ID`, `Code`, `Name`, `Parent_ID`, `FullName`, `Level
 	(5000, '511681', '华蓥市', 286, '四川省广安市华蓥市', 3, 0, 'Huaying Shi', 'HYC', 0);
 /*!40000 ALTER TABLE `dict_region` ENABLE KEYS */;
 
--- 正在导出表  sourcetracerdb.dict_system_function 的数据：~9 rows (大约)
+-- 正在导出表  sourcetracerdb.dict_system_function 的数据：~11 rows (大约)
 DELETE FROM `dict_system_function`;
 /*!40000 ALTER TABLE `dict_system_function` DISABLE KEYS */;
 INSERT INTO `dict_system_function` (`Id`, `CssClass`, `DisplayName`, `FullName`, `FunType`, `Name`, `Page`, `Seq`, `ParentId`) VALUES
 	('1f278f4d-118f-11e9-882f-3c970ea599ca', 'fa fa-plane', '经销商管理', 'mgn-info-dict_dealer_list', 1, 'dict_dealer_list', 'mgn/ent/dict_dealer_list.html', 'B_07', 'ab3a9f73-077c-11e9-97bc-3c970ea599ca'),
 	('2a5c67c2-f888-11e8-8fb3-3c970ea599ca', 'fa fa-book', '通用字典', 'mgn-system-dict_common_list', 1, 'dict_common_list', 'mgn/system/dict_common_list.html', 'Z_01', 'e589bb14-f887-11e8-8fb3-3c970ea599ca'),
 	('2f1be29a-0b66-11e9-97bc-3c970ea599ca', 'fa  fa-laptop', '业务管理', 'mgn-biz', 0, 'biz', 'mgn', 'D', NULL),
+	('354094a5-1bed-11e9-b724-3c970ea599ca', '', '产品管理-编辑', 'mgn-info-dict_product_edit', 3, 'dict_product_edit', 'dict_product_edit.html', 'B_03_01', 'ab3a9f73-077c-11e9-97bc-3c970ea599ca'),
 	('7cdeee12-0ed9-11e9-882f-3c970ea599ca', 'fa  fa-gift', '产品类别管理', 'mgn-info-dict_category_list', 1, 'dict_category_list', 'mgn/ent/dict_category_list.html', 'B_02', 'ab3a9f73-077c-11e9-97bc-3c970ea599ca'),
 	('89ed5769-0b66-11e9-97bc-3c970ea599ca', 'fa fa-home', '企业管理', 'mgn-biz-sys_member_list', 1, 'sys_member_list', 'mgn/biz/sys_member_list.html', 'D_01', '2f1be29a-0b66-11e9-97bc-3c970ea599ca'),
 	('ab3a9f73-077c-11e9-97bc-3c970ea599ca', 'fa fa-info', '资料管理', 'mgn-info', 0, 'info', 'mgn', 'B', NULL),
 	('ab5d51b9-01ff-11e9-97bc-3c970ea599ca', 'fa fa-building', '企业会员类型', 'mgn-system-dict_member_type', 1, 'dict_member_type', 'mgn/system/dict_member_type_list.html', 'Z_02', 'e589bb14-f887-11e8-8fb3-3c970ea599ca'),
+	('b13a0984-1bad-11e9-b724-3c970ea599ca', 'fa  fa-balance-scale', '产品管理', 'mgn-info-dict_product_list', 1, 'dict_product_list', 'mgn/ent/dict_product_list.html', 'B_03', 'ab3a9f73-077c-11e9-97bc-3c970ea599ca'),
 	('dad84696-118e-11e9-882f-3c970ea599ca', 'fa  fa-anchor', '供应商管理', 'mgn-info-dict_supplier_list', 1, 'dict_supplier_list', 'mgn/ent/dict_supplier_list.html', 'B_06', 'ab3a9f73-077c-11e9-97bc-3c970ea599ca'),
 	('e589bb14-f887-11e8-8fb3-3c970ea599ca', 'fa fa-dashboard', '系统管理', 'mgn-system', 0, 'system', 'mgn', 'Z', NULL),
 	('e93d3dee-0b66-11e9-97bc-3c970ea599ca', '', '修改会员信息', 'changeSysMemberInfo', 3, 'save', 'mgn/biz/SysMemberBiz/save', 'D_01_02', '89ed5769-0b66-11e9-97bc-3c970ea599ca'),
@@ -3661,10 +3668,35 @@ INSERT INTO `ent_dict_category` (`ID`, `SysMemberID`, `Code`, `Name`, `ParentID`
 	(4, 1, '01', '噶宁持明州', NULL, '', b'0', 0, '2019-01-03 21:35:01', '2019-01-03 21:35:01', 'syhyd', 'syhyd');
 /*!40000 ALTER TABLE `ent_dict_category` ENABLE KEYS */;
 
--- 正在导出表  sourcetracerdb.ent_dict_dealer 的数据：~0 rows (大约)
+-- 正在导出表  sourcetracerdb.ent_dict_coder 的数据：~0 rows (大约)
+DELETE FROM `ent_dict_coder`;
+/*!40000 ALTER TABLE `ent_dict_coder` DISABLE KEYS */;
+INSERT INTO `ent_dict_coder` (`ID`, `Code`, `Name`, `SysMemberID`, `Approved`, `Description`, `Comment`, `IsDeleted`, `Version`, `CreatedAt`, `UpdatedAt`, `CreatedBy`, `ModifiedBy`) VALUES
+	(1, '01', '默认规则', 1, b'1', '企业代码+产品编码+流水码+随机防伪码+日期码', '本规则为系统默认生成规则', b'0', 0, '2019-01-09 22:46:27', '2019-01-09 22:46:27', 'syhyd', 'syhyd');
+/*!40000 ALTER TABLE `ent_dict_coder` ENABLE KEYS */;
+
+-- 正在导出表  sourcetracerdb.ent_dict_coder_detail 的数据：~5 rows (大约)
+DELETE FROM `ent_dict_coder_detail`;
+/*!40000 ALTER TABLE `ent_dict_coder_detail` DISABLE KEYS */;
+INSERT INTO `ent_dict_coder_detail` (`ID`, `CoderID`, `Seq`, `Name`, `Type`, `FieldValue`, `FieldSize`, `Comment`, `Version`, `CreatedAt`, `UpdatedAt`, `CreatedBy`, `ModifiedBy`) VALUES
+	(1, 1, 4, '随机防伪码', 3, '自动生成', 5, NULL, 0, '2019-01-09 22:46:27', '2019-01-09 22:46:27', 'syhyd', 'syhyd'),
+	(2, 1, 2, '产品编码', 1, '自动识别', 2, NULL, 0, '2019-01-09 22:46:27', '2019-01-09 22:46:27', 'syhyd', 'syhyd'),
+	(3, 1, 1, '企业代码', 0, '00001', 5, NULL, 0, '2019-01-09 22:46:27', '2019-01-09 22:46:27', 'syhyd', 'syhyd'),
+	(4, 1, 5, '日期码', 4, 'YYYYMMDD', 8, NULL, 0, '2019-01-09 22:46:27', '2019-01-09 22:46:27', 'syhyd', 'syhyd'),
+	(5, 1, 3, '流水码', 2, '自动生成', 7, NULL, 0, '2019-01-09 22:46:27', '2019-01-09 22:46:27', 'syhyd', 'syhyd');
+/*!40000 ALTER TABLE `ent_dict_coder_detail` ENABLE KEYS */;
+
+-- 正在导出表  sourcetracerdb.ent_dict_dealer 的数据：~1 rows (大约)
 DELETE FROM `ent_dict_dealer`;
 /*!40000 ALTER TABLE `ent_dict_dealer` DISABLE KEYS */;
 /*!40000 ALTER TABLE `ent_dict_dealer` ENABLE KEYS */;
+
+-- 正在导出表  sourcetracerdb.ent_dict_product 的数据：~1 rows (大约)
+DELETE FROM `ent_dict_product`;
+/*!40000 ALTER TABLE `ent_dict_product` DISABLE KEYS */;
+INSERT INTO `ent_dict_product` (`ID`, `SysMemberID`, `CoderID`, `Code`, `CategoryID`, `Name`, `Spec`, `Period`, `Gift`, `Pic`, `DescVideo`, `OperVideo`, `OnlineVideo`, `RichDescription`, `IsDeleted`, `Comment`, `UserCustom1`, `UserCustom2`, `UserCustom3`, `UserCustom4`, `UserCustom5`, `UserCustom6`, `UserCustom7`, `UserCustom8`, `UserCustom9`, `UserCustom10`, `Version`, `CreatedAt`, `UpdatedAt`, `CreatedBy`, `ModifiedBy`) VALUES
+	(1, 1, 1, '01', 4, '秋吉林巴尊者龙王宝瓶', '', '', 0, '/st/uploadImange/8f582277b55240f3ae1bd8bc6bceac7c.jpg', NULL, NULL, '', '<p>abcd</p>', b'0', '<p>123</p>', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 10, NULL, '2019-01-22 23:19:40', NULL, 'syhyd');
+/*!40000 ALTER TABLE `ent_dict_product` ENABLE KEYS */;
 
 -- 正在导出表  sourcetracerdb.ent_dict_supplier 的数据：~0 rows (大约)
 DELETE FROM `ent_dict_supplier`;
@@ -3687,7 +3719,7 @@ INSERT INTO `sys_role` (`Id`, `Comment`, `Name`) VALUES
 	('ccbe0d7b-077b-11e9-97bc-3c970ea599ca', NULL, '后台员工');
 /*!40000 ALTER TABLE `sys_role` ENABLE KEYS */;
 
--- 正在导出表  sourcetracerdb.sys_role_permission 的数据：~8 rows (大约)
+-- 正在导出表  sourcetracerdb.sys_role_permission 的数据：~10 rows (大约)
 DELETE FROM `sys_role_permission`;
 /*!40000 ALTER TABLE `sys_role_permission` DISABLE KEYS */;
 INSERT INTO `sys_role_permission` (`Role_ID`, `Function_ID`) VALUES
@@ -3697,8 +3729,10 @@ INSERT INTO `sys_role_permission` (`Role_ID`, `Function_ID`) VALUES
 	('841edad4-f7d7-11e8-a03b-3c970ea599ca', 'e589bb14-f887-11e8-8fb3-3c970ea599ca'),
 	('841edad4-f7d7-11e8-a03b-3c970ea599ca', 'e93d3dee-0b66-11e9-97bc-3c970ea599ca'),
 	('a7fa0929-077b-11e9-97bc-3c970ea599ca', '1f278f4d-118f-11e9-882f-3c970ea599ca'),
+	('a7fa0929-077b-11e9-97bc-3c970ea599ca', '354094a5-1bed-11e9-b724-3c970ea599ca'),
 	('a7fa0929-077b-11e9-97bc-3c970ea599ca', '7cdeee12-0ed9-11e9-882f-3c970ea599ca'),
 	('a7fa0929-077b-11e9-97bc-3c970ea599ca', 'ab3a9f73-077c-11e9-97bc-3c970ea599ca'),
+	('a7fa0929-077b-11e9-97bc-3c970ea599ca', 'b13a0984-1bad-11e9-b724-3c970ea599ca'),
 	('a7fa0929-077b-11e9-97bc-3c970ea599ca', 'dad84696-118e-11e9-882f-3c970ea599ca'),
 	('a7fa0929-077b-11e9-97bc-3c970ea599ca', 'f2fb4d19-077c-11e9-97bc-3c970ea599ca');
 /*!40000 ALTER TABLE `sys_role_permission` ENABLE KEYS */;

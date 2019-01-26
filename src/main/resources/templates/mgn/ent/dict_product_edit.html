@@ -219,7 +219,7 @@
                         var xhr = form.data('jqxhr');
                         xhr.done(function (r) {
                             $.showSuccessTimeout('提交成功！',function(){
-                                window.location.href=ctx+"mgn/ent/dict_product_list.html"; 
+                                //window.location.href=ctx+"mgn/ent/dict_product_list.html"; 
                             });
                         }).fail(function (e) {
                             $.showErr(e.responseText);
