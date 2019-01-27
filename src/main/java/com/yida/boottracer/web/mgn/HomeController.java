@@ -35,7 +35,7 @@ public class HomeController extends BaseController
 	@Value("${my.upload-dir}")
 	private String uploadDir;
 
-	@GetMapping(value = { "", "index", "index.html" })
+	@GetMapping(value = {"index.html" })
 	public String Index(HttpServletRequest request)
 	{
 		Order o = new Order();

@@ -49,10 +49,14 @@ public abstract class BaseController
 
 	// @ModelAttribute先于RequestMapping来构造Model
 	@ModelAttribute
-	public void initSystemMenu(Model model)
+	public void initSystemMenu(Model model,HttpServletRequest request)
 	{
-		List<DictSystemFunctionDTO> all = userService.getSystemMenu(getUser().getUsername());
-		model.addAttribute("menu", all);
+		String url = request.getRequestURI();
+		if (StringUtils.endsWithIgnoreCase(url, "html"))
+		{
+			List<DictSystemFunctionDTO> all = userService.getSystemMenu(getUser().getUsername());
+			model.addAttribute("menu", all);
+		}	
 	}
 
 	@ModelAttribute

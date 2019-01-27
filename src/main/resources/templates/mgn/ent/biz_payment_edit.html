@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+    layout:decorate="~{_layout/main}" th:with="module='资料管理',functionName='续费管理',smallTitle='编辑'">
+
+<head>
+    <title>续费管理-编辑</title>
+    <link rel="stylesheet" th:href="@{/bower_components/bootstrap-dialog/dist/css/bootstrap-dialog.css}">
+    <link rel="stylesheet" th:href="@{/bower_components/jasny-bootstrap/dist/css/jasny-bootstrap.css}">
+
+</head>
+
+<body>
+    <div class="container-fluid" layout:fragment="doBody">
+        <div class="box box-primary">
+            <div class="box-body" id="app">
+                <form v-cloak data-toggle="validator" method="POST" id="editForm" class="form-horizontal" th:action="@{/mgn/ent/bizPayment/Save}"
+                    enctype="multipart/form-data">
+                    <div class="form-group">
+                        <div class="show-error">
+                            <label class="col-sm-2 control-label">企业名称</label>
+                            <div class="col-sm-4">
+                                <label class="control-label">{{d.sysMember.name}}</label>
+                            </div>
+                        </div>
+                        <div class="show-error">
+                            <label class="col-sm-2 control-label">会员类型</label>
+                            <div class="col-sm-4">
+                                <label class="control-label">{{d.sysMember.dictMemberType.name}}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="show-error">
+                            <label class="col-sm-2 control-label">有效期</label>
+                            <div class="col-sm-4">
+                                <label class="control-label">{{d.sysMember.endDate}}</label>
+                            </div>
+                        </div>
+                        <div class="show-error">
+                            <label class="col-sm-2 control-label">剩余码量</label>
+                            <div class="col-sm-4">
+                                <label class="control-label">{{d.sysMember.barcodeQty}}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="show-error">
+                            <label class="col-sm-2 control-label">账户余额</label>
+                            <div class="col-sm-4">
+                                <label class="control-label">{{d.sysMember.accountBalance}}</label>
+                            </div>
+                        </div>
+                        <div class="show-error">
+                            <label class="col-sm-2 control-label">单据状态</label>
+                            <div class="col-sm-4">
+                                <label class="control-label" v-bind:style="{color: statusColor}">{{status}}</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="show-error">
+                            <label class="col-sm-2 control-label">单据编号</label>
+                            <div class="col-sm-4">
+                                <label class="control-label">{{d.payCode}}</label>
+                            </div>
+                        </div>
+                        <div class="show-error">
+                            <label class="col-sm-2 control-label">付款方式</label>
+                            <div class="col-sm-4">
+                                <input required type="text" placeholder="请输入银行名称/微信/支付宝" class="form-control" v-model="d.payMethodName">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="show-error">
+                            <label class="col-sm-2 control-label">续费类型</label>
+                            <div class="col-sm-4">
+                                <select id="ds_payType" name="ds_payType" class="form-control" v-model="d.payType">
+                                    <option th:each="t:${ds_payType}" th:value="${t.value}" th:text="${t.name}"></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="show-error">
+                            <label class="col-sm-2 control-label">数量</label>
+                            <div class="col-sm-4">
+                                <select id="ds_payType" name="ds_payType" class="form-control" v-model="d.payQty">
+                                    <option v-for="item in curQty" :value="item.qty">{{item.qty}}{{unit}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="show-error">
+                            <label class="col-sm-2 control-label">汇款金额</label>
+                            <div class="col-sm-4">
+                                <input required type="number" class="form-control" v-model="d.payMoney" placeholder="元"></div>
+                        </div>
+                        <div class="show-error">
+                            <label class="col-sm-2 control-label">汇款日期</label>
+                            <div class="col-sm-4">
+                                <div class="input-group date" id="div_payDate">
+                                    <input type="text" class="form-control" id="ds_payDate" v-model="d.payDate">
+                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="show-error">
+                            <label class="col-sm-2 control-label">汇款人</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" v-model="d.remitter"> </div>
+                        </div>
+                        <div class="show-error">
+                            <label class="col-sm-2 control-label">联系电话</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" v-model="d.tel">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">备注</label>
+                        <div class="col-sm-10">
+                            <textarea class="form-control" rows="5" v-model="d.comment"></textarea>
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                    <div class="box-footer text-center">
+                        <button type="button" class="btn btn-normal  btn-primary" v-on:click="save">提交</button>                        
+                        <button type="button" class="btn btn-normal  btn-default" onclick="javascript:window.history.back(-1)">返回</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <th:block layout:fragment="script">
+        <script th:src="@{/bower_components/bootstrap-dialog/dist/js/bootstrap-dialog.js}"></script>
+        <script th:src="@{/js/bootstrap-dialog-zh-CN.js}"></script>
+        <script th:src="@{/js/bootstrap-dialog-Ext.js}"></script>
+        <script th:src="@{/bower_components/bootstrap-validator/dist/validator.custom.js}"></script>
+        <script th:src="@{/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.js}"></script>
+        <script th:src="@{/bower_components/bootstrap-datepicker/dist/locales/bootstrap-datepicker.zh-CN.min.js}"></script>
+
+
+        <script th:src="@{/bower_components/vue/dist/vue.js}"></script>
+
+        <script type="text/javascript">
+            $(function () {
+
+            });
+            var first = true;
+            var second = true;
+            var payQty, payMoney;
+
+            var vm = new Vue({
+                el: '#app',
+                data: {
+                    d: {
+                        sysMember: {
+                            dictMemberType: {
+                            }
+                        },
+                    },
+                    payTypeList: [],
+                    curQty: [],
+                    barcodePriceList: [],
+                    accountPeriodList: [],
+                    unit: ''
+                },
+                methods: {
+                    reset: function (e) {
+                        var self = this;
+                        $.get(ctx + 'mgn/ent/bizPayment/GetItem', {
+                            id: "[[${param.id}]]",
+                            _dt: new Date().getTime()
+
+                        }).done(function (data) {
+                            self.d = data.bizPayment;
+                            self.payTypeList = data.payTypeList;
+                            self.barcodePriceList = data.barcodePriceList;
+                            self.accountPeriodList = data.accountPeriodList;
+                            payQty = data.bizPayment.payQty;
+                            payMoney = data.bizPayment.payMoney;
+                            first = true;
+                            second=false;
+                        }).fail(function (e) {
+                            $.showErr(e.responseText);
+                        });
+                    },
+                    save: function (e) {
+                        var self = this;
+                        $.ajax({
+                            type: 'POST',
+                            url: ctx + 'mgn/ent/bizPayment/Save',
+                            data: JSON.stringify(vm.d),
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json"
+                        }).done(function (data) {
+                            $.showSuccessTimeout('提交成功！', function () {
+                                window.location.href = ctx + "mgn/ent/biz_payment_list.html";
+                            });
+                        }).fail(function (e) {
+                            $.showErr(e.responseText);
+                        });
+                    }
+                },
+                updated: function () {
+                    if (vm.d.id > 0 && first) {
+                    	vm.d.payQty = payQty;
+                    	second=true;
+                    }
+                    else if(vm.d.id > 0 && second){
+                        vm.d.payMoney = payMoney;
+                        second=false;
+                    }
+                    first = false;
+                },
+                mounted: function () {
+                    var cfg = {
+                        format: "yyyy-mm-dd",
+                        clearBtn: true,
+                        language: "zh-CN",
+                        autoclose: true,
+                        todayHighlight: true
+                    };
+                    $('#div_payDate').datepicker(cfg).on("changeDate", function () { vm.d.payDate = $('#ds_payDate').val(); });
+                },
+                watch: {
+                    "d.payType": function (val) {
+                        if (val == 0) {
+                            vm.curQty = vm.barcodePriceList;
+                            vm.unit = "个码";
+                        }
+                        else if (val == 1) {
+                            vm.curQty = vm.accountPeriodList;
+                            vm.unit = "个月";
+                        }
+                        else {
+                            vm.curQty = [];
+                            vm.unit = "";
+                        }
+                        if (vm.curQty.length > 0) {
+                            vm.d.payQty = vm.curQty[0].qty;
+                        }
+                        else {
+                            vm.d.payQty = 0;
+                        }
+                    },
+                    "d.payQty": function (val) {
+                        if (vm.curQty.length > 0) {
+                            for (var i = 0; i < vm.curQty.length; i++) {
+                                if (vm.curQty[i].qty == val) {
+                                    vm.d.payMoney = vm.curQty[i].price;
+                                    break;
+                                }
+                            }
+                        }
+                        else {
+                            vm.d.payMoney = 0;
+                        }
+                    }
+                },
+                computed: {
+                    status: {
+                        get: function () {
+                            switch (this.d.approved) {
+                                case 0:
+                                    return '未审核';
+                                case 1:
+                                    return '已审核';
+                                case 2:
+                                    return '已拒绝';
+                                default:
+                                    return '';
+                            }
+                        }
+                    },
+                    statusColor: {
+                        get: function () {
+                            switch (this.d.approved) {
+                                case 0:
+                                    return 'black';
+                                case 1:
+                                    return 'green';
+                                case 2:
+                                    return 'red';
+                                default:
+                                    return '';
+                            }
+                        }
+                    }
+                }
+            });
+            vm.reset();
+        </script>
+    </th:block>
+</body>
+
+</html>

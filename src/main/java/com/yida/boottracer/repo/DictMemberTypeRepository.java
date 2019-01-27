@@ -16,5 +16,5 @@ import com.yida.boottracer.domain.DictMemberType;
 @Repository
 public interface DictMemberTypeRepository extends EntityGraphJpaRepository<DictMemberType, Integer>
 {
-
+	
 }

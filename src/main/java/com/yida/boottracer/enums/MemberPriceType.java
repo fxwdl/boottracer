@@ -11,18 +11,16 @@ import com.yida.boottracer.dto.EnumObject;
  * @author fx__w
  *
  */
-public enum PayType
+public enum MemberPriceType
 {
 
-	Barcode(0),
+	Platform(1),
 
-	AccountPeriod(1),
-	
-	AccountBalance(2);
+	CreateBarcode(2);
 
 	private int id; // Could be other data type besides int
 
-	private PayType(int id)
+	private MemberPriceType(int id)
 	{
 		this.id = id;
 	}
@@ -36,20 +34,19 @@ public enum PayType
 	{
 		switch(id)
 		{
-		case 0:
-			return "生码续费";	
 		case 1:
-			return "账户有效期续费";
+			return "平台价格";
 		case 2:
-			return "账户余额充值";		
+			return "码量价格";			
+
 		default:
 			return "未知";
 		}
 	}
 
-	public static PayType fromId(int id)
+	public static MemberPriceType fromId(int id)
 	{
-		for (PayType type : values())
+		for (MemberPriceType type : values())
 		{
 			if (type.id == id)
 			{
@@ -62,9 +59,8 @@ public enum PayType
 	public static List<EnumObject> getList()
 	{
 		ArrayList<EnumObject> result = new ArrayList<>();
-		result.add(new EnumObject(PayType.Barcode.getId(), PayType.Barcode.getName()));		
-		result.add(new EnumObject(PayType.AccountPeriod.getId(), PayType.AccountPeriod.getName()));
-		result.add(new EnumObject(PayType.AccountBalance.getId(), PayType.AccountBalance.getName()));
+		result.add(new EnumObject(MemberPriceType.Platform.getId(), MemberPriceType.Platform.getName()));
+		result.add(new EnumObject(MemberPriceType.CreateBarcode.getId(), MemberPriceType.CreateBarcode.getName()));
 		return result;
 	}
 }

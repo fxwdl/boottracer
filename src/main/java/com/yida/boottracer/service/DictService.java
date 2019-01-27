@@ -1,12 +1,11 @@
 package com.yida.boottracer.service;
 
-import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Comparator;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
@@ -27,25 +26,19 @@ import org.springframework.data.jpa.repository.JpaContext;
 import org.springframework.stereotype.Service;
 
 import com.cosium.spring.data.jpa.entity.graph.domain.EntityGraphs;
-import com.jayway.jsonpath.Option;
 import com.yida.boottracer.domain.DictCommon;
 import com.yida.boottracer.domain.DictMemberPrice;
 import com.yida.boottracer.domain.DictMemberType;
 import com.yida.boottracer.domain.DictRegion;
-import com.yida.boottracer.domain.EntDictCategory;
 import com.yida.boottracer.domain.PagingModel;
-import com.yida.boottracer.domain.SysMember;
 import com.yida.boottracer.dto.RegionInfoDTO;
 import com.yida.boottracer.enums.DictCommomType;
 import com.yida.boottracer.enums.RegionLevel;
 import com.yida.boottracer.repo.DictCommonRepository;
 import com.yida.boottracer.repo.DictMemberTypeRepository;
 import com.yida.boottracer.repo.DictRegionRepository;
-import com.yida.boottracer.repo.EntDictCategoryRepository;
-import com.yida.boottracer.repo.EntDictSupplierRepository;
 import com.yida.boottracer.repo.SysMemberRepository;
 import com.yida.infrastructure.MyUtils;
-import com.yida.web.exception.ResourceNotFoundException;
 
 @Service
 public class DictService
@@ -326,4 +319,8 @@ public class DictService
 		return newItem;
 	}
 
+	public Optional<DictMemberType> getMemberTypeById(int id)
+	{
+		return dictMemberTypeRepository.findById(id);
+	}
 }

@@ -1,6 +1,7 @@
 package com.yida.boottracer.domain;
 // Generated 2018-12-2 22:45:07 by Hibernate Tools 5.2.10.Final
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -28,6 +29,7 @@ import javax.validation.constraints.NotBlank;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -41,8 +43,12 @@ import net.minidev.json.annotate.JsonIgnore;
 @NamedEntityGraphs(value = {
 	    @NamedEntityGraph(name = "SysMember.dictCompanyType-dictIndustry-dictRegion-dictMemberType", attributeNodes = {
 	        @NamedAttributeNode("dictCompanyType"),@NamedAttributeNode("dictIndustry"),@NamedAttributeNode("dictRegion"),@NamedAttributeNode("dictMemberType")
-	    })
+	    }),
+	    @NamedEntityGraph(name = "SysMember.dictMemberType", attributeNodes = {
+		        @NamedAttributeNode("dictMemberType")
+		    })	    
 	})
+
 public class SysMember extends AuditModel implements java.io.Serializable
 {
 
@@ -79,6 +85,8 @@ public class SysMember extends AuditModel implements java.io.Serializable
 	private Set<EntDictSupplier> entDictSuppliers = new HashSet<>();
 	private Set<EntDictDealer> entDictDealers = new HashSet<>();
 
+	private BigDecimal accountBalance;
+	
 	public SysMember()
 	{
 	}
@@ -355,6 +363,7 @@ public class SysMember extends AuditModel implements java.io.Serializable
 		this.fromDate = fromDate;
 	}
 
+	@JsonFormat(shape = JsonFormat.Shape.STRING,pattern="yyyy-MM-dd hh:ss:mm",timezone="GMT+8")
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "EndDate", length = 26)
 	public Date getEndDate()
@@ -412,6 +421,18 @@ public class SysMember extends AuditModel implements java.io.Serializable
 		this.barcodeQty = barcodeQty;
 	}
 
+	@Column(name = "AccountBalance", nullable = false, precision = 10)
+	public BigDecimal getAccountBalance()
+	{
+		return this.accountBalance;
+	}
+
+	public void setAccountBalance(BigDecimal accountBalance)
+	{
+		this.accountBalance = accountBalance;
+	}
+	
+	
 	@Version
 	@Column(name = "Version", nullable = false)
 	public Long getVersion()

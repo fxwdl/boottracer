@@ -119,7 +119,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 			//配置login相关
 			.formLogin().loginPage("/login.html").usernameParameter("username")
 				.passwordParameter("password").loginProcessingUrl("/logincheck").failureUrl("/login?error")
-				.defaultSuccessUrl("/mgn/index",true).successHandler(mySuccessHandler).failureHandler(myFailHandler)
+				.defaultSuccessUrl("/mgn/index.html",true).successHandler(mySuccessHandler).failureHandler(myFailHandler)
 				.and()
 			//配置登出相关
 			.logout().logoutUrl("/mgn/logout").permitAll().logoutSuccessUrl("/login.html").deleteCookies("JSESSIONID").and()			

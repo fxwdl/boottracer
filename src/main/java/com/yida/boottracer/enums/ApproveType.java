@@ -11,18 +11,18 @@ import com.yida.boottracer.dto.EnumObject;
  * @author fx__w
  *
  */
-public enum PayType
+public enum ApproveType
 {
 
-	Barcode(0),
+	UnApprove(0),
 
-	AccountPeriod(1),
-	
-	AccountBalance(2);
+	Approved(1),
+
+	Reject(2);
 
 	private int id; // Could be other data type besides int
 
-	private PayType(int id)
+	private ApproveType(int id)
 	{
 		this.id = id;
 	}
@@ -37,19 +37,20 @@ public enum PayType
 		switch(id)
 		{
 		case 0:
-			return "生码续费";	
+			return "未审核";
 		case 1:
-			return "账户有效期续费";
+			return "已审核";			
 		case 2:
-			return "账户余额充值";		
+			return "已拒绝";
+
 		default:
 			return "未知";
 		}
 	}
 
-	public static PayType fromId(int id)
+	public static ApproveType fromId(int id)
 	{
-		for (PayType type : values())
+		for (ApproveType type : values())
 		{
 			if (type.id == id)
 			{
@@ -62,9 +63,9 @@ public enum PayType
 	public static List<EnumObject> getList()
 	{
 		ArrayList<EnumObject> result = new ArrayList<>();
-		result.add(new EnumObject(PayType.Barcode.getId(), PayType.Barcode.getName()));		
-		result.add(new EnumObject(PayType.AccountPeriod.getId(), PayType.AccountPeriod.getName()));
-		result.add(new EnumObject(PayType.AccountBalance.getId(), PayType.AccountBalance.getName()));
+		result.add(new EnumObject(ApproveType.UnApprove.getId(), ApproveType.UnApprove.getName()));
+		result.add(new EnumObject(ApproveType.Approved.getId(), ApproveType.Approved.getName()));
+		result.add(new EnumObject(ApproveType.Reject.getId(), ApproveType.Reject.getName()));
 		return result;
 	}
 }
