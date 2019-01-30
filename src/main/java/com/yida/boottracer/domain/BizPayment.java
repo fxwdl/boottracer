@@ -298,6 +298,7 @@ public class BizPayment extends AuditModel implements java.io.Serializable
 	
 
 	@Temporal(TemporalType.TIMESTAMP)
+	@JsonFormat(shape = JsonFormat.Shape.STRING,pattern="yyyy-MM-dd hh:mm:ss",timezone="GMT+8")
 	@Column(name = "AppproveTime", nullable = true, length = 26)
 	public Date getAppproveTime()
 	{

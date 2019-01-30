@@ -1,7 +1,9 @@
 package com.yida.boottracer.service;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -14,6 +16,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import javax.transaction.Transactional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +31,7 @@ import com.yida.boottracer.domain.SysUser;
 import com.yida.boottracer.enums.ApproveType;
 import com.yida.boottracer.enums.PayType;
 import com.yida.boottracer.repo.BizPaymentRepository;
+import com.yida.boottracer.repo.SysMemberRepository;
 import com.yida.web.exception.ResourceNotFoundException;
 
 @Service
@@ -41,6 +45,9 @@ public class BizPaymentService
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private SysMemberRepository sysMemberRepository;
 
 	private JpaContext jpaContext;
 
@@ -56,9 +63,16 @@ public class BizPaymentService
 	{
 		return getListWithPagination(ent, limit, offset, sort, order, null, null, null);
 	}
-
+	
+	//审批列表用
+	public  PagingModel<BizPayment> getListWithPagination(int limit, int offset, String sort,
+			String order, Integer payType, String entName, Integer approved)
+	{
+		return getListWithPagination(null,limit,offset,sort,order,payType,entName,approved);
+	}
+	
 	protected PagingModel<BizPayment> getListWithPagination(SysMember ent, int limit, int offset, String sort,
-			String order, Integer payType, String entName, Boolean approved)
+			String order, Integer payType, String entName, Integer approved)
 	{
 
 		List<String> whereCause = new ArrayList<String>();
@@ -205,6 +219,54 @@ public class BizPaymentService
 				throw new RuntimeException("非法请求");
 			}
 		}
+		return item;
+	}
+	
+	@Transactional
+	public BizPayment approve(SysUser user, BizPayment item)
+	{
+		if (item == null)
+		{
+			throw new NullPointerException("参数不能为空");
+		}
+		if (item.getId() ==0)
+		{
+			throw new RuntimeException("数据异常");
+		}
+		BizPayment dbItem=findById(user, item.getId());
+		if(dbItem.getApproved()!=ApproveType.UnApprove.getId())
+		{
+			throw new RuntimeException("当前数据状态为：" + ApproveType.fromId(item.getApproved()).getName() + ",不允许审核");
+		}
+		
+		item.setApproved(ApproveType.Approved.getId());
+		item.setApproveUser(user);
+		item.setAppproveTime(new Date());
+		
+		item = bizPaymentRepository.save(item);
+		
+		SysMember dbMember = sysMemberRepository.getOne(item.getSysMember().getId());
+		
+		switch(PayType.fromId(item.getPayType()))
+		{
+		case Barcode:
+			dbMember.setBarcodeQty(dbMember.getBarcodeQty()+item.getPayQty());
+			break;
+		case AccountPeriod:
+			Calendar ca = Calendar.getInstance();
+			ca.setTime(dbMember.getEndDate());
+			ca.add(Calendar.MONTH, item.getPayQty());			
+			dbMember.setEndDate(ca.getTime());
+			break;
+		case AccountBalance:			
+			dbMember.setAccountBalance(dbMember.getAccountBalance().add(item.getPayMoney()));
+			break;
+		default:
+			throw new RuntimeException("未知的续费类型");
+		}
+		
+		sysMemberRepository.save(dbMember);
+		
 		return item;
 	}
 }

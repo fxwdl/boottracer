@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
-    layout:decorate="~{_layout/main}" th:with="module='资料管理',functionName='续费管理',smallTitle='编辑'">
+    layout:decorate="~{_layout/main}" th:with="module='业务管理',functionName='续费管理',smallTitle='审批'">
 
 <head>
-    <title>续费管理-编辑</title>
+    <title>续费管理-审核</title>
     <link rel="stylesheet" th:href="@{/bower_components/bootstrap-dialog/dist/css/bootstrap-dialog.css}">
     <link rel="stylesheet" th:href="@{/bower_components/jasny-bootstrap/dist/css/jasny-bootstrap.css}">
 
@@ -128,7 +128,7 @@
                         </div>
                     </div>
                     <div class="box-footer text-center">
-                        <button type="button" class="btn btn-normal  btn-primary" v-on:click="save">提交</button>
+                        <button type="button" class="btn btn-normal  btn-primary" v-on:click="approve">审核</button>
                         <button type="button" class="btn btn-normal  btn-default" onclick="javascript:window.history.back(-1)">返回</button>
                     </div>
                 </form>
@@ -172,7 +172,7 @@
                 methods: {
                     reset: function (e) {
                         var self = this;
-                        $.get(ctx + 'mgn/ent/bizPayment/GetItem', {
+                        $.get(ctx + 'mgn/biz/bizPayment/GetItem', {
                             id: "[[${param.id}]]",
                             _dt: new Date().getTime()
 
@@ -189,17 +189,17 @@
                             $.showErr(e.responseText);
                         });
                     },
-                    save: function (e) {
+                    approve: function (e) {
                         var self = this;
                         $.ajax({
                             type: 'POST',
-                            url: ctx + 'mgn/ent/bizPayment/Save',
+                            url: ctx + 'mgn/biz/bizPayment/Approve',
                             data: JSON.stringify(vm.d),
                             contentType: "application/json; charset=utf-8",
                             dataType: "json"
                         }).done(function (data) {
-                            $.showSuccessTimeout('提交成功！', function () {
-                                window.location.href = ctx + "mgn/ent/biz_payment_list.html";
+                            $.showSuccessTimeout('审批成功！', function () {
+                                window.location.href = ctx + "mgn/biz/biz_payment_list.html";
                             });
                         }).fail(function (e) {
                             $.showErr(e.responseText);

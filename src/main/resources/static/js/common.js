@@ -28,6 +28,14 @@ function operateOnlyDeleteFormatter(value, row, index, type) {
 	].join('');
 }
 
+function operateOnlyApproveFormatter(value, row, index, type) {
+	return [
+		'<a class="approve" href="javascript:void(0)" title="审批">',
+		'<i class="glyphicon glyphicon-pencil" data-type=' + type + '></i>',
+		'</a>'
+	].join('');
+}
+
 function memberStatusFormatter(value, row, index, type) {
 	if (value == 0)
 		return '申请中';
