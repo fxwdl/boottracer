@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -25,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.yida.boottracer.dto.ImageResultDto;
+import com.yida.boottracer.repo.impl.mybatis.mapper.BizCodeMapper;
 import com.yida.service.FileStorageService;
 
 @Controller
@@ -32,13 +34,15 @@ public class HomeController
 {
 	@Value("${my.upload-dir}")
 	private String uploadDir;
+	
+
 
 	@GetMapping(value = { "", "index.html" })
 	public String Index(HttpServletRequest request)
 	{
 		return "index";
 	}
-
+	
 	@ResponseBody
 	@GetMapping(value = "uploadImange/{fileName:.+}")
 	public ResponseEntity<Resource> getUploadImage(@PathVariable String fileName, HttpServletRequest request)

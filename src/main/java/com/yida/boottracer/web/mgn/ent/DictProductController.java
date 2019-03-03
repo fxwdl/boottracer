@@ -1,6 +1,7 @@
 package com.yida.boottracer.web.mgn.ent;
 
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import javax.management.openmbean.OpenMBeanParameterInfo;
@@ -76,7 +77,7 @@ public class DictProductController extends BaseController
 	@ResponseBody
 	public PagingModel<EntDictProduct> getData(@RequestParam("limit") int limit, @RequestParam("offset") int offset,
 			@RequestParam("search") String search, @RequestParam("sort") String sort,
-			@RequestParam("order") String order, @RequestParam("category") Integer category)
+			@RequestParam("order") String order, @RequestParam(name="category",required=false) Integer category)
 	{
 		return dictService.getProductListWithPagination(this.getUser().getSysMember(), limit, offset, search, sort,
 				order, category);
@@ -86,13 +87,17 @@ public class DictProductController extends BaseController
 	@ResponseBody
 	public ResponseEntity<?> delete(@PathVariable("id") int id)
 	{
-		 dictService.deleteEntDictProductItem(this.getUser().getSysMember(), id);
-		 return new ResponseEntity<>("删除数据成功！", HttpStatus.OK);		
+		dictService.deleteEntDictProductItem(this.getUser().getSysMember(), id);
+		return new ResponseEntity<>("删除数据成功！", HttpStatus.OK);
 	}
 
-	@PostMapping(value = { "dictProduct/Save" }/* ,consumes=MediaType.APPLICATION_JSON_VALUE ,consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE*/)
+	@PostMapping(value = { "dictProduct/Save" }/*
+												 * ,consumes=MediaType.APPLICATION_JSON_VALUE ,consumes =
+												 * MediaType.APPLICATION_FORM_URLENCODED_VALUE
+												 */)
 	@ResponseBody
-	public ResponseEntity<?> save(@Valid @ModelAttribute EntDictProduct item,@RequestParam(value="files",required=false) MultipartFile file, Errors errors)
+	public ResponseEntity<?> save(@Valid @ModelAttribute EntDictProduct item,
+			@RequestParam(value = "files", required = false) MultipartFile file, Errors errors)
 	{
 		if (errors.hasErrors())
 		{
@@ -101,5 +106,14 @@ public class DictProductController extends BaseController
 		}
 		return new ResponseEntity<>(dictService.saveEntDictProductItem(this.getUser().getSysMember(), item),
 				HttpStatus.OK);
+	}
+
+	@GetMapping(value = { "dict_product_list_select.html" })
+	public ModelAndView showSelectPage()
+	{
+		ModelAndView ma = new ModelAndView();
+		ma.addObject("tblId", UUID.randomUUID().toString().replaceAll("-", ""));
+		ma.setViewName("mgn/ent/dict_product_list_select");
+		return ma;
 	}
 }

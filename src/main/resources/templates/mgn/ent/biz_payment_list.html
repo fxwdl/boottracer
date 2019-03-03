@@ -90,19 +90,6 @@
 						return '';
 				}
 			}
-			function approvedFormatter(value, row, index, type) {
-				switch (value) {
-					case 0:
-						return '未审核';
-					case 1:
-						return '已审核';
-					case 2:
-						return '已拒绝';
-					default:
-						return '';
-				}
-			}
-
 			function refresh() {
 				$('#tbl').bootstrapTable('refresh');
 			}

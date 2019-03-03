@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -24,6 +25,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.yida.boottracer.domain.test.Order;
 import com.yida.boottracer.dto.ImageResultDto;
+import com.yida.boottracer.repo.impl.mybatis.mapper.BizCodeMapper;
 import com.yida.service.FileStorageService;
 
 @Controller(value = "mgn_HomeController")
@@ -34,6 +36,9 @@ public class HomeController extends BaseController
 
 	@Value("${my.upload-dir}")
 	private String uploadDir;
+	
+	@Autowired
+	private BizCodeMapper bizCodeMapper;
 
 	@GetMapping(value = {"index.html" })
 	public String Index(HttpServletRequest request)
@@ -86,11 +91,6 @@ public class HomeController extends BaseController
 		return r;
 	}
 
-	@GetMapping(value = { "test" })
-	public String test(HttpServletRequest request)
-	{
-		throw new RuntimeException("test error");
-	}
 
 	@GetMapping(value = "testAdmin")
 	// @Secured(value = "ROLE_管理员")

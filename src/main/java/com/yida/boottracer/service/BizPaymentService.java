@@ -74,7 +74,6 @@ public class BizPaymentService
 	protected PagingModel<BizPayment> getListWithPagination(SysMember ent, int limit, int offset, String sort,
 			String order, Integer payType, String entName, Integer approved)
 	{
-
 		List<String> whereCause = new ArrayList<String>();
 		Map<String, Object> paramaterMap = new HashMap<String, Object>();
 		StringBuilder sb = new StringBuilder("FROM BizPayment d WHERE 1=1");

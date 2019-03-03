@@ -25,6 +25,7 @@ import com.yida.boottracer.repo.SysRoleRepository;
 import com.yida.boottracer.repo.SysUserRepository;
 
 @SpringBootApplication
+@MapperScan("com.yida.boottracer.repo.impl.mybatis.mapper")
 // @EnableAutoConfiguration
 // @EnableJpaRepositories(basePackages =
 // {"com.yida.boottracer.repo","com.yida.boottracer.domain.test"})

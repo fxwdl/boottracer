@@ -4,19 +4,28 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.HashMap;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
 
+import org.apache.ibatis.session.ExecutorType;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mybatis.spring.SqlSessionTemplate;
+import org.mybatis.spring.annotation.MapperScan;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.test.autoconfigure.web.client.AutoConfigureWebClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.yida.boottracer.domain.BizCode;
 import com.yida.boottracer.domain.test.Order;
 import com.yida.boottracer.domain.test.OrderItem;
 import com.yida.boottracer.domain.test.OrderRepository;
@@ -24,10 +33,11 @@ import com.yida.boottracer.domain.test.Product;
 import com.yida.boottracer.domain.test.ProductRepository;
 import com.yida.boottracer.domain.test.User;
 import com.yida.boottracer.domain.test.UserRepository;
+import com.yida.boottracer.repo.impl.mybatis.mapper.BizCodeMapper;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-
+//@MapperScan("com.yida.boottracer.repo.impl.mybatis.mapper")
 public class BoottracerApplicationTests
 {
 	private static final Logger log = LoggerFactory.getLogger(BoottracerApplicationTests.class);
@@ -40,7 +50,17 @@ public class BoottracerApplicationTests
 
 	@Autowired
 	private ProductRepository productRepository;
+	
+	//@Autowired
+	//private BizCodeMapper bizCodeMapper;
 
+	@Autowired
+	private SqlSessionFactory sqlSessionFactory;
+	
+	@Autowired
+	@Qualifier("BatchSqlSessionTemplate")
+	SqlSessionTemplate sqlSessionTemplate;
+	
 	@Test
 	public void contextLoads()
 	{
@@ -181,5 +201,47 @@ public class BoottracerApplicationTests
 		BCryptPasswordEncoder b=new BCryptPasswordEncoder();
 		String pString=b.encode("1");
 		log.info(pString);
+	}
+	
+	@Test
+	//发现在Test里，开启@Transactional，那么无论是sqlSessionTemplate，还是直接sqlSessionFactory获取或者打开SqlSession,都不会正常提交事务，具体去Service层再试一下
+	@Transactional()
+	public void TestMyBatis() 
+	{
+//		HashMap<String, Object> map=new HashMap<String, Object>();
+//		map.put("id", 1);
+//		map.put("tabelname", "biz_code_0001");
+//		//String cString=bizCodeMapper.selectByPrimaryKey(1,"biz_code_001").getBarCode();
+//		
+//		//BizCode item= bizCodeMapper.selectByPrimaryKey(map);
+//		BizCode item=bizCodeMapper.selectByPrimaryKey(1,"biz_code_0001");
+//		String cString=item.getBarCode();
+//		System.out.println(cString);
+		
+		//SqlSession sqlSession = sqlSessionFactory.openSession(ExecutorType.BATCH);
+
+		//SqlSession sqlSession=sqlSessionTemplate.getSqlSessionFactory().openSession(ExecutorType.BATCH);
+		//BizCodeMapper m=sqlSession.getMapper(BizCodeMapper.class);
+		BizCodeMapper m=sqlSessionTemplate.getMapper(BizCodeMapper.class);
+		for(int i=0;i<100;i++)
+		{
+			BizCode n=new BizCode();
+			n.setApplyID(1);
+			n.setBarCode("A"+i);
+			n.setDelivered(false);
+			n.setActivated(false);
+			
+			m.insertSelective(n, "biz_code_0001");
+			
+			if((i + 1) % 50 == 0){
+	            //sqlSession.flushStatements();
+				sqlSessionTemplate.flushStatements();
+	        }
+		}
+		sqlSessionTemplate.flushStatements();
+		//sqlSessionTemplate.commit();
+		
+		//sqlSession.flushStatements();
+//		sqlSession.commit(true);
 	}
 }

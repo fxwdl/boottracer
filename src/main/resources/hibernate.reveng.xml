@@ -72,4 +72,10 @@
 	<table-filter match-name="biz_payment"
 		match-catalog="sourcetracerdb">
 	</table-filter>
+	<table-filter match-name="biz_code_apply"
+		match-catalog="sourcetracerdb">
+	</table-filter>
+	<table-filter match-name="biz_code"
+		match-catalog="sourcetracerdb">
+	</table-filter>
 </hibernate-reverse-engineering>

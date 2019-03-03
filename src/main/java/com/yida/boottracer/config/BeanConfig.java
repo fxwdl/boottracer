@@ -2,6 +2,10 @@ package com.yida.boottracer.config;
 
 import java.util.Locale;
 
+import org.apache.ibatis.session.ExecutorType;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -32,6 +36,9 @@ import com.yida.boottracer.service.auth.ValidateCodeGenerator;
 
 public class BeanConfig
 {
+	@Autowired
+	private SqlSessionFactory sqlSessionFactory;
+	
 	/*
 	 * @Bean public SpringSecurityDialect securityDialect() { return new
 	 * SpringSecurityDialect(); }
@@ -103,4 +110,8 @@ public class BeanConfig
 		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
 	}
 
+	@Bean(name="BatchSqlSessionTemplate")
+	public SqlSessionTemplate sqlSession() throws Exception {		
+	  return new SqlSessionTemplate(sqlSessionFactory, ExecutorType.BATCH);
+	}
 }

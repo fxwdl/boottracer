@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration>
+    <!-- 数据库配置文件 -->
+    <properties resource="jdbc.properties" />
+    <classPathEntry location="D:\project\java_repository\mysql\mysql-connector-java\8.0.13\mysql-connector-java-8.0.13-sources.jar" />
+    
+    <!-- targetRuntime 可选：MyBatis3DynamicSQL、MyBatis3 等值
+    	http://www.mybatis.org/generator/configreference/context.html
+    	其中：MyBatis3DynamicSQL可以生成依赖http://www.mybatis.org/mybatis-dynamic-sql/docs/introduction.html这里讲的动态SQL，实现类型安全的CRUD和JOIN语句，类似于LINQ的语法。应该优先用这个方案。
+    	
+    	MyBatis3DynamicSQL不生成xml配置文件。
+    	如果要使用传统的生成xml文件的方式，需要将targetRuntime改成MyBatis3
+    -->
+    <context id="context1" targetRuntime="MyBatis3">	
+    	
+        <property name="javaFileEncoding" value="UTF-8" />
+        <!-- 自动侦测SQL关键字 -->
+        <property name="autoDelimitKeywords" value="true" />
+        <!-- SQL关键字起始包装字符(mysql为反单引号`) -->
+        <property name="beginningDelimiter" value="`"/>
+        <!-- SQL关键字终止包装字符 -->
+		<property name="endingDelimiter" value="`"/>          
+        <property name="javaFormatter" value="org.mybatis.generator.api.dom.DefaultJavaFormatter" />
+        <property name="xmlFormatter" value="org.mybatis.generator.api.dom.DefaultXmlFormatter" />
+        
+		 <!--对注释进行控制--> 
+		 <commentGenerator> 
+		 	<property name="suppressDate" value="true"/> 
+		 	<property name="suppressAllComments" value="true"/> 
+		 </commentGenerator>
+
+        <!-- 数据库连接 -->
+        <jdbcConnection driverClass="${jdbc.driverClassName}" connectionURL="${jdbc.url}" userId="${jdbc.username}" password="${jdbc.password}" />
+
+
+        <!-- 数据库的生成配置 -->
+        <javaModelGenerator targetPackage="com.yida.boottracer.domain" targetProject="boottracer/src/main/java">
+	        <!--  for MyBatis3/MyBatis3Simple
+	            自动为每一个生成的类创建一个构造方法，构造方法包含了所有的field；而不是使用setter；
+	         -->        
+        	<property name="constructorBased" value="true"/>
+            <property name="enableSubPackages" value="false" />
+             <!-- 设置是否在getter方法中，对String类型字段调用trim()方法 -->
+            <property name="trimStrings" value="true" />        
+ 			<!-- 设置一个根对象， 如果设置了这个根对象，那么生成的keyClass或者recordClass会继承这个类；在Table的rootClass属性中可以覆盖该选项 注意：如果在key class或者record class中有root class相同的属性，MBG就不会重新生成这些属性了，包括： 1，属性名相同，类型相同，有相同的getter/setter方法；  
+ 			<property name="rootClass" value="com.yixun.ccmz.domain.BaseModel"/>  -->    
+        </javaModelGenerator>
+        <sqlMapGenerator targetPackage="mybatisMapper" targetProject="boottracer/src/main/resources">
+            <property name="enableSubPackages" value="false" />
+            <property name="trimStrings" value="true" />           
+        </sqlMapGenerator>
+        <javaClientGenerator targetPackage="com.yida.boottracer.repo.impl.mybatis.mapper" targetProject="boottracer/src/main/java" type="XMLMAPPER" >
+            <property name="enableSubPackages" value="false" />
+            <property name="trimStrings" value="true" />
+        </javaClientGenerator>
+        
+        <!-- 以上部分配置固定，无需改动，此处往下开始项目设置 -->
+                
+        <table  tableName="biz_code" domainObjectName="BizCode" delimitIdentifiers="false" delimitAllColumns="false" 
+        
+        enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"  enableUpdateByExample="false" selectByExampleQueryId="false">
+        	<property name="constructorBased" value="false"/>
+            <property name="useActualColumnNames" value="true" />
+            <generatedKey column="id" sqlStatement="SELECT LAST_INSERT_ID()" identity="true" />
+        </table>
+        
+    </context>
+</generatorConfiguration>

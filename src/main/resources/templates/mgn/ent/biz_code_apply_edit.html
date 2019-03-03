@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{_layout/main}"
+    th:with="module='防伪码管理',functionName='防伪码申请',smallTitle='编辑'">
+
+<head>
+    <title>防伪码申请-编辑</title>
+    <link rel="stylesheet" th:href="@{/bower_components/bootstrap-dialog/dist/css/bootstrap-dialog.css}">
+    <link rel="stylesheet" th:href="@{/bower_components/bootstrap-table/dist/bootstrap-table.css}">
+    <style type="text/css">
+
+    </style>
+</head>
+
+<body>
+
+    <div class="container-fluid" layout:fragment="doBody">
+        <div class="box box-primary">
+            <div class="box-body">
+                <form data-toggle="validator" method="POST" id="editForm" class="form-horizontal" th:object="${m}"
+                    th:action="@{/mgn/ent/bizCodeMgn/Save}">
+                    <input type="hidden" th:field="*{id}" />
+                    <input type="hidden" th:field="*{version}" />
+                    <input id="entDictProduct.id" type="hidden" th:field="*{entDictProduct.id}" />
+                    <input type="hidden" th:field="*{approved}" />                    
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">产品名称</label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <input required readonly type="text" class="form-control" id="entDictProduct.name" name="entDictProduct.name"
+                                    th:value="*{entDictProduct.name}">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-search" onclick="selProduct()"></i></span>
+                            </div>
+
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">批次号</label>
+                        <div class="col-sm-9">
+                            <input required type="text" class="form-control" id="batchCode" name="batchCode" th:value="*{batchCode}">
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">申请数量</label>
+                        <div class="col-sm-9">
+                            <input required type="number" class="form-control" id="applyQty" name="applyQty" th:value="*{applyQty}">
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">备注</label>
+                        <div class="col-sm-9">
+                            <textarea class="form-control" rows="5" id="comment" name="comment" th:text="*{comment}"></textarea>
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                    <div class="box-footer text-center">
+                        <button type="submit" class="btn btn-normal  btn-primary">提交</button>
+                        <button type="button" class="btn btn-normal  btn-default" onclick="javascript:window.history.back(-1)">返回</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <th:block layout:fragment="script">
+        <script th:src="@{/bower_components/bootstrap-dialog/dist/js/bootstrap-dialog.js}"></script>
+        <script th:src="@{/js/bootstrap-dialog-zh-CN.js}"></script>
+        <script th:src="@{/js/bootstrap-dialog-Ext.js}"></script>
+        <script th:src="@{/bower_components/bootstrap-table/dist/bootstrap-table.js}"></script>
+        <script th:src="@{/bower_components/bootstrap-table/dist/locale/bootstrap-table-zh-CN.js}"></script>
+        <script th:src="@{/bower_components/bootstrap-validator/dist/validator.custom.js}"></script>
+        <script th:src="@{/bower_components/jquery-form/dist/jquery.form.min.js}"></script>
+        <script type="text/javascript">
+            $(function () {
+                $('form').validator().on('submit', function (e) {
+                    if (e.isDefaultPrevented()) {
+                        // handle the invalid form...
+                    } else {
+                        e.preventDefault(); // prevent native submit
+
+                        var form = $(this).ajaxSubmit();
+                        var xhr = form.data('jqxhr');
+                        xhr.done(function (r) {
+                            $.showSuccessTimeout('保存成功！', function () {
+                                window.location.href = ctx + "mgn/ent/biz_code_apply_list.html";
+                            });
+                        }).fail(function (e) {
+                            $.showErr(e.responseText);
+                        });
+                    }
+                })
+            });
+
+            function selProduct() {
+                var p = {
+                		size: BootstrapDialog.SIZE_WIDE,
+                    url: ctx + 'mgn/ent/dict_product_list_select.html',
+                    title: '选择产品',
+                    callback: function (row) {
+                        $('#entDictProduct\\.id').val(row.id);
+                        $('#entDictProduct\\.name').val(row.name);                                                
+                    }
+                };
+                
+                showSelectForm(p);
+            }
+
+        </script>
+    </th:block>
+</body>
+
+</html>

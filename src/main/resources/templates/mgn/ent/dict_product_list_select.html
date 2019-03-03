@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<style type="text/css">
+
+</style>
+
+</head>
+<body>
+<div>
+    <table  th:id="${tblId}"
+           data-toggle="table" 
+           data-cache="false" 
+           data-pagination="true" 
+           data-side-pagination="server"
+           data-search="true" 
+           data-search-on-enter-key="false" 
+           data-show-refresh="true" 
+           data-show-pagination-switch="true"
+           data-id-field="id"
+           data-click-to-select="true" 
+           data-single-select="true" 
+           data-striped="true" 
+           data-sort-name="code" 
+           data-sort-order="asc" 
+           data-show-columns="true"
+           data-select-item-name="myRadioName"
+           th:data-url="@{/mgn/ent/dictProduct/GetData}" 
+           data-query-params="queryParams" 
+           >
+        <thead>
+            <tr>
+                <th data-field="state" data-radio="true"></th>
+				<th data-field="entDictCategory.name" data-halign="center" data-align="left" data-sortable="true">产品类别</th>
+				<th data-field="code" data-halign="center" data-align="left" data-sortable="true">编号</th>
+				<th data-field="name" data-halign="center" data-align="left" data-sortable="true">名称</th>
+				<th data-field="spec" data-halign="center" data-align="left" data-sortable="true">规格</th>
+				<th data-field="period" data-halign="center" data-align="left" data-sortable="true">保质期</th>
+				<th data-field="comment" data-halign="center" data-align="left" data-sortable="true">备注</th>
+            </tr>
+        </thead>
+    </table>
+
+</div>
+
+	<script type="text/javascript">
+		//debugger;
+
+    $('#[[${tblId}]]').bootstrapTable();
+
+    function queryParams(params) {
+        return params;
+    }
+    
+    $('[[${tblId}]]').on('dbl-click-row.bs.table', function (e, row, $element) {
+        var dialog=BootstrapDialog.getDialog('${param.dialogId}');
+        if (dialog!=null){
+            if(typeof dialog.getData('callback') === 'function') {
+                dialog.getData('callback').call(this,row);
+            }
+            dialog.close();
+        }
+    });
+	</script>
+</body>
+</html>

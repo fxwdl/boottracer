@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{_layout/main}"
+ th:with="module='防伪码管理',functionName='防伪码申请',smallTitle=''">
+
+<head>
+	<title>防伪码申请</title>
+	<link rel="stylesheet" th:href="@{/bower_components/bootstrap-dialog/dist/css/bootstrap-dialog.css}">
+	<link rel="stylesheet" th:href="@{/bower_components/bootstrap-table/dist/bootstrap-table.css}">
+	<!-- daterange picker -->
+	<link rel="stylesheet" th:href="@{/bower_components/bootstrap-daterangepicker/daterangepicker.css}">	
+</head>
+
+<body>
+	<div class="container-fluid" layout:fragment="doBody">
+		<div class="form-inline" role="form">
+			<div class="form-group">
+				<label for="productName">产品名称：</label>
+				<input required type="text" class="form-control" id="productName" name="productName">
+			</div>
+			<div class="form-group">
+					<label for="batchCode">批次号：</label>
+					<input required type="text" class="form-control" id="batchCode" name="batchCode">
+				</div>			
+			<div class="form-group">
+				<label class="" for="begin">申请时间：</label>
+				<div class="input-group">
+					<div class="input-group-addon">
+						<i class="fa fa-calendar"></i>
+					</div>
+					<input type="text" class="form-control pull-right" id="reservation">
+				</div>
+			</div>
+			<button id="btnSearch" class="btn btn-default"><i class="glyphicon glyphicon-search" style="padding-right: 3px;"></i><span>搜索</span></button>
+		</div>
+		<div id="toolbar" class="btn-group">
+			<button type="button" id="addNew" class="btn btn-default">
+				<i class="glyphicon glyphicon-plus" style="padding-right: 3px;"></i><span>新增申请</span>
+			</button>
+		</div>
+		<table data-toggle="table" id="tbl" data-toolbar="#toolbar" data-show-export="true" data-cache="false" data-search="false"
+		 data-search-on-enter-key="false" data-show-refresh="true" data-id-field="id" data-click-to-select="true"
+		 data-single-select="true" data-striped="true" data-sort-name="createdAt" data-sort-order="desc" data-show-columns="true"
+		 data-select-item-name="myRadioName" data-side-pagination="server" data-pagination="true" data-page-list="[10, 25, 50, 100, ALL]"
+		 th:data-url="@{/mgn/ent/bizCodeMgn/GetMyApplyData}" data-query-params="queryParams">
+			<thead>
+				<tr>
+					<th data-field="batchCode" data-halign="center" data-align="left" data-sortable="true">批次号</th>
+					<th data-field="entDictProduct.code" data-halign="center" data-align="left" data-sortable="true">产品编码</th>
+					<th data-field="entDictProduct.name" data-halign="center" data-align="left" data-sortable="true">产品名称</th>
+					<th data-field="applyQty" data-halign="center" data-align="left" data-sortable="true">申请数量</th>
+					<th data-field="createdAt" data-halign="center" data-align="left" data-sortable="true">申请时间</th>
+					<th data-field="approved" data-halign="center" data-align="left" data-sortable="true" data-formatter="approvedFormatter">状态</th>
+					<th data-field="appproveTime" data-halign="center" data-align="left" data-sortable="true">审核时间</th>
+					<th data-field="operate" data-halign="center" data-align="center" data-formatter="operateFormatter" data-events="operateEvents">操作</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+	<th:block layout:fragment="script">
+		<!-- date-range-picker -->
+		<script th:src="@{/bower_components/moment/min/moment-with-locales.min.js}"></script>
+		<script th:src="@{/bower_components/bootstrap-daterangepicker/daterangepicker.js}"></script>
+
+		<script th:src="@{/bower_components/bootstrap-dialog/dist/js/bootstrap-dialog.js}"></script>
+		<script th:src="@{/js/bootstrap-dialog-zh-CN.js}"></script>
+		<script th:src="@{/js/bootstrap-dialog-Ext.js}"></script>
+		<script th:src="@{/bower_components/bootstrap-table/dist/bootstrap-table.js}"></script>
+		<script th:src="@{/bower_components/bootstrap-table/dist/extensions/export/bootstrap-table-export.js}"></script>
+		<!--/* https://github.com/hhurz/tableExport.jquery.plugin */-->
+		<script th:src="@{/bower_components/tableExport.jquery.plugin/tableExport.js}"></script>
+		<script th:src="@{/bower_components/bootstrap-table/dist/locale/bootstrap-table-zh-CN.js}"></script>
+		<script th:src="@{/js/common.js}"></script>
+		<script type="text/javascript">
+			$(function () {
+				$('#reservation').daterangepicker({
+					"locale": {
+						"format": "YYYY/MM/DD",
+						"separator": " - ",
+						"applyLabel": "确定",
+						"cancelLabel": "取消",
+						"fromLabel": "从",
+						"toLabel": "到",
+						"customRangeLabel": "Custom",
+						"daysOfWeek": [
+							"日", "一", "二", "三", "四", "五", "六"
+						],
+						"monthNames": [
+							"一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"
+						],
+						"firstDay": 1
+					},
+					"autoUpdateInput": false,
+					"opens": "center"
+				}, function (start, end, label) {
+					$('#reservation').val(start.format('YYYY/MM/DD') + '-' + end.format('YYYY/MM/DD'));
+				});
+
+				$('#btnSearch').click(function () {
+					$('#tbl').bootstrapTable('refresh');
+				});
+				$('#addNew').click(function () {
+					window.location.href = ctx + "mgn/ent/biz_code_apply_edit.html";
+				});
+			});
+
+			function queryParams(params) {
+				var productName = $('#productName').val();
+				params = $.extend(params, { productName: productName });
+				var batchCode = $('#batchCode').val();
+				params = $.extend(params, { batchCode: batchCode });		
+				var val = $('#reservation').val(), split = val.split('-'), start = null, end = null;
+				if (split.length == 2) {
+					start = moment(split[0], 'YYYY/MM/DD').toString();
+					end = moment(split[1], 'YYYY/MM/DD').toString();
+					params = $.extend(params, { start: start, end: end });
+				}
+				return params;
+			}
+
+			window.operateEvents = {
+				'click .edit': function (e, value, row, index) {
+					window.location.href = ctx + "mgn/ent/biz_code_apply_edit.html?id=" + row.id;
+				},
+				'click .remove': function (e, value, row, index) {
+					$.showConfirm("确定要删除'" + row.batchCode + "'吗?", function () {
+						$.get(ctx + "mgn/ent/bizCodeMgn/Delete/" + row.id)
+							.done(function (d) {
+								$.showSuccessTimeout('删除操作成功！');
+								$('#tbl').bootstrapTable('remove', {
+									field: 'id',
+									values: [row.id]
+								});
+							})
+							.fail(function (e) {
+								$.showErr(e.responseText);
+							});
+					});
+				}
+			};
+		</script>
+	</th:block>
+</body>
+
+</html>
