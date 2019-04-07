@@ -108,7 +108,7 @@ public class EntDictProduct extends AuditModel implements java.io.Serializable
 	{
 		return this.entDictCoder;
 	}
-
+	
 	public void setEntDictCoder(EntDictCoder entDictCoder)
 	{
 		this.entDictCoder = entDictCoder;

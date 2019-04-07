@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{_layout/main}"
- th:with="module='防伪码管理',functionName='防伪码申请',smallTitle=''">
+ th:with="module='防伪码管理',functionName='防伪码审批',smallTitle=''">
 
 <head>
-	<title>防伪码申请</title>
+	<title>防伪码审批</title>
 	<link rel="stylesheet" th:href="@{/bower_components/bootstrap-dialog/dist/css/bootstrap-dialog.css}">
 	<link rel="stylesheet" th:href="@{/bower_components/bootstrap-table/dist/bootstrap-table.css}">
 	<!-- daterange picker -->
-	<link rel="stylesheet" th:href="@{/bower_components/bootstrap-daterangepicker/daterangepicker.css}">	
+	<link rel="stylesheet" th:href="@{/bower_components/bootstrap-daterangepicker/daterangepicker.css}">
 </head>
 
 <body>
@@ -18,9 +18,13 @@
 				<input type="text" class="form-control" id="productName" name="productName">
 			</div>
 			<div class="form-group">
-					<label for="batchCode">批次号：</label>
-					<input type="text" class="form-control" id="batchCode" name="batchCode">
-				</div>			
+				<label for="batchCode">批次号：</label>
+				<input type="text" class="form-control" id="batchCode" name="batchCode">
+			</div>
+			<label>状态：</label>
+			<select id="ds_approved" name="ds_approved" class="form-control">
+				<option th:each="t:${ds_approved}" th:value="${t.value}" th:text="${t.name}"></option>
+			</select>
 			<div class="form-group">
 				<label class="" for="begin">申请时间：</label>
 				<div class="input-group">
@@ -31,11 +35,6 @@
 				</div>
 			</div>
 			<button id="btnSearch" class="btn btn-default"><i class="glyphicon glyphicon-search" style="padding-right: 3px;"></i><span>搜索</span></button>
-		</div>
-		<div id="toolbar" class="btn-group">
-			<button type="button" id="addNew" class="btn btn-default">
-				<i class="glyphicon glyphicon-plus" style="padding-right: 3px;"></i><span>新增申请</span>
-			</button>
 		</div>
 		<table data-toggle="table" id="tbl" data-toolbar="#toolbar" data-show-export="true" data-cache="false" data-search="false"
 		 data-search-on-enter-key="false" data-show-refresh="true" data-id-field="id" data-click-to-select="true"
@@ -51,7 +50,8 @@
 					<th data-field="createdAt" data-halign="center" data-align="left" data-sortable="true">申请时间</th>
 					<th data-field="approved" data-halign="center" data-align="left" data-sortable="true" data-formatter="approvedFormatter">状态</th>
 					<th data-field="appproveTime" data-halign="center" data-align="left" data-sortable="true">审核时间</th>
-					<th data-field="operate" data-halign="center" data-align="center" data-formatter="operateFormatter" data-events="operateEvents">操作</th>
+					<th data-field="operate" data-halign="center" data-align="center" data-formatter="operateOnlyApproveFormatter"
+					 data-events="operateEvents">操作</th>
 				</tr>
 			</thead>
 		</table>
@@ -85,10 +85,14 @@
 			});
 
 			function queryParams(params) {
+				var c = $('select[name=ds_approved]').val();
+				if(c!=''){
+					params = $.extend(params, { approved: c });
+				}
 				var productName = $('#productName').val();
 				params = $.extend(params, { productName: productName });
 				var batchCode = $('#batchCode').val();
-				params = $.extend(params, { batchCode: batchCode });		
+				params = $.extend(params, { batchCode: batchCode });
 				var val = $('#reservation').val(), split = val.split('-'), start = null, end = null;
 				if (split.length == 2) {
 					start = moment(split[0], 'YYYY/MM/DD').toString();
@@ -99,23 +103,8 @@
 			}
 
 			window.operateEvents = {
-				'click .edit': function (e, value, row, index) {
-					window.location.href = ctx + "mgn/ent/biz_code_apply_edit.html?id=" + row.id;
-				},
-				'click .remove': function (e, value, row, index) {
-					$.showConfirm("确定要删除'" + row.batchCode + "'吗?", function () {
-						$.get(ctx + "mgn/ent/bizCodeMgn/Delete/" + row.id)
-							.done(function (d) {
-								$.showSuccessTimeout('删除操作成功！');
-								$('#tbl').bootstrapTable('remove', {
-									field: 'id',
-									values: [row.id]
-								});
-							})
-							.fail(function (e) {
-								$.showErr(e.responseText);
-							});
-					});
+				'click .approve': function (e, value, row, index) {
+					window.location.href = ctx + "mgn/ent/biz_code_approve_edit.html?id=" + row.id;
 				}
 			};
 		</script>

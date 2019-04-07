@@ -25,6 +25,7 @@ import javax.persistence.Version;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.yida.boottracer.enums.ApproveType;
 
 /**
@@ -63,7 +64,10 @@ public class BizCodeApply extends AuditModel implements java.io.Serializable
 	private Integer approved;
 	private String approveUser;
 	private Date appproveTime;
+	private Boolean codeGenerated;
 
+	private Date genCodeFrom;
+	private Date genCodeEnd;
 
 	public BizCodeApply()
 	{
@@ -205,6 +209,17 @@ public class BizCodeApply extends AuditModel implements java.io.Serializable
 	{
 		this.downloaded = downloaded;
 	}
+	
+	@Column(name = "codeGenerated", nullable = true)
+	public Boolean isCodeGenerated()
+	{
+		return this.codeGenerated;
+	}
+
+	public void setCodeGenerated(Boolean codeGenerated)
+	{
+		this.codeGenerated = codeGenerated;
+	}
 
 	@Column(name = "Comment", length = 500)
 	public String getComment()
@@ -241,6 +256,7 @@ public class BizCodeApply extends AuditModel implements java.io.Serializable
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "AppproveTime", length = 26)
+	@JsonFormat(shape = JsonFormat.Shape.STRING,pattern="yyyy-MM-dd hh:ss:mm",timezone="GMT+8")
 	public Date getAppproveTime()
 	{
 		return this.appproveTime;
@@ -250,5 +266,30 @@ public class BizCodeApply extends AuditModel implements java.io.Serializable
 	{
 		this.appproveTime = appproveTime;
 	}
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "GenCodeFrom", length = 26,nullable = true)
+	@JsonFormat(shape = JsonFormat.Shape.STRING,pattern="yyyy-MM-dd hh:ss:mm",timezone="GMT+8")
+	public Date getGenCodeFrom()
+	{
+		return this.genCodeFrom;
+	}
 
+	public void setGenCodeFrom(Date genCodeFrom)
+	{
+		this.genCodeFrom = genCodeFrom;
+	}
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "GenCodeEnd", length = 26,nullable = true)
+	@JsonFormat(shape = JsonFormat.Shape.STRING,pattern="yyyy-MM-dd hh:ss:mm",timezone="GMT+8")
+	public Date getGenCodeEnd()
+	{
+		return this.genCodeEnd;
+	}
+
+	public void setGenCodeEnd(Date genCodeEnd)
+	{
+		this.genCodeEnd = genCodeEnd;
+	}
 }

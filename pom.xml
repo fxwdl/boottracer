@@ -123,6 +123,9 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		
+	<!--  Spice up your java: Automatic Resource Management, automatic generation of getters, setters, equals, hashCode and toString, and more!  -->
+
 	</dependencies>
 
 	<build>

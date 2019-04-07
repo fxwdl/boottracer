@@ -4,34 +4,29 @@ public class EnumObject
 {
 	private int value;
 	private String name;
-
-	public EnumObject()
-	{
-	}
-
+	
 	public EnumObject(int value, String name)
 	{
+		super();
 		this.value = value;
 		this.name = name;
 	}
-
+	public int getValue()
+	{
+		return value;
+	}
 	public void setValue(int value)
 	{
 		this.value = value;
 	}
-
-	public int getValue()
+	public String getName()
 	{
-		return this.value;
+		return name;
 	}
-
 	public void setName(String name)
 	{
 		this.name = name;
 	}
 
-	public String getName()
-	{
-		return this.name;
-	}
+
 }

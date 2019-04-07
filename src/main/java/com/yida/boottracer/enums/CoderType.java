@@ -37,11 +37,12 @@ public enum CoderType
 	 * 日期码
 	 */
 	DateCode(4),
-	
+		
 	/**
 	 * 自定义码
 	 */
 	Custom(5);
+
 	
 
 	private int id; // Could be other data type besides int

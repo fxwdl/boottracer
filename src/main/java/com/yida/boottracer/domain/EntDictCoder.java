@@ -1,7 +1,9 @@
 package com.yida.boottracer.domain;
 // Generated 2019-1-8 21:56:57 by Hibernate Tools 5.2.10.Final
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -43,7 +45,7 @@ public class EntDictCoder extends AuditModel implements java.io.Serializable
 	private boolean approved;
 	private String comment;
 	private boolean isDeleted;
-	private Set<EntDictCoderDetail> details = new HashSet<>();	
+	private List<EntDictCoderDetail> details = new ArrayList<>();	
 	
 	private String description;
 
@@ -156,12 +158,12 @@ public class EntDictCoder extends AuditModel implements java.io.Serializable
 
 	@JsonManagedReference(value="EntDictCoder-EntDictCoderDetail")
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "entDictCoder",cascade= {CascadeType.PERSIST,CascadeType.REFRESH,CascadeType.REMOVE,CascadeType.DETACH,CascadeType.MERGE}, orphanRemoval=true /*jpa 2 新增，允许删除子对象*/)
-	public Set<EntDictCoderDetail> getDetails()
+	public List<EntDictCoderDetail> getDetails()
 	{
 		return this.details;
 	}
 
-	public void setDetails(Set<EntDictCoderDetail> details)
+	public void setDetails(List<EntDictCoderDetail> details)
 	{
 		this.details = details;
 	}

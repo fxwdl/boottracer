@@ -484,7 +484,7 @@ public class SysMember extends AuditModel implements java.io.Serializable
 	@Transient
 	public String getDisplayId() 
 	{
-		return StringUtils.leftPad(Long.toString(this.getId()), 5, "0");
+		return StringUtils.leftPad(Long.toString(this.getId()), 4, "0");
 	}
 	
 	protected void setDisplayId(String v)

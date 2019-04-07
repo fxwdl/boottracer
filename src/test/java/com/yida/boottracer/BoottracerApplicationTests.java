@@ -7,7 +7,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.HashMap;
 import java.util.Optional;
 
-import javax.transaction.Transactional;
+//import javax.transaction.Transactional;
 
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
@@ -24,6 +24,7 @@ import org.springframework.boot.test.autoconfigure.web.client.AutoConfigureWebCl
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.yida.boottracer.domain.BizCode;
 import com.yida.boottracer.domain.test.Order;
@@ -68,6 +69,7 @@ public class BoottracerApplicationTests
 	}
 
 	@Test
+	@Transactional
 	public void testFirst()
 	{
 		User u = new User();
@@ -75,15 +77,26 @@ public class BoottracerApplicationTests
 		u.setAge(1);
 
 		User nu = userRepository.save(u);
+		
+//		if (true)
+//			throw new RuntimeException();
+		
+		u = new User();
+		u.setName("b");
+		u.setAge(2);
 
-		assertEquals(1l, (long) nu.getId());
+		
+		nu = userRepository.save(u);
+
+		//assertEquals(1l, (long) nu.getId());
 
 		long l = userRepository.count();
 
-		assertEquals(1l, l);
+		assertEquals(1, 1);
 	}
 
 	@Test
+	@Transactional()
 	public void testInsertOrder()
 	{
 		// 因为配置了级联，所以可以只处理order，而不需要处理orderitem，但是这里的deleteAll是使用的n+1，即先查出来再删，性能差
@@ -92,15 +105,15 @@ public class BoottracerApplicationTests
 		productRepository.deleteAll();
 
 		Product p1 = new Product();
-		p1.setName("电脑");
+		p1.setName("电脑1");
 
 		Product np1 = productRepository.save(p1);
 		Product p2 = new Product();
-		p2.setName("办公桌");
+		p2.setName("办公桌1");
 		Product np2 = productRepository.save(p2);
 
 		Order order = new Order();
-		order.setOrderNumber("2018-001");
+		order.setOrderNumber("2019-001");
 
 		OrderItem i1 = new OrderItem();
 		i1.setOrder(order);

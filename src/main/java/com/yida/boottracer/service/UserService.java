@@ -12,7 +12,6 @@ import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import javax.transaction.Transactional;
 
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
@@ -21,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaContext;
 import org.springframework.messaging.handler.invocation.ReactiveReturnValueHandler;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.yida.boottracer.domain.DictCommon;
@@ -34,7 +34,9 @@ import com.yida.boottracer.dto.DictSystemFunctionDTO;
 import com.yida.boottracer.enums.SysMemberStatus;
 import com.yida.boottracer.enums.SystemFunctionType;
 import com.yida.boottracer.repo.DictSystemFunctionRepository;
+import com.yida.boottracer.repo.EntDictCoderDetailRepository;
 import com.yida.boottracer.repo.SysMemberRepository;
+import com.yida.boottracer.repo.SysUserRepository;
 import com.yida.web.exception.ResourceNotFoundException;
 
 @Service
@@ -44,13 +46,22 @@ public class UserService
 
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private SysUserRepository sysUserRepository;
 
 	@Autowired
 	private DictSystemFunctionRepository dictSystemFunctionRepository;
 
 	@Autowired
 	private SysMemberRepository sysMemberRepository;
-
+	
+	@Autowired
+	private EntDictService entDictServer;
+	
+	@Autowired
+	private BizCodeService bizCodeService;
+		
 	@Autowired
 	public UserService(JpaContext context)
 	{
@@ -158,8 +169,12 @@ public class UserService
 	 * @param item
 	 * @return
 	 */
+	@Transactional
 	public SysMember registryMember(SysMember item)
 	{
+		//1.增加企业信息
+		//2.增加第1个管理员账户,IsApproved=false
+		//3.分配用户角色
 		throw new NotImplementedException("注册企业会员");
 	}
 
@@ -227,9 +242,17 @@ public class UserService
 				});				
 				break;
 			case Approved:
+				//1.设置用户通过使用
 				result.getSysUsers().forEach(p->{
 					p.setIsApproved(true);
-				});				
+					sysUserRepository.save(p);
+				});
+				//2.创建默认编码规则
+				entDictServer.createDefaultCoder(result);				
+				
+				//3.尝试创建生码表
+				bizCodeService.createCodeTable(result);
+				
 				break;
 			case Disabled:
 				result.getSysUsers().forEach(p->{
@@ -242,10 +265,11 @@ public class UserService
 			}
 			result.setComment(item.getComment());
 		}
-		result = sysMemberRepository.save(result);
+		result = sysMemberRepository.saveAndFlush(result);	
+		
 		return result;
-	}
-
+	}	
+	
 	/**
 	 * 管理端审核会员
 	 * 
@@ -253,6 +277,7 @@ public class UserService
 	 * @return
 	 * @throws NotFoundException
 	 */
+	@Transactional
 	public SysMember ApproveMember(SysMember item)
 	{
 		return editSysMemberInfo(item, true);

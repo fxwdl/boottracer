@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaContext;
 import org.springframework.stereotype.Service;
 
+import com.cosium.spring.data.jpa.entity.graph.domain.EntityGraphs;
 import com.yida.boottracer.domain.AuditModel;
 import com.yida.boottracer.domain.DictCommon;
 import com.yida.boottracer.domain.EntDictCategory;
@@ -61,6 +62,7 @@ public class EntDictService
 	private EntDictDealerRepository entDictDealerRepository;
 	@Autowired
 	private EntDictCoderRepository entDictCoderRepository;
+	
 	@Autowired
 	private EntDictProductRepository entDictProductRepository;
 
@@ -226,6 +228,7 @@ public class EntDictService
 	 * @param ent
 	 * @return
 	 */
+	@Transactional
 	public EntDictCoder createDefaultCoder(SysMember ent)
 	{
 		Optional<EntDictCoder> r = entDictCoderRepository.findBySysMemberAndCode(ent, DEFAULT_CODER_CODE);
@@ -299,7 +302,7 @@ public class EntDictService
 							CoderType.SeqCode.getName(), CoderType.CheckCode.getName(), CoderType.DateCode.getName()));
 
 			newItem = entDictCoderRepository.saveAndFlush(newItem);
-
+		
 			return newItem;
 		}
 	}
@@ -425,6 +428,21 @@ public class EntDictService
 				fItem.get().setIsDeleted(true);
 				entDictProductRepository.saveAndFlush(fItem.get());
 			}
+		}
+	}
+	
+	public EntDictCoder findCoderByProduct(int productId)
+	{
+		Optional<EntDictProduct> optProduct = entDictProductRepository.findById(productId, EntityGraphs.named("EntDictProduct.entDictCategory-entDictCoder"));
+		
+		if (optProduct.isPresent())
+		{
+			int id=optProduct.get().getEntDictCoder().getId();
+			return entDictCoderRepository.myFindById(id);
+		}
+		else 
+		{
+			return null;
 		}
 	}
 }

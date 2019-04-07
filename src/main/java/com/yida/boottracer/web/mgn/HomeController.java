@@ -26,6 +26,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.yida.boottracer.domain.test.Order;
 import com.yida.boottracer.dto.ImageResultDto;
 import com.yida.boottracer.repo.impl.mybatis.mapper.BizCodeMapper;
+import com.yida.boottracer.service.BizCodeService;
 import com.yida.service.FileStorageService;
 
 @Controller(value = "mgn_HomeController")
@@ -39,6 +40,9 @@ public class HomeController extends BaseController
 	
 	@Autowired
 	private BizCodeMapper bizCodeMapper;
+	
+	@Autowired
+	private BizCodeService bizCodeService;
 
 	@GetMapping(value = {"index.html" })
 	public String Index(HttpServletRequest request)
@@ -122,5 +126,13 @@ public class HomeController extends BaseController
 	// @GetMapping("/posts")
 	// public Page<Post> getAllPosts(Pageable pageable) {
 	// return postRepository.findAll(pageable);
+
+	@GetMapping(value = "test")
+	public String test()
+	{
+		bizCodeService.generateCode(1,"");
+
+		return "mgn/index";
+	}
 
 }

@@ -31,7 +31,7 @@ import com.yida.boottracer.repo.SysUserRepository;
 // {"com.yida.boottracer.repo","com.yida.boottracer.domain.test"})
 // @EntityScan(basePackages = { "com.yida.boottracer.domain" })
 // @ComponentScan(basePackages = { "com.yida.boottracer.service" })
-// @EnableTransactionManagement
+ @EnableTransactionManagement()
 
 // 用来集成mybatis
 // @MapperScan("")

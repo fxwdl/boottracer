@@ -17,6 +17,8 @@ public class BizCode
 
 	private Boolean activated;
 
+	private Integer queryCount;
+	
 	private Long version;
 
 	private Date createdAt;
@@ -81,6 +83,16 @@ public class BizCode
 		this.activated = activated;
 	}
 
+	public Integer getQueryCount()
+	{
+		return queryCount;
+	}
+	
+	public void setQueryCount(Integer queryCount)
+	{
+		this.queryCount=queryCount;
+	}
+	
 	public Long getVersion()
 	{
 		return version;

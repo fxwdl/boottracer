@@ -24,5 +24,9 @@ public interface BizCodeMapper {
 
     int updateByPrimaryKey(BizCode record,@Param("tablename") String tablename);
         
+    int existTable(@Param("tableName") String tableName);
     
+    int dropTable(@Param("tableName") String tableName);
+    
+    int createCodeTable(@Param("tableName") String tableName);
 }

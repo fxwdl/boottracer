@@ -28,7 +28,7 @@ public class EntDictCoderDetail extends AuditModel implements java.io.Serializab
 	private int id;
 	private Long version;
 	private EntDictCoder entDictCoder;
-	private int seq;
+	private Integer seq;
 	private int type;
 	private String fieldValue;
 	private int fieldSize;
@@ -78,12 +78,12 @@ public class EntDictCoderDetail extends AuditModel implements java.io.Serializab
 	}
 
 	@Column(name = "Seq", nullable = false)
-	public int getSeq()
+	public Integer getSeq()
 	{
 		return this.seq;
 	}
 
-	public void setSeq(int seq)
+	public void setSeq(Integer seq)
 	{
 		this.seq = seq;
 	}

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{_layout/main}"
+    th:with="module='防伪码管理',functionName='防伪码审批',smallTitle='编辑'">
+
+<head>
+    <title>防伪码审批-编辑</title>
+    <link rel="stylesheet" th:href="@{/bower_components/bootstrap-dialog/dist/css/bootstrap-dialog.css}">
+</head>
+
+<body>
+    <div class="container-fluid" layout:fragment="doBody">
+        <div class="box box-primary">
+            <div class="box-body">
+                <form data-toggle="validator" method="POST" id="editForm" class="form-horizontal" th:object="${m}"
+                    th:action="@{/mgn/ent/bizCodeMgn/Save}">
+                    <input type="hidden" th:field="*{id}" />
+                    <input type="hidden" th:field="*{version}" />
+                    <input id="entDictProduct.id" type="hidden" th:field="*{entDictProduct.id}" />
+                    <input type="hidden" th:field="*{approved}" />
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">产品名称</label>
+                        <div class="col-sm-9">
+                            <input required readonly type="text" class="form-control" id="entDictProduct.name" name="entDictProduct.name"
+                                th:value="*{entDictProduct.name}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">批次号</label>
+                        <div class="col-sm-9">
+                            <input required readonly type="text" class="form-control" id="batchCode" name="batchCode"
+                                th:value="*{batchCode}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">申请数量</label>
+                        <div class="col-sm-9">
+                            <input required readonly type="number" class="form-control" id="applyQty" name="applyQty"
+                                th:value="*{applyQty}">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">备注</label>
+                        <div class="col-sm-9">
+                            <textarea class="form-control" rows="5" id="comment" name="comment" th:text="*{comment}"></textarea>
+                        </div>
+                    </div>
+                    <div class="box-footer text-center">
+                        <button type="button" id="btnApprove" class="btn btn-normal  btn-primary">审核生码</button>
+                        <button type="button" id="btnReject" class="btn btn-normal  btn-danger">拒绝生码</button>
+                        <button type="button" class="btn btn-normal  btn-default" onclick="javascript:window.history.back(-1)">返回</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <th:block layout:fragment="script">
+        <script th:src="@{/bower_components/bootstrap-dialog/dist/js/bootstrap-dialog.js}"></script>
+        <script th:src="@{/js/bootstrap-dialog-zh-CN.js}"></script>
+        <script th:src="@{/js/bootstrap-dialog-Ext.js}"></script>
+        <script th:src="@{/bower_components/bootstrap-table/dist/bootstrap-table.js}"></script>
+        <script th:src="@{/bower_components/bootstrap-table/dist/locale/bootstrap-table-zh-CN.js}"></script>
+        <script th:src="@{/bower_components/bootstrap-validator/dist/validator.custom.js}"></script>
+        <script type="text/javascript">
+            $(function () {
+                $('#btnApprove').click(function () {
+                	$.showConfirm("确定审核生码吗?",function(){
+                        var applyId = $('#id').val();
+                        var comment = '';
+                        var dialog = new BootstrapDialog({
+                        	title: '提示',
+                            message: '正在生码，请稍等...!',
+                            closable: false, 
+                            draggable: true, 
+                            size: BootstrapDialog.SIZE_SMALL
+                        });
+                        dialog.open();
+                        $.ajax({
+                            type: 'POST',
+                            url: ctx + 'mgn/ent/bizCodeMgn/Approve',
+                            data: { applyId: applyId, comment: comment }
+                        }).done(function (data) {
+                            $.showSuccessTimeout('提交成功！', function () {
+                                window.location.href = ctx + "mgn/ent/biz_code_approve_list.html";
+                            });
+                        }).fail(function (e) {
+                            $.showErr(e.responseText);
+                        }).always(function(){
+                        	dialog.close();
+                        });                		
+                	});
+
+                })
+                $('#btnReject').click(function () {
+                    alert('approve');
+                    return;
+                })
+            });
+        </script>
+    </th:block>
+</body>
+
+</html>
