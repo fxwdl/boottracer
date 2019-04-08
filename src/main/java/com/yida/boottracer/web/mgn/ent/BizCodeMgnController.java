@@ -144,8 +144,17 @@ public class BizCodeMgnController extends BaseController
 	@ResponseBody
 	public ResponseEntity<?> approve(Integer applyId, String comment)
 	{
-		bizCodeService.ApproveApply(this.getUser(), applyId,queryUrl);
+		bizCodeService.ApproveApply(this.getUser(), applyId,queryUrl,comment);
 		
 		return new ResponseEntity<>("操作成功", HttpStatus.OK);
 	}
+	
+	@PostMapping(value = { "bizCodeMgn/Reject" })
+	@ResponseBody
+	public ResponseEntity<?> reject(Integer applyId, String comment)
+	{
+		bizCodeService.RejectApply(this.getUser(), applyId, comment);
+		
+		return new ResponseEntity<>("操作成功", HttpStatus.OK);
+	}	
 }

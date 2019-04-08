@@ -256,7 +256,7 @@ public class BizCodeApply extends AuditModel implements java.io.Serializable
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "AppproveTime", length = 26)
-	@JsonFormat(shape = JsonFormat.Shape.STRING,pattern="yyyy-MM-dd hh:ss:mm",timezone="GMT+8")
+	@JsonFormat(shape = JsonFormat.Shape.STRING,pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
 	public Date getAppproveTime()
 	{
 		return this.appproveTime;
@@ -269,7 +269,7 @@ public class BizCodeApply extends AuditModel implements java.io.Serializable
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "GenCodeFrom", length = 26,nullable = true)
-	@JsonFormat(shape = JsonFormat.Shape.STRING,pattern="yyyy-MM-dd hh:ss:mm",timezone="GMT+8")
+	@JsonFormat(shape = JsonFormat.Shape.STRING,pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
 	public Date getGenCodeFrom()
 	{
 		return this.genCodeFrom;
@@ -282,7 +282,7 @@ public class BizCodeApply extends AuditModel implements java.io.Serializable
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "GenCodeEnd", length = 26,nullable = true)
-	@JsonFormat(shape = JsonFormat.Shape.STRING,pattern="yyyy-MM-dd hh:ss:mm",timezone="GMT+8")
+	@JsonFormat(shape = JsonFormat.Shape.STRING,pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
 	public Date getGenCodeEnd()
 	{
 		return this.genCodeEnd;

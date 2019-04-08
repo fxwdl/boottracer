@@ -273,7 +273,7 @@ public class BizCodeService
 	}
 
 	@Transactional
-	public boolean ApproveApply(SysUser user, int applyId,String queryUrl)
+	public boolean ApproveApply(SysUser user, int applyId,String queryUrl,String comment)
 	{
 		boolean result = false;
 
@@ -302,6 +302,7 @@ public class BizCodeService
 		nItem.setAppproveTime(new Date());
 		nItem.setApproved(ApproveType.Approved.getId());
 		nItem.setApproveUser(user.getUserName());
+		nItem.setComment(comment);
 
 		nItem = bizCodeApplyRepository.save(nItem);
 
@@ -309,6 +310,43 @@ public class BizCodeService
 
 		return result;
 	}
+	
+	@Transactional
+	public boolean RejectApply(SysUser user, int applyId,String comment)
+	{
+		boolean result = false;
+
+		if (!user.IsEnterpriseMember())
+		{
+			throw new RuntimeException("非法请求");
+		}
+		BizCodeApply nItem = null;
+
+		Optional<BizCodeApply> oItem = bizCodeApplyRepository.findById(applyId);
+		if (!oItem.isPresent())
+		{
+			throw new RuntimeException("未找到数据");
+		}
+		nItem = oItem.get();
+		if (nItem.getApproved() != ApproveType.UnApprove.getId())
+		{
+			throw new RuntimeException("当前数据状态为：" + ApproveType.fromId(nItem.getApproved()).getName() + ",不允许拒绝审批");
+		}
+
+		if (user.getSysMember().getId() != nItem.getSysMember().getId())
+		{
+			throw new RuntimeException("非法请求");
+		}
+
+		nItem.setAppproveTime(new Date());
+		nItem.setApproved(ApproveType.Reject.getId());
+		nItem.setApproveUser(user.getUserName());
+		nItem.setComment(comment);
+		
+		nItem = bizCodeApplyRepository.save(nItem);
+
+		return result;
+	}	
 
 	public boolean generateCode(Integer applyId, String url)
 	{
@@ -330,18 +368,19 @@ public class BizCodeService
 		{
 			return true;
 		}
-
+			
 		EntDictCoder coder = entDictService.findCoderByProduct(apply.getEntDictProduct().getId());
 		if (coder == null)
 		{
 			throw new RuntimeException("产品ID:" + apply.getEntDictProduct().getId() + ",没有对应的生码规则");
 		}
-		coder.getDetails().sort((d1, d2) -> d1.getSeq().compareTo(d2.getSeq()));
-
+		coder.getDetails().sort((d1, d2) -> d1.getSeq().compareTo(d2.getSeq()));	
+		
 		StringBuilder sb = new StringBuilder();
 		int ckLength = 0;
 		String entCode = "";
 		// 这里按规则生成编码即可，查询时先确定企业代码，然后再去库里查询，再反向找出产品等相关信息
+		// 还应该增加起始序号字段
 		for (EntDictCoderDetail detail : coder.getDetails())
 		{
 			int fs = detail.getFieldSize();
@@ -388,8 +427,18 @@ public class BizCodeService
 			String ck = MyUtils.getAlphaNumericString(ckLength);
 			String code = String.format(sb.toString(), i, ck);
 
+			if (i==1)
+			{
+				apply.setFromCode(code);
+				apply.setGenCodeFrom(new Date());
+			}
+			else if (i==apply.getApplyQty())
+			{
+				apply.setEndCode(code);				
+			}
 			BizCode newItem = new BizCode();
 			newItem.setApplyID(applyId);
+			newItem.setSeq(i);
 			newItem.setBarCode(code);
 			newItem.setQRBarcode(url + code);
 			newItem.setDelivered(false);
@@ -408,6 +457,12 @@ public class BizCodeService
 		}
 		sqlSessionTemplate.flushStatements();
 
+
+		apply.setGenCodeEnd(new Date());
+		apply.setCodeGenerated(true);
+
+		apply = bizCodeApplyRepository.save(apply);
+		
 		result = true;
 
 		return result;

@@ -61,7 +61,7 @@ public abstract class AuditModel implements Serializable
 		this.modifiedBy = modifiedBy;
 	}
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING,pattern="yyyy-MM-dd hh:ss:mm",timezone="GMT+8")
+	@JsonFormat(shape = JsonFormat.Shape.STRING,pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "CreatedAt", nullable = false, updatable = false)
 	@CreatedDate
@@ -75,6 +75,7 @@ public abstract class AuditModel implements Serializable
 		this.createdAt = createdAt;
 	}
 
+	@JsonFormat(shape = JsonFormat.Shape.STRING,pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "UpdatedAt", nullable = false)
 	@LastModifiedDate

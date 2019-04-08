@@ -67,7 +67,7 @@
                 $('#btnApprove').click(function () {
                 	$.showConfirm("确定审核生码吗?",function(){
                         var applyId = $('#id').val();
-                        var comment = '';
+                        var comment = $('#comment').val();
                         var dialog = new BootstrapDialog({
                         	title: '提示',
                             message: '正在生码，请稍等...!',
@@ -93,8 +93,22 @@
 
                 })
                 $('#btnReject').click(function () {
-                    alert('approve');
-                    return;
+                	$.showConfirm("确定拒绝生码吗?",function(){
+                        var applyId = $('#id').val();
+                        var comment = $('#comment').val();
+                        $.ajax({
+                            type: 'POST',
+                            url: ctx + 'mgn/ent/bizCodeMgn/Reject',
+                            data: { applyId: applyId, comment: comment }
+                        }).done(function (data) {
+                            $.showSuccessTimeout('提交成功！', function () {
+                                window.location.href = ctx + "mgn/ent/biz_code_approve_list.html";
+                            });
+                        }).fail(function (e) {
+                            $.showErr(e.responseText);
+                        }).always(function(){
+                        });                		
+                	});
                 })
             });
         </script>

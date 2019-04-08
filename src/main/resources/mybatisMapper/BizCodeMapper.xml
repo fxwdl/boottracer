@@ -6,9 +6,9 @@
 		type="com.yida.boottracer.domain.BizCode">
 		<id column="ID" jdbcType="INTEGER" property="ID" />
 		<result column="ApplyID" jdbcType="INTEGER" property="applyID" />
+		<result column="Seq" jdbcType="INTEGER" property="seq" />
 		<result column="BarCode" jdbcType="VARCHAR" property="barCode" />
-		<result column="QRBarcode" jdbcType="VARCHAR"
-			property="QRBarcode" />
+		<result column="QRBarcode" jdbcType="VARCHAR" property="QRBarcode" />
 		<result column="Delivered" jdbcType="BIT" property="delivered" />
 		<result column="Activated" jdbcType="BIT" property="activated" />
 		<result column="Version" jdbcType="BIGINT" property="version" />
@@ -33,6 +33,7 @@
 		`ApplyID` INT(11) NOT NULL,
 		`BarCode` VARCHAR(256) NOT NULL COMMENT '一维码',
 		`QRBarcode` VARCHAR(256) NOT NULL COMMENT '二维码',
+		`Seq` INT(11) NOT NULL COMMENT '序号',
 		`Delivered` BIT(1) NOT NULL DEFAULT b'0' COMMENT '已出库',
 		`Activated` BIT(1) NOT NULL DEFAULT b'0' COMMENT '已激活',
 		`QueryCount` INT(11) NOT NULL DEFAULT '0' COMMENT '查询次数',
@@ -66,10 +67,11 @@
 			resultType="java.lang.Integer">
 			SELECT LAST_INSERT_ID()
 		</selectKey>
-		insert into ${tablename} (ApplyID, BarCode, QRBarcode,
+		insert into ${tablename} (ApplyID,Seq, BarCode, QRBarcode,
 		Delivered, Activated, Version,
 		CreatedAt)
 		values (#{record.applyID,jdbcType=INTEGER},
+		#{record.seq,jdbcType=INTEGER},			
 		#{record.barCode,jdbcType=VARCHAR},
 		#{record.QRBarcode,jdbcType=VARCHAR},
 		#{record.delivered,jdbcType=BIT}, #{record.activated,jdbcType=BIT},
@@ -87,6 +89,9 @@
 			<if test="record.applyID != null">
 				ApplyID,
 			</if>
+			<if test="record.seq != null">
+				Seq,
+			</if>					
 			<if test="record.barCode != null">
 				BarCode,
 			</if>
@@ -110,6 +115,9 @@
 			<if test="record.applyID != null">
 				#{record.applyID,jdbcType=INTEGER},
 			</if>
+			<if test="record.seq != null">
+				#{record.seq,jdbcType=INTEGER},
+			</if>					
 			<if test="record.barCode != null">
 				#{record.barCode,jdbcType=VARCHAR},
 			</if>
@@ -137,6 +145,9 @@
 			<if test="record.applyID != null">
 				ApplyID = #{record.applyID,jdbcType=INTEGER},
 			</if>
+			<if test="record.seq != null">
+				Seq = #{record.seq,jdbcType=INTEGER},
+			</if>					
 			<if test="record.barCode != null">
 				BarCode = #{record.barCode,jdbcType=VARCHAR},
 			</if>
@@ -162,6 +173,7 @@
 		parameterType="com.yida.boottracer.domain.BizCode">
 		update ${tablename}
 		set ApplyID = #{record.applyID,jdbcType=INTEGER},
+		Seq = #{record.seq,jdbcType=INTEGER},
 		BarCode = #{record.barCode,jdbcType=VARCHAR},
 		QRBarcode = #{record.QRBarcode,jdbcType=VARCHAR},
 		Delivered = #{record.delivered,jdbcType=BIT},

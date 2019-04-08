@@ -9,6 +9,8 @@ public class BizCode
 
 	private Integer applyID;
 
+	private Integer seq;
+
 	private String barCode;
 
 	private String QRBarcode;
@@ -41,6 +43,16 @@ public class BizCode
 	public void setApplyID(Integer applyID)
 	{
 		this.applyID = applyID;
+	}	
+	
+	public Integer getSeq()
+	{
+		return seq;
+	}
+
+	public void setSeq(Integer seq)
+	{
+		this.seq = seq;
 	}
 
 	public String getBarCode()

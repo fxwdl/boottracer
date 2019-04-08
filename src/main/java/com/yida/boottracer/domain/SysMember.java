@@ -363,7 +363,7 @@ public class SysMember extends AuditModel implements java.io.Serializable
 		this.fromDate = fromDate;
 	}
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING,pattern="yyyy-MM-dd hh:ss:mm",timezone="GMT+8")
+	@JsonFormat(shape = JsonFormat.Shape.STRING,pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "EndDate", length = 26)
 	public Date getEndDate()
