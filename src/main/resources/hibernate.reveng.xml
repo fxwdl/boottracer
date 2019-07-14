@@ -78,4 +78,10 @@
 	<table-filter match-name="biz_code"
 		match-catalog="sourcetracerdb">
 	</table-filter>
+	<table-filter match-name="biz_delivery"
+		match-catalog="sourcetracerdb">
+	</table-filter>
+	<table-filter match-name="ent_dict_dealer"
+		match-catalog="sourcetracerdb">
+	</table-filter>
 </hibernate-reverse-engineering>
