@@ -65,7 +65,7 @@ public class BizCodeMgnController extends BaseController
 			@RequestParam(name = "approved", required = false) Integer approved)
 	{
 		return bizCodeService.getListWithPagination(this.getUser().getSysMember(), limit, offset, sort, order,
-				productName, batchCode, start, end, approved);
+				productName, batchCode, start, end, approved,null);
 	}
 
 	@GetMapping(value = { "biz_code_apply_edit.html" })

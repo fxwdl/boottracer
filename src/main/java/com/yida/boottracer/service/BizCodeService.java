@@ -47,6 +47,7 @@ import com.yida.boottracer.domain.SysMember;
 import com.yida.boottracer.domain.SysUser;
 import com.yida.boottracer.enums.ApproveType;
 import com.yida.boottracer.enums.CoderType;
+import com.yida.boottracer.enums.DeliveryQueryType;
 import com.yida.boottracer.enums.PayType;
 import com.yida.boottracer.repo.BizCodeApplyRepository;
 import com.yida.boottracer.repo.impl.mybatis.mapper.BizCodeMapper;
@@ -98,7 +99,7 @@ public class BizCodeService
 	}
 
 	public PagingModel<BizCodeApply> getListWithPagination(SysMember ent, int limit, int offset, String sort,
-			String order, String productName, String batchCode, Date start, Date end, Integer approved)
+			String order, String productName, String batchCode, Date start, Date end, Integer approved,Integer queryType)
 	{
 		List<String> whereCause = new ArrayList<String>();
 		Map<String, Object> paramaterMap = new HashMap<String, Object>();
@@ -135,6 +136,24 @@ public class BizCodeService
 			paramaterMap.put("approved", approved);
 		}
 
+		if (queryType!=null)
+		{			
+			switch (DeliveryQueryType.fromId(queryType))
+			{
+			case Initial:
+				whereCause.add("d.deliveredQty=0");
+				break;
+			case Partial:
+				whereCause.add("d.deliveredQty>0 && d.deliveredQty<d.applyQty");
+				break;
+			case Finished:
+				whereCause.add("d.deliveredQty>0 && d.deliveredQty=d.applyQty");
+				break;
+			default:
+				break;
+			}
+		}
+		
 		if (whereCause.size() > 0)
 		{
 			sb.append(" AND " + StringUtils.join(whereCause, " and "));
@@ -145,6 +164,7 @@ public class BizCodeService
 			sb.append(" ORDER BY d." + sort + " " + order);
 		}
 
+				
 		TypedQuery<BizCodeApply> query = em.createQuery("SELECT d " + sb.toString(), BizCodeApply.class);
 		EntityGraph<?> graph = em.getEntityGraph("BizCodeApply|sysMember|entDictProduct");
 		query.setHint("javax.persistence.loadgraph", graph);

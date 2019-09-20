@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{_layout/main}"
+ th:with="module='防伪码管理',functionName='单货品出库管理',smallTitle=''">
+
+<head>
+	<title>单货品出库管理</title>
+	<link rel="stylesheet" th:href="@{/bower_components/bootstrap-dialog/dist/css/bootstrap-dialog.css}">
+	<link rel="stylesheet" th:href="@{/bower_components/bootstrap-table/dist/bootstrap-table.css}">
+	<!-- daterange picker -->
+	<link rel="stylesheet" th:href="@{/bower_components/bootstrap-daterangepicker/daterangepicker.css}">
+</head>
+
+<body>
+	<div class="container-fluid" layout:fragment="doBody">
+		<div class="form-inline" role="form">
+			<div class="form-group">
+				<label for="productName">产品名称：</label>
+				<input type="text" class="form-control" id="productName" name="productName">
+			</div>
+			<div class="form-group">
+				<label for="batchCode">批次号：</label>
+				<input type="text" class="form-control" id="batchCode" name="batchCode">
+			</div>
+			<label>出库情况：</label>
+			<select id="dsQueryType" name="dsQueryType" class="form-control">
+				<option value=""> -- 请选择 -- </option>
+				<option th:each="t:${dsQueryType}" th:value="${t.value}" th:text="${t.name}"></option>
+			</select>
+			<div class="form-group">
+				<label class="" for="begin">申请时间：</label>
+				<div class="input-group">
+					<div class="input-group-addon">
+						<i class="fa fa-calendar"></i>
+					</div>
+					<input type="text" class="form-control pull-right" id="reservation">
+				</div>
+			</div>
+			<button id="btnSearch" class="btn btn-default"><i class="glyphicon glyphicon-search" style="padding-right: 3px;"></i><span>搜索</span></button>
+		</div>
+		<table data-toggle="table" id="tbl" data-toolbar="#toolbar" data-show-export="true" data-cache="false" data-search="false"
+		 data-search-on-enter-key="false" data-show-refresh="true" data-id-field="id" data-click-to-select="true"
+		 data-single-select="true" data-striped="true" data-sort-name="createdAt" data-sort-order="desc" data-show-columns="true"
+		 data-select-item-name="myRadioName" data-side-pagination="server" data-pagination="true" data-page-list="[10, 25, 50, 100, ALL]"
+		 th:data-url="@{/mgn/ent/BizCodeDelivery/GetDeliveryListData}" data-query-params="queryParams">
+			<thead>
+				<tr>
+					<th data-field="batchCode" data-valign="middle" data-halign="center" data-align="left" data-sortable="true">批次号</th>					
+					<th data-field="entDictProduct.name" data-valign="middle" data-halign="center" data-align="left" data-sortable="true">产品名称</th>
+					<th data-field="applyQty" data-valign="middle" data-halign="center" data-align="left" data-sortable="true">申请数量</th>					
+					<th data-field="createdAt" data-valign="middle" data-halign="center" data-align="left" data-sortable="true">申请时间</th>
+					<th data-field="fromCode" data-valign="middle" data-halign="center" data-align="left" data-sortable="true" data-formatter="codeFormatter">开始/结束码</th>
+					<th data-field="deliveredQty" data-valign="middle" data-halign="center" data-align="left" data-sortable="true">出库数量</th>
+					<th data-field="operate" data-valign="middle" data-halign="center" data-align="center" data-formatter="operateFormatter"
+					 data-events="operateEvents">操作</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+	<th:block layout:fragment="script">
+		<!-- date-range-picker -->
+		<script th:src="@{/bower_components/moment/min/moment-with-locales.min.js}"></script>
+		<script th:src="@{/bower_components/bootstrap-daterangepicker/daterangepicker.js}"></script>
+
+		<script th:src="@{/bower_components/bootstrap-dialog/dist/js/bootstrap-dialog.js}"></script>
+		<script th:src="@{/js/bootstrap-dialog-zh-CN.js}"></script>
+		<script th:src="@{/js/bootstrap-dialog-Ext.js}"></script>
+		<script th:src="@{/bower_components/bootstrap-table/dist/bootstrap-table.js}"></script>
+		<script th:src="@{/bower_components/bootstrap-table/dist/extensions/export/bootstrap-table-export.js}"></script>
+		<!--/* https://github.com/hhurz/tableExport.jquery.plugin */-->
+		<script th:src="@{/bower_components/tableExport.jquery.plugin/tableExport.js}"></script>
+		<script th:src="@{/bower_components/bootstrap-table/dist/locale/bootstrap-table-zh-CN.js}"></script>
+		<script th:src="@{/js/common.js}"></script>
+		<script type="text/javascript">
+			$(function () {
+				$('#reservation').daterangepicker(dtpConfig, function (start, end, label) {
+					$('#reservation').val(start.format('YYYY/MM/DD') + '-' + end.format('YYYY/MM/DD'));
+				});
+
+				$('#btnSearch').click(function () {
+					$('#tbl').bootstrapTable('refresh');
+				});
+			});
+
+			function queryParams(params) {
+				var c = $('select[name=dsQueryType]').val();
+				if(c!=''){
+					params = $.extend(params, { queryType: c });
+				}
+				var productName = $('#productName').val();
+				params = $.extend(params, { productName: productName });
+				var batchCode = $('#batchCode').val();
+				params = $.extend(params, { batchCode: batchCode });
+				var val = $('#reservation').val(), split = val.split('-'), start = null, end = null;
+				if (split.length == 2) {
+					start = moment(split[0], 'YYYY/MM/DD').toString();
+					end = moment(split[1], 'YYYY/MM/DD').toString();
+					params = $.extend(params, { start: start, end: end });
+				}
+				return params;
+			}
+			function codeFormatter(value, row, index, type) {
+				return [
+					'<span>'+row.fromCode+'</span>',
+					'<br/>',
+					'<span>'+row.endCode+'</span>'
+				].join('');
+			}
+			function operateFormatter(value, row, index, type) {
+				return [
+					'<button class="btn btn-success btn-xs delivery" style="margin:1px" type="button">核销出库</button>',
+					'<button class="btn btn-warning btn-xs cancelDelivery" style="margin:1px"  type="button">取消出库</button>'
+				].join('');
+				
+			}			
+			window.operateEvents = {
+				'click .delivery': function (e, value, row, index) {
+					//window.location.href = ctx + "mgn/ent/biz_code_approve_edit.html?id=" + row.id;
+					alert(row.id);
+				}
+			};
+		</script>
+	</th:block>
+</body>
+
+</html>

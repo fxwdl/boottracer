@@ -212,7 +212,7 @@ public class BizDelivery extends AuditModel implements java.io.Serializable
 	@Column(name = "Mode")
 	public Integer getMode()
 	{
-		return this.type;
+		return this.mode;
 	}
 
 	public void setMode(Integer mode)
